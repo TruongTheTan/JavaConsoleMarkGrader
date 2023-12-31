@@ -12,6 +12,7 @@ builder.Services.AddSwaggerGen();
 
 ServicesConfig.Services = builder.Services;
 ServicesConfig.AddDIs();
+ServicesConfig.AddCors();
 ServicesConfig.AddJWTAuthentication(builder.Configuration["JWT:SecretKey"].ToString());
 
 var app = builder.Build();

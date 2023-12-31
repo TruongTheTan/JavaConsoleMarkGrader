@@ -1,8 +1,13 @@
 ﻿using AutoMapper;
+using Repositories.DTOs.Semester;
+using Repositories.DTOs.Student;
+using Repositories.DTOs.TestCase;
+using Repositories.DTOs.User;
+using Repositories.Models;
 
 namespace MarkGrader.Config
 {
-	public class MappingProfile : Profile
+	public sealed class MappingProfile : Profile
 	{
 
 		public MappingProfile()
@@ -13,36 +18,36 @@ namespace MarkGrader.Config
 		}
 
 
-		private static void UserMapping()
+		private void UserMapping()
 		{
-			/*
-			 CreateMap<User, GetStudentDTO>()
-                //.ForMember(des => des.GradingTime, option => option.MapFrom(student => student.GradingTime!.Value.ToString("dd-MM-yyyy hh:mm:ss tt")))
-                .ReverseMap();
+
+			CreateMap<User, GetStudentDTO>()
+			   //.ForMember(des => des.GradingTime, option => option.MapFrom(student => student.GradingTime!.Value.ToString("dd-MM-yyyy hh:mm:ss tt")))
+			   .ReverseMap();
 
 
-            CreateMap<User, UserDTO>()
-                .ForMember(des => des.RoleName, option => option.MapFrom(user => user.Role!.Name))
-                .ReverseMap();
-			*/
+			CreateMap<User, UserDTO>()
+				.ForMember(des => des.RoleName, option => option.MapFrom(user => user.Role!.Name))
+				.ReverseMap();
+
 		}
 
 
 
-		private static void SemesterMapping()
+		private void SemesterMapping()
 		{
-			/*
+
 			CreateMap<Semester, GetSemesterDTO>().ReverseMap();
-            CreateMap<Semester, CreateSemesterDTO>().ReverseMap();
-            CreateMap<Semester, UpdateSemesterDTO>().ReverseMap();
-			*/
+			CreateMap<Semester, CreateSemesterDTO>().ReverseMap();
+			CreateMap<Semester, UpdateSemesterDTO>().ReverseMap();
+
 		}
 
 
 
-		private static void TestCaseMapping()
+		private void TestCaseMapping()
 		{
-			/*
+
 			CreateMap<TestCase, GetTestCaseDTO>()
 				.ForMember(dest => dest.Input, opt => opt.MapFrom(src => src.Input!.Split(" ", StringSplitOptions.None).ToList()))
 				.ForMember(dest => dest.Output, opt => opt.MapFrom(src => src.Output!.Split(" ", StringSplitOptions.None).ToList()));
@@ -57,7 +62,7 @@ namespace MarkGrader.Config
 			CreateMap<UpdateTestCaseDTO, TestCase>()
 				.ForMember(dest => dest.Input, opt => opt.MapFrom(src => string.Join(" ", src.Input!)))
 				.ForMember(dest => dest.Output, opt => opt.MapFrom(src => string.Join(" ", src.Output!)));
-			*/
+
 		}
 	}
 }

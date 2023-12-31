@@ -1,7 +1,14 @@
 ﻿using System.Text;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Repositories;
+using Repositories.Models;
+using Services.SemesterService;
+using Services.StudentService;
+using Services.TestCaseService;
+using Services.UserService;
 
 namespace MarkGrader.Config
 {
@@ -12,10 +19,32 @@ namespace MarkGrader.Config
 
 
 
+		public static void AddCors()
+		{
+			Services.AddCors(options =>
+			{
+				options.AddDefaultPolicy(
+					builder =>
+					{
+						builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+					});
+			});
+		}
+
+
 
 		public static void AddDIs()
 		{
-			// todo
+			Services.AddScoped<UnitOfWork>();
+			Services.AddScoped<IUserService, UserService>();
+			Services.AddScoped<PRO192_Auto_GraderContext>();
+			Services.AddScoped<IStudentService, StudentService>();
+			Services.AddScoped<ISemesterService, SemesterService>();
+			Services.AddScoped<ITestCaseService, TestCaseService>();
+
+
+			var mappingConfig = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile()));
+			Services.AddSingleton(mappingConfig.CreateMapper());
 		}
 
 
