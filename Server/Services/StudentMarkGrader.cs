@@ -1,10 +1,11 @@
 ﻿using System.Diagnostics;
 using Repositories.DTOs.Student;
-using Server.DTO.TestCase;
+using Repositories.DTOs.TestCase;
+using Services;
 
 namespace MarkGrader
 {
-	public class StudentMarkGrader
+	public static class StudentMarkGrader
 	{
 
 		private static StreamWriter? streamWriter;

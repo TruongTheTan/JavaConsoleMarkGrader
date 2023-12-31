@@ -1,4 +1,4 @@
-﻿namespace Server.DTO.TestCase
+﻿namespace Repositories.DTOs.TestCase
 {
 	public class UpdateTestCaseDTO : GetTestCaseDTO
 	{

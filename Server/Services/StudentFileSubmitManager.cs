@@ -1,8 +1,10 @@
-﻿using SharpCompress.Archives;
+﻿using Microsoft.AspNetCore.Http;
+using SharpCompress.Archives;
 using SharpCompress.Archives.Rar;
 using SharpCompress.Common;
 
-namespace MarkGrader
+
+namespace Services
 {
 	public static class StudentFileSubmitManager
 	{
@@ -40,9 +42,7 @@ namespace MarkGrader
 				stream.Close();
 
 
-				// Check file saved sucessfull
-				if (File.Exists(SAVE_FILE_LOCATION + studentFileName))
-					return true;
+				return File.Exists(SAVE_FILE_LOCATION + studentFileName);
 			}
 			return false;
 		}
