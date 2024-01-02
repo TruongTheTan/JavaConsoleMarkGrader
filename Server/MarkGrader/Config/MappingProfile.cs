@@ -47,7 +47,6 @@ namespace MarkGrader.Config
 
 		private void TestCaseMapping()
 		{
-
 			CreateMap<TestCase, GetTestCaseDTO>()
 				.ForMember(dest => dest.Input, opt => opt.MapFrom(src => src.Input!.Split(" ", StringSplitOptions.None).ToList()))
 				.ForMember(dest => dest.Output, opt => opt.MapFrom(src => src.Output!.Split(" ", StringSplitOptions.None).ToList()));
@@ -62,7 +61,6 @@ namespace MarkGrader.Config
 			CreateMap<UpdateTestCaseDTO, TestCase>()
 				.ForMember(dest => dest.Input, opt => opt.MapFrom(src => string.Join(" ", src.Input!)))
 				.ForMember(dest => dest.Output, opt => opt.MapFrom(src => string.Join(" ", src.Output!)));
-
 		}
 	}
 }

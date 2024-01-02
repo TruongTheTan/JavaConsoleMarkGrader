@@ -15,7 +15,7 @@ namespace MarkGrader.Config
 	public static class ServicesConfig
 	{
 
-		public static IServiceCollection Services { get; set; } = null!;
+		public static IServiceCollection Services { get; set; }
 
 
 
@@ -36,8 +36,8 @@ namespace MarkGrader.Config
 		public static void AddDIs()
 		{
 			Services.AddScoped<UnitOfWork>();
-			Services.AddScoped<IUserService, UserService>();
 			Services.AddScoped<PRO192_Auto_GraderContext>();
+			Services.AddScoped<IUserService, UserService>();
 			Services.AddScoped<IStudentService, StudentService>();
 			Services.AddScoped<ISemesterService, SemesterService>();
 			Services.AddScoped<ITestCaseService, TestCaseService>();
