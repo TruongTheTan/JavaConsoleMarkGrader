@@ -55,11 +55,12 @@ namespace MarkGrader.Config
 			{
 				x.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
 				{
-					Description = "JWT Authorization",
-					Name = "Authorization",
+					Scheme = "Bearer",
+					BearerFormat = "JWT",
 					In = ParameterLocation.Header,
-					Type = SecuritySchemeType.ApiKey,
-					Scheme = "Bearer"
+					Name = "Authorization",
+					Description = "Bearer Authentication with JWT Token",
+					Type = SecuritySchemeType.Http
 				});
 				x.AddSecurityRequirement(new OpenApiSecurityRequirement
 				{
@@ -80,7 +81,11 @@ namespace MarkGrader.Config
 
 			var secretKeyByte = Encoding.UTF8.GetBytes(secretKey);
 
-			Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+			Services.AddAuthentication(opt =>
+			{
+				opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+				opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+			})
 				.AddJwtBearer(o => o.TokenValidationParameters = new TokenValidationParameters
 				{
 					ValidateIssuer = false,
@@ -90,7 +95,6 @@ namespace MarkGrader.Config
 					IssuerSigningKey = new SymmetricSecurityKey(secretKeyByte),
 					ClockSkew = TimeSpan.Zero,
 				});
-			Services.AddAuthorization();
 		}
 
 
@@ -99,7 +103,10 @@ namespace MarkGrader.Config
 
 		public static void AddAuthorization()
 		{
-
+			Services.AddAuthorization(options =>
+			{
+				options.AddPolicy("AdminAndTeacherRole", policy => policy.RequireRole("Admin", "Teacher"));
+			});
 		}
 
 	}

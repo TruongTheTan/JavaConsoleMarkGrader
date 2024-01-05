@@ -14,6 +14,8 @@ ServicesConfig.Services = builder.Services;
 ServicesConfig.AddDIs();
 ServicesConfig.AddCors();
 ServicesConfig.AddJWTAuthentication(builder.Configuration["JWT:SecretKey"]);
+ServicesConfig.AddAuthorization();
+
 
 var app = builder.Build();
 
@@ -26,6 +28,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

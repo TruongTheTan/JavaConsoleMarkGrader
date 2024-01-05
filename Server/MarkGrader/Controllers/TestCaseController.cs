@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Repositories.DTOs;
 using Services.TestCaseService;
 
@@ -24,6 +25,7 @@ namespace MarkGrader.Controllers
 
 
 		[HttpGet]
+		[Authorize(Policy = "AdminAndTeacherRole")]
 		public async Task<IActionResult> GetTestCaseById([FromQuery] int testCaseId)
 		{
 			GetTestCaseDTO getTestCaseDTO = await this.testService.GetTestCaseByIdAsync(testCaseId);
