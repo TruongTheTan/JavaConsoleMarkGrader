@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
-using Repositories.DTOs.Student;
-using Repositories.DTOs.TestCase;
+using Repositories.DTOs;
 using Services;
 
 namespace MarkGrader

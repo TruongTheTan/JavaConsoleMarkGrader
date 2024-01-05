@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Repositories;
-using Repositories.DTOs.TestCase;
+using Repositories.DTOs;
 using Repositories.EntiyRepository;
 using Repositories.Models;
 

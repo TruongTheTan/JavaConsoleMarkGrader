@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Repositories.DTOs.Student;
+using Repositories.DTOs;
 using Services;
 using Services.StudentService;
 

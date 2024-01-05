@@ -1,4 +1,4 @@
-﻿using Repositories.DTOs.TestCase;
+﻿using Repositories.DTOs;
 
 namespace Services.TestCaseService
 {

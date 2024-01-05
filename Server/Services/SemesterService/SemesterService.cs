@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Repositories;
-using Repositories.DTOs.Semester;
+using Repositories.DTOs;
 using Repositories.Models;
 
 namespace Services.SemesterService
 {
-    public class SemesterService : ISemesterService
+	public class SemesterService : ISemesterService
 	{
 		private readonly IMapper mapper;
 		private readonly UnitOfWork unitOfWork;

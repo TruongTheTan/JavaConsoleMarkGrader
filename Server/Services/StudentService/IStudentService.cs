@@ -1,8 +1,8 @@
-﻿using Repositories.DTOs.Student;
+﻿using Repositories.DTOs;
 
 namespace Services.StudentService
 {
-    public interface IStudentService
+	public interface IStudentService
 	{
 		//Task<List<GetStudentDTO>?> GetListStudentAsync();
 		Task<GetStudentDTO>? GetStudentByIdAsync(Guid id);

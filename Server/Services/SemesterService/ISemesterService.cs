@@ -1,8 +1,8 @@
-﻿using Repositories.DTOs.Semester;
+﻿using Repositories.DTOs;
 
 namespace Services.SemesterService
 {
-    public interface ISemesterService
+	public interface ISemesterService
 	{
 		Task<GetSemesterDTO> GetSemesterByIdAsync(int semesterId);
 		Task<bool> CreateNewSemesterAsync(CreateSemesterDTO semesterCreate);

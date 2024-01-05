@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using MarkGrader;
 using Repositories;
-using Repositories.DTOs.Student;
-using Repositories.DTOs.TestCase;
+using Repositories.DTOs;
 using Repositories.EntiyRepository;
 using Repositories.Models;
 
