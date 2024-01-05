@@ -15,16 +15,5 @@ namespace Repositories.EntiyRepository
 			return (await dbSet.AsNoTracking().FirstOrDefaultAsync(e => e.Id == semesterId))!;
 		}
 
-
-		public async Task<bool> CreateNewSemesterAsync(Semester semester)
-		{
-			return await CreateAsync(semester);
-		}
-
-
-		public async Task<bool> UpdateSemesterAsync(Semester semester)
-		{
-			return await UpdateAsync(semester);
-		}
 	}
 }

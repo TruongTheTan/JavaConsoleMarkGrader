@@ -15,20 +15,20 @@ namespace Repositories
 		}
 
 
-		protected async Task<List<T>> GetAllAsync()
+		public async Task<List<T>> GetAllAsync()
 		{
 			return await dbSet.AsNoTracking().ToListAsync();
 		}
 
 
-		protected async Task<bool> CreateAsync(T entity)
+		public async Task<bool> CreateAsync(T entity)
 		{
 			await dbSet.AddAsync(entity);
 			return await this.SaveChangesAsync();
 		}
 
 
-		protected async Task<bool> UpdateAsync(T entity)
+		public async Task<bool> UpdateAsync(T entity)
 		{
 			dbSet.Update(entity);
 			bool saveChangesSucessfull = await this.SaveChangesAsync();

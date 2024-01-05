@@ -48,7 +48,6 @@ namespace MarkGrader.Controllers
 		public async Task<IActionResult> GoogleLogin([FromBody] string googleIdToken)
 		{
 
-			
 			try
 			{
 				var payload = await GoogleJsonWebSignature.ValidateAsync(googleIdToken.Trim());
@@ -59,7 +58,7 @@ namespace MarkGrader.Controllers
 					return Problem();
 
 				UserDTO userDTO = await this.userService.GetUserByEmail(payload.Email.Trim());
-				return ReturnActionResult(userDTO);
+				return Ok(userDTO);
 			}
 			catch (InvalidJwtException ex)
 			{
@@ -73,19 +72,38 @@ namespace MarkGrader.Controllers
 
 
 
-		[HttpPost("basic-login")]
-		public async Task<IActionResult> CreateNewUser([FromBody] UserLoginDTO user)
+		[HttpPost("create")]
+		public async Task<IActionResult> CreateNewUser([FromBody] CreateUserDTO createUserDTO)
+		{
+			bool createdSuccessfull = await userService.AddNewUser(createUserDTO, configuration["DefaultPassword"]);
+
+			if (createdSuccessfull)
+				return Created(nameof(CreateNewUser), createUserDTO);
+
+			else
+				return Problem();
+		}
+
+
+
+
+
+		[HttpPost("change-password")]
+		public async Task<IActionResult> ChangePassword([FromBody] ChangeUserPasswordDTO changeUserPasswordDTO)
 		{
 
-			GetUserDTO userDTO = await this.userService.GetUserByEmailAndPassword(user.Email.Trim(), user.Password);
+			if (changeUserPasswordDTO.Password != changeUserPasswordDTO.ConfirmPassword)
+				return BadRequest("Password and confirm password are not equal");
 
-			if (userDTO == null)
-				return NotFound("User not found");
+			bool updateSuccessfull = await userService.ChangeUserPassword(changeUserPasswordDTO.Email, changeUserPasswordDTO.Password);
 
-			this.CreateToken(ref userDTO);
+			if (updateSuccessfull)
+				return Ok("Change password successfully");
 
-			return Ok(userDTO);
+			return Problem();
 		}
+
+
 
 
 

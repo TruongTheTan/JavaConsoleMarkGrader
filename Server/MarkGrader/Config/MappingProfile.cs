@@ -27,6 +27,7 @@ namespace MarkGrader.Config
 				.ForMember(des => des.RoleName, option => option.MapFrom(user => user.Role!.Name))
 				.ReverseMap();
 
+			CreateMap<User, CreateUserDTO>().ReverseMap();
 		}
 
 

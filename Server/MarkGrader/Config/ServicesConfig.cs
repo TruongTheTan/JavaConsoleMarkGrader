@@ -93,6 +93,15 @@ namespace MarkGrader.Config
 			Services.AddAuthorization();
 		}
 
+
+
+
+
+		public static void AddAuthorization()
+		{
+
+		}
+
 	}
 
 

@@ -23,21 +23,5 @@ namespace Repositories.EntiyRepository
 			return await dbSet.AsNoTracking().FirstOrDefaultAsync(t => t.Id == testCaseId);
 		}
 
-
-		public async Task<bool> CreateNewTestCaseAsync(TestCase testCase)
-		{
-			return await CreateAsync(testCase);
-
-
-		}
-
-
-
-		public async Task<bool> UpdateTestCase(TestCase testCase)
-		{
-			return await UpdateAsync(testCase);
-		}
-
-
 	}
 }

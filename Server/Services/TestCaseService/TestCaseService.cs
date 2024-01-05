@@ -27,7 +27,7 @@ namespace Services.TestCaseService
 		public async Task<bool> CreateNewTestCaseAsync(CreateTestCaseDTO testCase)
 		{
 			TestCase newTestCase = mapper.Map<TestCase>(testCase);
-			return await testCaseRepository.CreateNewTestCaseAsync(newTestCase);
+			return await testCaseRepository.CreateAsync(newTestCase);
 		}
 
 
@@ -62,7 +62,7 @@ namespace Services.TestCaseService
 		{
 			TestCase testCaseToUpdate = mapper.Map<TestCase>(testCaseUpdateDTO);
 
-			return await testCaseRepository.UpdateTestCase(testCaseToUpdate);
+			return await testCaseRepository.UpdateAsync(testCaseToUpdate);
 		}
 	}
 }

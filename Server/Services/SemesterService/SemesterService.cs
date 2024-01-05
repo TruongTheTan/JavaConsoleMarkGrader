@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Repositories;
 using Repositories.DTOs;
+using Repositories.EntiyRepository;
 using Repositories.Models;
 
 namespace Services.SemesterService
@@ -9,11 +10,13 @@ namespace Services.SemesterService
 	{
 		private readonly IMapper mapper;
 		private readonly UnitOfWork unitOfWork;
+		private readonly SemesterRepository semesterRepository;
 
 		public SemesterService(UnitOfWork unitOfWork, IMapper mapper)
 		{
 			this.mapper = mapper;
 			this.unitOfWork = unitOfWork;
+			this.semesterRepository = unitOfWork.SemesterRepository;
 		}
 
 
@@ -22,14 +25,14 @@ namespace Services.SemesterService
 		{
 			Semester semester = new() { SemesterName = semesterDTO.SemesterName };
 
-			return await unitOfWork.SemesterRepository.CreateNewSemesterAsync(semester);
+			return await semesterRepository.CreateAsync(semester);
 		}
 
 
 
 		public async Task<GetSemesterDTO> GetSemesterByIdAsync(int semesterId)
 		{
-			Semester semester = await unitOfWork.SemesterRepository.GetSemesterByIdAsync(semesterId);
+			Semester semester = await semesterRepository.GetSemesterByIdAsync(semesterId);
 
 			return mapper.Map<GetSemesterDTO>(semester);
 		}
@@ -40,7 +43,7 @@ namespace Services.SemesterService
 		{
 			Semester semester = mapper.Map<Semester>(semesterUpdateDTO);
 
-			return await unitOfWork.SemesterRepository.UpdateSemesterAsync(semester);
+			return await semesterRepository.UpdateAsync(semester);
 		}
 	}
 }
