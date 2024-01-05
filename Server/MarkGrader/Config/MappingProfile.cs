@@ -1,8 +1,5 @@
 ﻿using AutoMapper;
 using Repositories.DTOs;
-using Repositories.DTOs.Semester;
-using Repositories.DTOs.Student;
-using Repositories.DTOs.TestCase;
 using Repositories.Models;
 
 namespace MarkGrader.Config
