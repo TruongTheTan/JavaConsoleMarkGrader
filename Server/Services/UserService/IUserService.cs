@@ -1,10 +1,10 @@
-﻿using Repositories.DTOs.User;
+﻿using Repositories.DTOs;
 
 namespace Services.UserService
 {
 	public interface IUserService
 	{
-		Task<UserDTO> GetUserByEmailAndPassword(string email, string password);
-		Task<UserDTO> GetUserByEmail(string email);
+		Task<GetUserDTO> GetUserByEmailAndPassword(string email, string password);
+		Task<GetUserDTO> GetUserByEmail(string email);
 	}
 }

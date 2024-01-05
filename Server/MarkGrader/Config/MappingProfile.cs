@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using Repositories.DTOs;
 using Repositories.DTOs.Semester;
 using Repositories.DTOs.Student;
 using Repositories.DTOs.TestCase;
-using Repositories.DTOs.User;
 using Repositories.Models;
 
 namespace MarkGrader.Config
@@ -26,7 +26,7 @@ namespace MarkGrader.Config
 			   .ReverseMap();
 
 
-			CreateMap<User, UserDTO>()
+			CreateMap<User, GetUserDTO>()
 				.ForMember(des => des.RoleName, option => option.MapFrom(user => user.Role!.Name))
 				.ReverseMap();
 

@@ -8,7 +8,7 @@ using Repositories.Models;
 
 namespace Services.StudentService
 {
-    public class StudentService : IStudentService
+	public class StudentService : IStudentService
 	{
 
 		private readonly IMapper mapper;
@@ -115,7 +115,7 @@ namespace Services.StudentService
 		public async Task<CreateStudentSubmissionDetailsDTO> GradeStudentMark(int semesterID)
 		{
 			List<TestCase> testCaseList = await unitOfWork.TestCaseRepository.GetAllTestCaseBySemesterIdAsync(semesterID);
-			StudentMarkGrader.TestCaseList = mapper.Map<List<GetTestCaseDTO>>(testCaseList); // Load all test cases by semester
+			StudentMarkGrader.TestCaseList = mapper.Map<List<GetTestCaseDTO>>(testCaseList);
 
 			return StudentMarkGrader.GradeStudentMark();
 		}

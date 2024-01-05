@@ -105,6 +105,10 @@ namespace MarkGrader
 						studentQuestionTotalMark += GetMarkByTestCaseOutput(testCase, studentOuputResult);
 					}
 				}
+
+				streamWriter?.Close();
+				streamReader?.Close();
+				myProcess.Close();
 			}
 			else
 			{
@@ -116,8 +120,6 @@ namespace MarkGrader
 			createStudentSubmissionDetailsDTO.TotalMark = (short?)tempMark;
 			createStudentSubmissionDetailsDTO.QuestionDescription = questionDescription.Trim();
 
-
-			myProcess.Close();
 
 			return createStudentSubmissionDetailsDTO;
 		}

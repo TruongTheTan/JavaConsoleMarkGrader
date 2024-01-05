@@ -39,7 +39,7 @@ namespace Services
 				using FileStream stream = new(filePath, FileMode.Create);
 
 				await file.CopyToAsync(stream);
-				stream.Close();
+				stream?.Close();
 
 
 				return File.Exists(SAVE_FILE_LOCATION + studentFileName);
@@ -87,7 +87,7 @@ namespace Services
 					}
 					catch (Exception)
 					{
-						throw new Exception();
+						throw;
 					}
 				}
 			});
@@ -108,7 +108,7 @@ namespace Services
 				}
 				catch (Exception)
 				{
-					throw new Exception();
+					throw;
 				}
 			});
 

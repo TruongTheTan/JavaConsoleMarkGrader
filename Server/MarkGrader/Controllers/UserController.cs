@@ -3,10 +3,10 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Repositories.DTOs.User;
+using Repositories.DTOs;
 using Services.UserService;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
 
 namespace MarkGrader.Controllers
 {
@@ -30,7 +30,7 @@ namespace MarkGrader.Controllers
 		public async Task<IActionResult> BasicLogin([FromBody] UserLoginDTO user)
 		{
 
-			UserDTO userDTO = await this.userService.GetUserByEmailAndPassword(user.Email.Trim(), user.Password);
+			GetUserDTO userDTO = await this.userService.GetUserByEmailAndPassword(user.Email.Trim(), user.Password);
 
 			if (userDTO == null)
 				return NotFound("User not found");
@@ -71,7 +71,25 @@ namespace MarkGrader.Controllers
 
 
 
-		private void CreateToken(ref UserDTO user)
+
+
+		[HttpPost("basic-login")]
+		public async Task<IActionResult> CreateNewUser([FromBody] UserLoginDTO user)
+		{
+
+			GetUserDTO userDTO = await this.userService.GetUserByEmailAndPassword(user.Email.Trim(), user.Password);
+
+			if (userDTO == null)
+				return NotFound("User not found");
+
+			this.CreateToken(ref userDTO);
+
+			return Ok(userDTO);
+		}
+
+
+
+		private void CreateToken(ref GetUserDTO user)
 		{
 			var jwtTokenHandle = new JwtSecurityTokenHandler();
 

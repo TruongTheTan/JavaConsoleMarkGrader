@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Repositories;
-using Repositories.DTOs.User;
+using Repositories.DTOs;
 using Repositories.EntiyRepository;
 using Repositories.Models;
 
@@ -20,12 +20,12 @@ namespace Services.UserService
 		}
 
 
-		public async Task<UserDTO> GetUserByEmailAndPassword(string email, string password)
+		public async Task<GetUserDTO> GetUserByEmailAndPassword(string email, string password)
 		{
 			User userFound = await userRepository.GetUserByEmailAndPassword(email, password);
 
 			if (userFound != null)
-				return mapper.Map<UserDTO>(userFound);
+				return mapper.Map<GetUserDTO>(userFound);
 
 			return null!;
 		}
@@ -33,12 +33,12 @@ namespace Services.UserService
 
 
 
-		public async Task<UserDTO> GetUserByEmail(string email)
+		public async Task<GetUserDTO> GetUserByEmail(string email)
 		{
 			User userFound = await userRepository.GetUserByEmail(email);
 
 			if (userFound != null)
-				return mapper.Map<UserDTO>(userFound);
+				return mapper.Map<GetUserDTO>(userFound);
 
 			return null!;
 		}

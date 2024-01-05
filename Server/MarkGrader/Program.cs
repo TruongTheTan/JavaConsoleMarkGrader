@@ -13,7 +13,7 @@ builder.Services.AddSwaggerGen();
 ServicesConfig.Services = builder.Services;
 ServicesConfig.AddDIs();
 ServicesConfig.AddCors();
-ServicesConfig.AddJWTAuthentication(builder.Configuration["JWT:SecretKey"].ToString());
+ServicesConfig.AddJWTAuthentication(builder.Configuration["JWT:SecretKey"]);
 
 var app = builder.Build();
 
@@ -25,7 +25,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors();
 app.UseAuthorization();
 
 app.MapControllers();
