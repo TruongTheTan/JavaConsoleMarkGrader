@@ -5,10 +5,13 @@ namespace Repositories
 {
 	public abstract class BaseRepository<T> where T : class
 	{
-		protected DbSet<T> dbSet;
-		protected PRO192_Auto_GraderContext context;
 
-		protected BaseRepository(PRO192_Auto_GraderContext context)
+
+
+		protected DbSet<T> dbSet;
+		protected Java_Console_Auto_GraderContext context;
+
+		protected BaseRepository(Java_Console_Auto_GraderContext context)
 		{
 			this.context = context;
 			dbSet = context.Set<T>();
@@ -32,7 +35,7 @@ namespace Repositories
 		{
 			dbSet.Update(entity);
 			bool saveChangesSucessfull = await this.SaveChangesAsync();
-			this.context.Entry(entity).State = EntityState.Detached;
+			this.context.Entry(entity).State = EntityState.Modified;
 			return saveChangesSucessfull;
 		}
 
@@ -41,5 +44,6 @@ namespace Repositories
 		{
 			return await this.context.SaveChangesAsync() > 0;
 		}
+
 	}
 }

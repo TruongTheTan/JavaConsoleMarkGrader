@@ -3,9 +3,10 @@ using Repositories.Models;
 
 namespace Repositories.EntiyRepository
 {
+
 	public class TestCaseRepository : BaseRepository<TestCase>
 	{
-		public TestCaseRepository(PRO192_Auto_GraderContext context) : base(context)
+		public TestCaseRepository(Java_Console_Auto_GraderContext context) : base(context)
 		{
 		}
 
@@ -24,4 +25,5 @@ namespace Repositories.EntiyRepository
 		}
 
 	}
+
 }

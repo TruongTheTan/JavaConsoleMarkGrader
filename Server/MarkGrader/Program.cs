@@ -1,21 +1,20 @@
-
-using System.Text.Json.Serialization;
-using MarkGrader.Config;
+using MarkGrader.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
-
-ServicesConfig.Services = builder.Services;
-ServicesConfig.AddDIs();
-ServicesConfig.AddCors();
-ServicesConfig.AddJWTAuthentication(builder.Configuration["JWT:SecretKey"]);
-ServicesConfig.AddAuthorization();
-
+ServiceConfig.Services = builder.Services;
+ServiceConfig.AddIdentityUser();
+ServiceConfig.AddDIs();
+ServiceConfig.AddCors();
+ServiceConfig.AddSwagger();
+ServiceConfig.AddJWTAuthentication(builder.Configuration["JWT:SecretKey"]!);
+ServiceConfig.AddAuthorization();
 
 var app = builder.Build();
 

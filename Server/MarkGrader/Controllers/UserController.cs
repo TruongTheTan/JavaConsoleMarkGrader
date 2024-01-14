@@ -1,12 +1,7 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using Repositories.DTOs;
 using Services.UserService;
-
-
 
 namespace MarkGrader.Controllers
 {
@@ -14,14 +9,15 @@ namespace MarkGrader.Controllers
 	[ApiController]
 	public class UserController : ControllerBase
 	{
+
 		private readonly IUserService userService;
-		private readonly IConfiguration configuration;
+		private readonly SignInManager<IdentityUser> _signInManager;
 
 
-		public UserController(IConfiguration configuration, IUserService userService)
+		public UserController(IUserService userService, SignInManager<IdentityUser> _signInManager)
 		{
+			this._signInManager = _signInManager;
 			this.userService = userService;
-			this.configuration = configuration;
 		}
 
 
@@ -30,15 +26,27 @@ namespace MarkGrader.Controllers
 		public async Task<IActionResult> BasicLogin([FromBody] UserLoginDTO user)
 		{
 
-			GetUserDTO userDTO = await this.userService.GetUserByEmailAndPassword(user.Email.Trim(), user.Password);
+			GetUserDTO? userDTO = await this.userService.Login(user);
+
 
 			if (userDTO == null)
 				return NotFound("User not found");
 
-			this.CreateToken(ref userDTO);
+
+			HttpContext.Response.Cookies.Append("token", userDTO.Token!,
+				new CookieOptions()
+				{
+					HttpOnly = true,
+					Secure = true,
+					SameSite = SameSiteMode.None,
+					//Expires = DateTime.UtcNow.AddMinutes(Convert.ToInt32(configuration["JWT:Expiration"]))
+				});
 
 			return Ok(userDTO);
 		}
+
+
+
 
 
 
@@ -70,12 +78,10 @@ namespace MarkGrader.Controllers
 
 
 
-
-
 		[HttpPost("create")]
 		public async Task<IActionResult> CreateNewUser([FromBody] CreateUserDTO createUserDTO)
 		{
-			bool createdSuccessfull = await userService.AddNewUser(createUserDTO, configuration["DefaultPassword"]);
+			bool createdSuccessfull = await userService.AddNewUser(createUserDTO);
 
 			if (createdSuccessfull)
 				return Created(nameof(CreateNewUser), createUserDTO);
@@ -88,51 +94,19 @@ namespace MarkGrader.Controllers
 
 
 
-		[HttpPost("change-password")]
+		[HttpPatch("change-password")]
 		public async Task<IActionResult> ChangePassword([FromBody] ChangeUserPasswordDTO changeUserPasswordDTO)
 		{
 
-			if (changeUserPasswordDTO.Password != changeUserPasswordDTO.ConfirmPassword)
+			if (changeUserPasswordDTO.OldPassword != changeUserPasswordDTO.NewPassword)
 				return BadRequest("Password and confirm password are not equal");
 
-			bool updateSuccessfull = await userService.ChangeUserPassword(changeUserPasswordDTO.Email, changeUserPasswordDTO.Password);
+			bool updateSuccessfull = await userService.ChangeUserPassword(changeUserPasswordDTO);
 
 			if (updateSuccessfull)
 				return Ok("Change password successfully");
 
 			return Problem();
-		}
-
-
-
-
-
-		private void CreateToken(ref GetUserDTO user)
-		{
-			var jwtTokenHandle = new JwtSecurityTokenHandler();
-
-			byte[] secretKeyBytes = Encoding.UTF8.GetBytes(this.configuration["JWT:SecretKey"]);
-
-			SigningCredentials signingCredentials = new(new SymmetricSecurityKey(secretKeyBytes), SecurityAlgorithms.HmacSha256Signature);
-
-
-
-			var tokenDescription = new SecurityTokenDescriptor()
-			{
-				Subject = new ClaimsIdentity(new[]
-				{
-					new Claim("Id", user.Id.ToString()),
-					new Claim(ClaimTypes.Name, user.Name!),
-					new Claim(ClaimTypes.Email, user.Email!),
-					new Claim(ClaimTypes.Role, user.RoleName!),
-				}),
-
-				Expires = DateTime.UtcNow.AddMinutes(Convert.ToInt32(this.configuration["JWT:Expiration"])),
-				SigningCredentials = signingCredentials
-			};
-
-			SecurityToken token = jwtTokenHandle.CreateToken(tokenDescription);
-			user.Token = jwtTokenHandle.WriteToken(token);
 		}
 	}
 }

@@ -10,12 +10,11 @@ namespace Repositories.Models
             StudentSubmissionDetails = new HashSet<StudentSubmissionDetail>();
         }
 
-        public Guid StudentId { get; set; }
+        public string StudentId { get; set; } = null!;
         public int SemesterId { get; set; }
         public int? TotalSubmission { get; set; }
 
-        public virtual Semester Semester { get; set; } = null!;
-        public virtual User Student { get; set; } = null!;
+        public virtual AspNetUser Student { get; set; } = null!;
         public virtual ICollection<StudentSubmissionDetail> StudentSubmissionDetails { get; set; }
     }
 }

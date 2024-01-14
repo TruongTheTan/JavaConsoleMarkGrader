@@ -8,6 +8,8 @@ namespace Services.SemesterService
 {
 	public class SemesterService : ISemesterService
 	{
+
+
 		private readonly IMapper mapper;
 		private readonly UnitOfWork unitOfWork;
 		private readonly SemesterRepository semesterRepository;
@@ -45,5 +47,6 @@ namespace Services.SemesterService
 
 			return await semesterRepository.UpdateAsync(semester);
 		}
+
 	}
 }

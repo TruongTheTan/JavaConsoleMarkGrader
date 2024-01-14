@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MarkGrader;
+using Microsoft.AspNetCore.Identity;
 using Repositories;
 using Repositories.DTOs;
 using Repositories.EntiyRepository;
@@ -7,18 +8,22 @@ using Repositories.Models;
 
 namespace Services.StudentService
 {
+
+
 	public class StudentService : IStudentService
 	{
 
 		private readonly IMapper mapper;
 		private readonly UnitOfWork unitOfWork;
 		private readonly StudentRepository studentRepository;
+		private readonly UserManager<IdentityUser> userManager;
 
 
-		public StudentService(IMapper mapper, UnitOfWork unitOfWork)
+		public StudentService(IMapper mapper, UnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
 		{
 			this.mapper = mapper;
 			this.unitOfWork = unitOfWork;
+			this.userManager = userManager;
 			studentRepository = unitOfWork.StudentRepository;
 		}
 
@@ -28,7 +33,7 @@ namespace Services.StudentService
 
 		public async Task<GetStudentDTO> GetStudentByIdAsync(Guid id)
 		{
-			User? studentFound = await unitOfWork.StudentRepository.FindStudentByIdAsync(id);
+			IdentityUser studentFound = await userManager.FindByIdAsync(id.ToString());
 
 
 			if (studentFound != null)
@@ -114,9 +119,13 @@ namespace Services.StudentService
 		public async Task<CreateStudentSubmissionDetailsDTO> GradeStudentMark(int semesterID)
 		{
 			List<TestCase> testCaseList = await unitOfWork.TestCaseRepository.GetAllTestCaseBySemesterIdAsync(semesterID);
-			StudentMarkGrader.TestCaseList = mapper.Map<List<GetTestCaseDTO>>(testCaseList);
 
-			return StudentMarkGrader.GradeStudentMark();
+			if (testCaseList.Count > 0)
+			{
+				StudentMarkGrader.TestCaseList = mapper.Map<List<GetTestCaseDTO>>(testCaseList);
+				return StudentMarkGrader.GradeStudentMark();
+			}
+			return null!;
 		}
 
 

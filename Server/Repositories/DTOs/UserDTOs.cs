@@ -4,7 +4,7 @@ namespace Repositories.DTOs
 {
 	public class GetUserDTO
 	{
-		public Guid Id { get; set; }
+		public string Id { get; set; }
 		public string? Name { get; set; }
 		public string? Email { get; set; }
 		public string? Token { get; set; }
@@ -15,7 +15,7 @@ namespace Repositories.DTOs
 
 	public class UserLoginDTO
 	{
-		[Required]
+		[Required, EmailAddress]
 		[DataType(DataType.EmailAddress, ErrorMessage = "E-mail is not valid")]
 		public string Email { get; set; } = null!;
 
@@ -31,13 +31,13 @@ namespace Repositories.DTOs
 		[Required]
 		public string? Name { get; set; }
 
-		[Required]
+		[Required, EmailAddress]
 		[DataType(DataType.EmailAddress, ErrorMessage = "E-mail is not valid")]
 		[RegularExpression(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$", ErrorMessage = "Invalid email format")]
 		public string Email { get; set; } = null!;
 
-		[Required, Range(1, 3)]
-		public int? RoleId { get; set; }
+		[Required]
+		public string? RoleName { get; set; }
 	}
 
 
@@ -45,7 +45,7 @@ namespace Repositories.DTOs
 
 	public class ChangeUserPasswordDTO
 	{
-		[Required]
+		[Required, EmailAddress]
 		[DataType(DataType.EmailAddress, ErrorMessage = "E-mail is not valid")]
 		[RegularExpression(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$", ErrorMessage = "Invalid email format")]
 		public string Email { get; set; } = null!;
@@ -53,11 +53,10 @@ namespace Repositories.DTOs
 
 		[Required]
 		[DataType(DataType.Password)]
-		public string Password { get; set; } = null!;
-
+		public string OldPassword { get; set; } = null!;
 
 		[Required]
 		[DataType(DataType.Password)]
-		public string ConfirmPassword { get; set; } = null!;
+		public string NewPassword { get; set; } = null!;
 	}
 }

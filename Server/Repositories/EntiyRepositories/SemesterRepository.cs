@@ -3,9 +3,10 @@ using Repositories.Models;
 
 namespace Repositories.EntiyRepository
 {
+
 	public class SemesterRepository : BaseRepository<Semester>
 	{
-		public SemesterRepository(PRO192_Auto_GraderContext context) : base(context)
+		public SemesterRepository(Java_Console_Auto_GraderContext context) : base(context)
 		{
 		}
 
@@ -16,4 +17,5 @@ namespace Repositories.EntiyRepository
 		}
 
 	}
+
 }

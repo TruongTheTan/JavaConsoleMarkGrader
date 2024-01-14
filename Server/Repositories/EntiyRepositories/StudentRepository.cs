@@ -4,25 +4,19 @@ using Repositories.Models;
 namespace Repositories.EntiyRepository
 {
 
-	public class StudentRepository : BaseRepository<User>
+
+	public class StudentRepository : BaseRepository<AspNetUser>
 	{
 
 		private readonly DbSet<StudentSubmissionDetail> studentSubmissionDetailTable;
 
 
-		public StudentRepository(PRO192_Auto_GraderContext context) : base(context)
+		public StudentRepository(Java_Console_Auto_GraderContext context) : base(context)
 		{
+
 			studentSubmissionDetailTable = context.StudentSubmissionDetails;
 		}
 
-
-		public async Task<User?> FindStudentByIdAsync(Guid id)
-		{
-			return await dbSet
-				.Where(student => student.Id.Equals(id) && student.RoleId == 2)
-				.AsNoTracking()
-				.FirstOrDefaultAsync();
-		}
 
 
 
@@ -70,5 +64,8 @@ namespace Repositories.EntiyRepository
 			await studentSubmissionDetailTable.AddAsync(studentSubmissionDetail);
 			return await SaveChangesAsync();
 		}
+
 	}
+
+
 }
