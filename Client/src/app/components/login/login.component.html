@@ -1,0 +1,16 @@
+<div class="login-page">
+    <div class="form">
+        <h1>Login</h1>
+        <form novalidate class="login-form" (ngSubmit)="login()">
+            <input type="email" placeholder="Email" name="email" [(ngModel)]="email" required />
+            <input
+                type="password"
+                name="password"
+                placeholder="password"
+                required
+                [(ngModel)]="password"
+            />
+            <button formnovalidate type="submit">login</button>
+        </form>
+    </div>
+</div>
