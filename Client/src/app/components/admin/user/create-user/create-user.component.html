@@ -1,0 +1,97 @@
+<div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title text-center" id="exampleModalLabel">Add new user</h2>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+
+            <form [formGroup]="createUserForm" (ngSubmit)="submit()">
+                <div class="modal-body">
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Username</label>
+                        <div class="col-sm-10">
+                            <input
+                                type="text"
+                                class="form-control"
+                                [formControl]="createUserForm.controls.username"
+                            />
+                        </div>
+
+                        <!-- Error msg -->
+                        <div class="error text-danger">
+                            <p *ngIf="createUserForm.controls.username.hasError('required')">
+                                Username is required
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Email</label>
+                        <div class="col-sm-10">
+                            <input
+                                type="email"
+                                class="form-control"
+                                [formControl]="createUserForm.controls.email"
+                            />
+                        </div>
+
+                        <!-- Error msg -->
+                        <div class="error text-danger">
+                            <p *ngIf="createUserForm.controls.email.errors?.['required']">
+                                Email is required
+                            </p>
+                            <p *ngIf="createUserForm.controls.email.hasError('pattern')">
+                                Not a valid Email
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Phone</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" min="0" />
+                        </div>
+                    </div> -->
+
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Role</label>
+                        <div class="col-sm-10">
+                            <select
+                                class="form-select"
+                                [formControl]="createUserForm.controls.role"
+                            >
+                                <option value="Admin">Admin</option>
+                                <option value="Teacher">Teacher</option>
+                                <option value="Student">Student</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="reset" class="btn btn-secondary" (click)="reset()">Reset</button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        [disabled]="createUserForm.invalid"
+                    >
+                        Create
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

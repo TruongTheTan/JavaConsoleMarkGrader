@@ -1,0 +1,77 @@
+<app-create-user></app-create-user>
+
+<div class="card shadow border-0 mb-7">
+    <header class="bg-surface-primary border-bottom pt-6 pb-4">
+        <div class="container-fluid">
+            <div class="mb-npx">
+                <div class="row align-items-center">
+                    <div class="col-sm-6 col-12 mb-4 mb-sm-0">
+                        <!-- Title -->
+                        <h1 class="h2 mb-0 ls-tight">User List</h1>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="col-sm-6 col-12 text-sm-end">
+                        <div class="mx-n1">
+                            <button
+                                class="btn d-inline-flex btn-sm btn-primary mx-1"
+                                data-bs-toggle="modal"
+                                data-bs-target="#exampleModal"
+                            >
+                                <span class="pe-2">
+                                    <i class="bi bi-plus"></i>
+                                </span>
+                                <span>Create</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Table -->
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of userList">
+                    <td>
+                        <span class="text-heading font-semibold"> {{ user.userName }} </span>
+                    </td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <a class="text-heading font-semibold"> {{ user.phoneNumber }} </a>
+                    </td>
+                    <td>{{ user.roleName }}</td>
+                    <td>
+                        <span class="badge badge-lg badge-dot">
+                            <i class="bg-warning"></i>Postponed
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <button type="button" class="btn btn-sm btn-info m-1">Detail</button>
+
+                        <button type="button" class="btn btn-sm btn-danger btn-square">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer border-0 py-5">
+        <span class="text-muted text-sm"
+            >Showing 10 items out of {{ userList.length }} results found</span
+        >
+    </div>
+</div>

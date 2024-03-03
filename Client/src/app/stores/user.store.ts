@@ -1,13 +1,39 @@
-import { BehaviorSubject, map } from 'rxjs';
-import { GetUser } from '../models/user';
-import { Injectable } from '@angular/core';
-import { action, computed, makeObservable, observable } from 'mobx';
+import { BehaviorSubject, Observable, map } from 'rxjs';
+import { AuthenticationUser, GetUser } from '../models/user';
+import { Injectable, signal } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class UserStore {
-    loggedUserSubject = new BehaviorSubject<GetUser>({} as GetUser);
+    private userList = new BehaviorSubject([] as GetUser[]);
+    private authenticationUser = new BehaviorSubject({} as AuthenticationUser);
 
-    setUser(user: GetUser) {
-        this.loggedUserSubject.next(user);
+    setUser(user: AuthenticationUser) {
+        this.authenticationUser.next(user);
+    }
+
+    getUser() {
+        return this.authenticationUser.asObservable();
+    }
+
+    updateList(list: GetUser[]) {
+        this.userList.next(list);
+    }
+
+    getUserList(): Observable<GetUser[]> {
+        return this.userList;
+    }
+
+    listLenth() {
+        return this.userList.value.length;
+    }
+
+    add() {
+        this.userList.value.push({
+            id: '',
+            email: '',
+            userName: 'sss',
+            roleName: '',
+            phoneNumber: '',
+        });
     }
 }

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { GetUser } from 'src/app/models/user';
+import { SocialAuthService } from '@abacritt/angularx-social-login';
+import { Component } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
-import { UserStore } from 'src/app/stores/user.store';
 
 @Component({
     selector: 'app-login',
@@ -9,24 +9,39 @@ import { UserStore } from 'src/app/stores/user.store';
     styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
-    email = '';
-    password = '';
-    user = {} as GetUser;
+    loginForm = new FormGroup({
+        email: new FormControl('', [
+            Validators.required,
+            Validators.pattern('^[A-Za-z0-9_.]+@gmail.com$'),
+        ]),
+        password: new FormControl('', Validators.required),
+    });
 
-    count = 0;
-
-    constructor(private authService: AuthService, private userStore: UserStore) {}
+    constructor(private authService: AuthService, private socialAuth: SocialAuthService) {
+        this.googleLogin();
+    }
 
     login() {
         // truongthetan1601@gmail.com, 123@123A, student
         // teacher@gmail.com, 123@123A, teacher
         // admin@gmail.com, 123@123A, admin
 
-        if (this.email.trim() === '' || this.password === '') {
+        if (this.loginForm.invalid) {
             alert('Must fill in email and password');
         } else {
-            this.authService.login(this.email, this.password);
-            this.userStore.loggedUserSubject.subscribe((user) => (this.user = user));
+            this.authService.login(
+                this.loginForm.controls.email.value!,
+                this.loginForm.controls.password.value!
+            );
         }
+    }
+
+    googleLogin() {
+        this.socialAuth.authState.subscribe((user) => {
+            if (user !== null) {
+                console.log(user);
+                this.authService.googleLogin(user.idToken, user.provider);
+            }
+        });
     }
 }

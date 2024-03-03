@@ -1,6 +1,6 @@
-import { StudentService } from './../../../services/student.service';
+import { StudentService } from '../../services/student.service';
 import { Component } from '@angular/core';
-import { AuthService } from 'src/app/services/auth.service';
+import { UserStore } from 'src/app/stores/user.store';
 
 @Component({
     selector: 'app-student',
@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class StudentComponent {
     file: File | null = null;
 
-    constructor(private studentService: StudentService) {}
+    constructor(private studentService: StudentService, private userStore: UserStore) {}
 
     submit() {
         if (this.file == null) alert('Please choose a file');

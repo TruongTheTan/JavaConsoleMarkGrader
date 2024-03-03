@@ -1,4 +1,4 @@
-export type GetUser = {
+export type AuthenticationUser = {
     id: string;
     email: string;
     name: string;
@@ -9,5 +9,13 @@ export type GetUser = {
 export type CreateUser = {
     name: string;
     email: string;
-    roleId: number;
+    role: string;
+};
+
+export type GetUser = {
+    id: string;
+    email: string;
+    userName: string;
+    roleName: string;
+    phoneNumber: string;
 };

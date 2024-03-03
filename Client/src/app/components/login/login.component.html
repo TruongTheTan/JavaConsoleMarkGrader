@@ -1,16 +1,19 @@
 <div class="login-page">
     <div class="form">
         <h1>Login</h1>
-        <form novalidate class="login-form" (ngSubmit)="login()">
-            <input type="email" placeholder="Email" name="email" [(ngModel)]="email" required />
+        <form [formGroup]="loginForm" class="login-form" (ngSubmit)="login()">
+            <input type="email" placeholder="Email" [formControl]="loginForm.controls.email" />
             <input
                 type="password"
-                name="password"
                 placeholder="password"
-                required
-                [(ngModel)]="password"
+                [formControl]="loginForm.controls.password"
             />
-            <button formnovalidate type="submit">login</button>
+            <button type="submit">login</button>
         </form>
+
+        <div style="margin-top: 20px; display: flex; align-items: center">
+            <span> Or login with Google: </span>
+            <asl-google-signin-button />
+        </div>
     </div>
 </div>

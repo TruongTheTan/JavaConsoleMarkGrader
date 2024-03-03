@@ -1,47 +1,51 @@
-import { Injectable, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {
-    HTTP_INTERCEPTORS,
-    HttpClientModule,
-    HttpEvent,
-    HttpHandler,
-    HttpInterceptor,
-    HttpRequest,
-} from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
-import { Observable } from 'rxjs';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './services/auth.service';
 import { CookieService } from 'ngx-cookie-service';
 import { UserStore } from './stores/user.store';
-import { StudentComponent } from './components/user/student/student.component';
-import { TeacherComponent } from './components/user/teacher/teacher.component';
-import { AdminComponent } from './components/user/admin/admin.component';
+import { StudentComponent } from './components/student/student.component';
+import { TeacherComponent } from './components/teacher/teacher.component';
 import { StudentService } from './services/student.service';
-
-@Injectable()
-export class InterceptorConfig implements HttpInterceptor {
-    constructor(private cookieService: CookieService) {}
-
-    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const jwtToken = this.cookieService.get('token');
-
-        const modifiedRequest = request.clone({
-            url: `https://localhost:7254/api/${request.url}`,
-            headers: request.headers.set('Authorization', `Bearer ${jwtToken}`),
-        });
-
-        return next.handle(modifiedRequest);
-    }
-}
+import { UsersComponent } from './components/admin/user/user-list/users.component';
+import { ModalComponent } from './components/modal/modal.component';
+import { GlobalErrorHandler } from './utils/global-error-handler';
+import { TestCaseComponent } from './components/admin/test-case/test-case.component';
+import { CommonLayoutComponent } from './components/layout/common-layout/common-layout.component';
+import { CreateUserComponent } from './components/admin/user/create-user/create-user.component';
+import { AdminService } from './services/admin.service';
+import {
+    SocialLoginModule,
+    SocialAuthServiceConfig,
+    GoogleLoginProvider,
+    GoogleSigninButtonModule,
+} from '@abacritt/angularx-social-login';
+import { interceptorConfig } from './utils/http-interceptor';
 
 // Add services here
-const servicesProvider = [AuthService, StudentService];
+const servicesProvider = [AdminService, AuthService, StudentService, GlobalErrorHandler];
 
 // Add stores here
 const storesProvider = [UserStore];
+
+const SocialAuthProvider = {
+    provide: 'SocialAuthServiceConfig',
+    useValue: {
+        autoLogin: false,
+        providers: [
+            {
+                id: GoogleLoginProvider.PROVIDER_ID,
+                provider: new GoogleLoginProvider(
+                    '256438874185-qp91u851or88s8plr1p8ku8nv28vp0jh.apps.googleusercontent.com'
+                ),
+            },
+        ],
+    } as SocialAuthServiceConfig,
+};
 
 @NgModule({
     declarations: [
@@ -49,18 +53,27 @@ const storesProvider = [UserStore];
         LoginComponent,
         StudentComponent,
         TeacherComponent,
-        AdminComponent,
+        UsersComponent,
+        ModalComponent,
+        TestCaseComponent,
+        CommonLayoutComponent,
+        CreateUserComponent,
     ],
-    imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule, ReactiveFormsModule],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        FormsModule,
+        ReactiveFormsModule,
+        SocialLoginModule,
+        GoogleSigninButtonModule,
+    ],
     providers: [
         ...servicesProvider,
         ...storesProvider,
+        SocialAuthProvider,
         CookieService,
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: InterceptorConfig,
-            multi: true,
-        },
+        interceptorConfig,
     ],
     bootstrap: [AppComponent],
 })
