@@ -87,7 +87,6 @@ namespace MarkGrader.Configurations
 
 		public static void AddDIs()
 		{
-
 			/*
 			Services.AddIdentity<IdentityUser, IdentityRole>()
 				.AddEntityFrameworkStores<Java_Console_Auto_GraderContext>()
@@ -95,10 +94,13 @@ namespace MarkGrader.Configurations
 			*/
 			Services.AddIdentityCore<IdentityUser>().AddEntityFrameworkStores<Java_Console_Auto_GraderContext>();
 
+
 			Services.AddScoped<UserManager<IdentityUser>>();
+
 
 			Services.AddScoped<UnitOfWork>();
 			Services.AddScoped<Java_Console_Auto_GraderContext>();
+
 
 			Services.AddScoped<IUserService, UserService>();
 			Services.AddScoped<IStudentService, StudentService>();

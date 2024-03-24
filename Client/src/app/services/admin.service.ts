@@ -1,4 +1,4 @@
-import { GlobalErrorHandlerService } from '../utils/global-error-handler';
+import { GlobalErrorHandler } from '../utils/global-error-handler';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { CreateUser, AuthenticationUser, GetUser } from '../models/user';

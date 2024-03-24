@@ -10,11 +10,9 @@ namespace MarkGrader.Configurations
 
 		public MappingProfile()
 		{
-
 			UserMapping();
 			TestCaseMapping();
 			SemesterMapping();
-
 		}
 
 
@@ -26,11 +24,13 @@ namespace MarkGrader.Configurations
 			//   .ReverseMap();
 
 
-			CreateMap<IdentityUser, GetUserDTO>()
+			CreateMap<IdentityUser, AuthenticationUser>()
 				.ForMember(des => des.Name, option => option.MapFrom(user => user.UserName))
 				.ReverseMap();
 
+			CreateMap<IdentityUser, GetUserDTO>().ReverseMap();
 			CreateMap<AspNetUser, GetUserDTO>().ReverseMap();
+			CreateMap<AspNetUser, AuthenticationUser>().ReverseMap();
 			CreateMap<IdentityUser, CreateUserDTO>().ReverseMap();
 		}
 

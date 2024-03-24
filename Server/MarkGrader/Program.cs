@@ -16,6 +16,7 @@ ServiceConfig.AddSwagger();
 ServiceConfig.AddJWTAuthentication(builder.Configuration["JWT:SecretKey"]!);
 ServiceConfig.AddAuthorization();
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

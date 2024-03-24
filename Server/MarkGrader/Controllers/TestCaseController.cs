@@ -64,7 +64,7 @@ namespace MarkGrader.Controllers
 		[HttpPost("create")]
 		public async Task<IActionResult> CreateTestCase([FromBody] CreateTestCaseDTO testCase)
 		{
-			if (ModelState.IsValid)
+			if (ModelState.IsValid && testCase.CheckValidInputType == true)
 			{
 				bool createSuccessfull = await this.testService.CreateNewTestCaseAsync(testCase);
 
@@ -93,5 +93,7 @@ namespace MarkGrader.Controllers
 			}
 			return BadRequest();
 		}
+
 	}
+
 }

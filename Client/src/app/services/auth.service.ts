@@ -5,7 +5,6 @@ import { Injectable, signal } from '@angular/core';
 import { AuthenticationUser, GetUser } from '../models/user';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
-import { ModalComponent } from '../components/modal/modal.component';
 
 @Injectable({
     providedIn: 'root',

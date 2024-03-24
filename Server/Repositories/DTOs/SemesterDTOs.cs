@@ -18,7 +18,10 @@ namespace Repositories.DTOs
 
 	public class UpdateSemesterDTO
 	{
+		[Required]
 		public int Id { get; set; }
+
+		[Required]
 		public string? SemesterName { get; set; }
 	}
 }

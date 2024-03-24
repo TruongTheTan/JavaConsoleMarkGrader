@@ -1,7 +1,12 @@
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-    Launch static backdrop modal
-</button>
+<button
+    id="button"
+    type="button"
+    class="btn btn-primary"
+    data-bs-toggle="modal"
+    data-bs-target="#myModal"
+    style="display: none"
+></button>
 
 <!-- Modal -->
 <div class="modal" id="myModal">
@@ -13,11 +18,18 @@
             </div>
 
             <!-- Modal body -->
-            <div class="modal-body">{{ message }}</div>
+            <div class="modal-body">{{ message() }}</div>
 
             <!-- Modal footer -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                <button
+                    type="button"
+                    class="btn btn-danger"
+                    data-bs-dismiss="modal"
+                    (click)="message.set('')"
+                >
+                    Close
+                </button>
             </div>
         </div>
     </div>

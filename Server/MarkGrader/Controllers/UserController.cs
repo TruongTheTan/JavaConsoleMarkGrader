@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.DTOs;
 using Services.UserService;
@@ -11,14 +11,15 @@ namespace MarkGrader.Controllers
 	{
 
 		private readonly IUserService userService;
-		private readonly SignInManager<IdentityUser> _signInManager;
 
 
-		public UserController(IUserService userService, SignInManager<IdentityUser> _signInManager)
+
+		public UserController(IUserService userService)
 		{
-			this._signInManager = _signInManager;
 			this.userService = userService;
 		}
+
+
 
 
 
@@ -26,14 +27,14 @@ namespace MarkGrader.Controllers
 		public async Task<IActionResult> BasicLogin([FromBody] UserLoginDTO user)
 		{
 
-			GetUserDTO? userDTO = await this.userService.Login(user);
+			AuthenticationUser? authenticationUser = await this.userService.Login(user);
 
 
-			if (userDTO == null)
+			if (authenticationUser == null)
 				return NotFound("User not found");
 
 
-			HttpContext.Response.Cookies.Append("token", userDTO.Token!,
+			HttpContext.Response.Cookies.Append("token", authenticationUser.Token!,
 				new CookieOptions()
 				{
 					HttpOnly = true,
@@ -42,7 +43,7 @@ namespace MarkGrader.Controllers
 					//Expires = DateTime.UtcNow.AddMinutes(Convert.ToInt32(configuration["JWT:Expiration"]))
 				});
 
-			return Ok(userDTO);
+			return Ok(authenticationUser);
 		}
 
 
@@ -51,34 +52,35 @@ namespace MarkGrader.Controllers
 
 
 
-		/*
+
 		[HttpPost("google-login")]
-		public async Task<IActionResult> GoogleLogin([FromBody] string googleIdToken)
+		public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginDTO googleLoginDTO)
 		{
 
-			try
-			{
-				var payload = await GoogleJsonWebSignature.ValidateAsync(googleIdToken.Trim());
+			AuthenticationUser? authenticationUser = await this.userService.GoogleLogin(googleLoginDTO);
 
+			if (authenticationUser == null)
+				return NotFound("User not found");
 
-				// The token is invalid or unable to decode
-				if (payload == null)
-					return Problem();
-
-				UserDTO userDTO = await this.userService.GetUserByEmail(payload.Email.Trim());
-				return Ok(userDTO);
-			}
-			catch (InvalidJwtException ex)
-			{
-				return Problem(ex.ToString());
-
-			}
+			return Ok(authenticationUser);
 		}
-		*/
+
+
+
+
+
+		[HttpGet("list")]
+		[Authorize(Roles = "Admin")]
+		public async Task<IActionResult> GetUserList()
+		{
+			List<GetUserDTO> list = await userService.GetUserList();
+			return Ok(list);
+		}
 
 
 
 		[HttpPost("create")]
+		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> CreateNewUser([FromBody] CreateUserDTO createUserDTO)
 		{
 			bool createdSuccessfull = await userService.AddNewUser(createUserDTO);
@@ -98,13 +100,26 @@ namespace MarkGrader.Controllers
 		public async Task<IActionResult> ChangePassword([FromBody] ChangeUserPasswordDTO changeUserPasswordDTO)
 		{
 
-			if (changeUserPasswordDTO.OldPassword != changeUserPasswordDTO.NewPassword)
-				return BadRequest("Password and confirm password are not equal");
-
 			bool updateSuccessfull = await userService.ChangeUserPassword(changeUserPasswordDTO);
 
 			if (updateSuccessfull)
 				return Ok("Change password successfully");
+
+			return Problem();
+		}
+
+
+
+
+
+		[HttpPatch("reset-password")]
+		public async Task<IActionResult> ResetPassword([FromBody] string email)
+		{
+
+			bool resetSuccessfull = await userService.ResetPassword(email);
+
+			if (resetSuccessfull)
+				return Ok("Reset password successfully");
 
 			return Problem();
 		}

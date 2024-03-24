@@ -2,12 +2,23 @@
 
 namespace Repositories.DTOs
 {
-	public class GetUserDTO
+
+	public class AuthenticationUser
 	{
-		public string Id { get; set; }
+		public string? Id { get; set; }
 		public string? Name { get; set; }
 		public string? Email { get; set; }
 		public string? Token { get; set; }
+		public string? RoleName { get; set; }
+	}
+
+
+	public class GetUserDTO
+	{
+		public string? Id { get; set; }
+		public string? UserName { get; set; }
+		public string? Email { get; set; }
+		public string? PhoneNumber { get; set; }
 		public string? RoleName { get; set; }
 	}
 
@@ -23,6 +34,19 @@ namespace Repositories.DTOs
 		[DataType(DataType.Password)]
 		public string Password { get; set; } = null!;
 	}
+
+
+
+
+	public class GoogleLoginDTO
+	{
+		[Required, DataType(DataType.Text)]
+		public string? Provider { get; set; }
+
+		[Required, DataType(DataType.Text)]
+		public string? IdToken { get; set; }
+	}
+
 
 
 

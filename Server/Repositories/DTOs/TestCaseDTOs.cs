@@ -1,18 +1,19 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace Repositories.DTOs
 {
 	public class CreateTestCaseDTO
 	{
 		[Required, MinLength(1)]
-		[NotNull, ListNotEmptyString(ErrorMessage = "Inputs must not contain empty string ")]
+		[NotNull, ListNotContainEmptyString(ErrorMessage = "Inputs must not contain empty string ")]
 		public List<string>? Input { get; set; }
 
 
 
 		[Required, MinLength(1)]
-		[NotNull, ListNotEmptyString(ErrorMessage = "Ouputs must not contain empty string ")]
+		[NotNull, ListNotContainEmptyString(ErrorMessage = "Ouputs must not contain empty string ")]
 		public List<string>? Output { get; set; }
 
 
@@ -21,17 +22,30 @@ namespace Repositories.DTOs
 		public int? Mark { get; set; }
 
 
+		[Required]
+		public bool? IsInputArray { get; set; }
+
 
 		[Required]
-		public bool IsInputArray { get; set; } = false;
+		public bool? IsInputByLine { get; set; }
 
 
-		[Required]
-		public bool IsInputByLine { get; set; } = false;
-
-
-		[Required, Range(0, int.MaxValue), NotNull]
+		[Required, Range(1, int.MaxValue), NotNull]
 		public int? SemesterId { get; set; }
+
+
+		[JsonIgnore]
+		public bool CheckValidInputType
+		{
+			get
+			{
+				if (IsInputArray != IsInputByLine || IsInputByLine != IsInputArray)
+					return true;
+
+				return false;
+			}
+		}
+
 	}
 
 
