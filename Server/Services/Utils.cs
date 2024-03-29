@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Repositories.DTOs;
 
@@ -12,6 +13,20 @@ namespace Services
 {
 	public static class Utils
 	{
+
+		private static readonly IConfigurationRoot configuration;
+
+
+		static Utils()
+		{
+			var builder = new ConfigurationBuilder();
+
+			builder.SetBasePath(Directory.GetCurrentDirectory());
+			builder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+			configuration = builder.Build();
+		}
+
 
 
 		public static void CreateJwtToken(ref AuthenticationUser user, string secretKey, int expiration)
@@ -47,47 +62,68 @@ namespace Services
 
 
 
-		public static async Task SendEmailAsync(string subject, string body, string sender, string recipient)
+		public static async Task<bool> SendEmailAsync(string subject, string body, string to)
 		{
 
-			string smtpServer = "your_smtp_server";
-			int smtpPort = 587; // Port number may vary depending on your SMTP server
-			string smtpUsername = "your_username";
-			string smtpPassword = "your_password";
+			if (!(await ValidateEmailAsync(to)))
+				return false;
 
 
-			string senderEmail = sender;
-			string recipientEmail = recipient;
+			string sender = configuration.GetSection("MailSettings:Sender").Value!;
+			string password = configuration.GetSection("MailSettings:AppPassword").Value!;
+
+			MailMessage mail = new();
+			SmtpClient smtpClient = new("smtp.gmail.com");
 
 
-			MailMessage mail = new(senderEmail, recipientEmail)
-			{
-				Subject = subject,
-				Body = "This is your default password: 123@123A. Please change your password now" // body
-			};
+			mail.From = new MailAddress(sender);
+			mail.To.Add(to);
+			mail.Subject = subject;
+			mail.Body = body;
 
-			// Set the SMTP client settings
-			SmtpClient smtpClient = new(smtpServer, smtpPort)
-			{
-				UseDefaultCredentials = false,
-				Credentials = new NetworkCredential(smtpUsername, smtpPassword),
-				EnableSsl = true
-			};
+
+			smtpClient.Port = 587;
+			smtpClient.UseDefaultCredentials = false;
+			smtpClient.Credentials = new NetworkCredential(sender, password);
+			smtpClient.EnableSsl = true;
+
 
 			try
 			{
 				await smtpClient.SendMailAsync(mail);
 				Console.WriteLine("Email sent successfully.");
+				return true;
 			}
 			catch (Exception ex)
 			{
 				Console.WriteLine("Failed to send email: " + ex.Message);
+				return false;
 			}
 			finally
 			{
 				mail.Dispose();
 				smtpClient.Dispose();
 			}
+		}
+
+
+
+
+		private static async Task<bool> ValidateEmailAsync(string email)
+		{
+
+			const string apiKey = "1d6495eafd9045e486e37c8d0d2b40b8";
+			string apiUrl = $"https://emailvalidation.abstractapi.com/v1/?api_key={apiKey}&email={email}";
+
+
+			using HttpClient client = new();
+			HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+			if (!response.IsSuccessStatusCode)
+				return false;
+
+			string resultJsonString = await response.Content.ReadAsStringAsync();
+			return resultJsonString.Contains("\"deliverability\":\"DELIVERABLE\"");
 		}
 	}
 }
