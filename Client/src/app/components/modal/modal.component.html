@@ -1,6 +1,6 @@
 <!-- Button trigger modal -->
 <button
-    id="button"
+    id="openModalButton"
     type="button"
     class="btn btn-primary"
     data-bs-toggle="modal"
@@ -23,10 +23,10 @@
             <!-- Modal footer -->
             <div class="modal-footer">
                 <button
+                    id="closeModalButton"
                     type="button"
                     class="btn btn-danger"
                     data-bs-dismiss="modal"
-                    (click)="message.set('')"
                 >
                     Close
                 </button>

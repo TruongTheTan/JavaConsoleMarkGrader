@@ -1,5 +1,5 @@
 import { UserStore } from 'src/app/stores/user.store';
-import { AdminService } from './../../../../services/admin.service';
+import { AdminService } from '../../../../../services/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { GetUser } from 'src/app/models/user';
 

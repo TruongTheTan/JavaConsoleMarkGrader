@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
 export class AuthService {
     private readonly BASIC_LOGIN_API = 'User/basic-login';
     private readonly GOOGLE_LOGIN_API = 'User/google-login';
+    private readonly RESET_PASSWORD_API = 'User/reset-password';
+    private readonly CHANGE_PASSWORD_API = 'User/change-password';
 
     constructor(
         private http: HttpClient,
@@ -49,7 +51,23 @@ export class AuthService {
     }
 
     resetPasswordToDefault(email: string) {
-        // TODO:
+        this.http.patch(this.RESET_PASSWORD_API, { email }).subscribe({
+            next: (user) => alert('Password reset to default'),
+            error: (error: HttpErrorResponse) => this.errorHander.handleHttpError(error),
+        });
+    }
+
+    changePassword(email: string, oldPassword: string, newPassword: string) {
+        const changePasswordObj = {
+            email,
+            oldPassword,
+            newPassword,
+        };
+
+        this.http.patch(this.CHANGE_PASSWORD_API, changePasswordObj).subscribe({
+            next: () => alert('ok'),
+            error: (error: HttpErrorResponse) => this.errorHander.handleHttpError(error),
+        });
     }
 
     logout() {

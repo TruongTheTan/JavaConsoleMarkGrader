@@ -26,13 +26,9 @@ export class LoginComponent {
         // teacher@gmail.com, 123@123A, teacher
         // admin@gmail.com, 123@123A, admin
 
-        if (this.loginForm.invalid) {
-            alert('Must fill in email and password');
-        } else {
-            this.authService.login(
-                this.loginForm.controls.email.value!,
-                this.loginForm.controls.password.value!
-            );
+        if (!this.loginForm.invalid) {
+            const { email, password } = this.loginForm.controls;
+            this.authService.login(email.value!, password.value!);
         }
     }
 

@@ -1,7 +1,6 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable, signal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { GetUser } from '../models/user';
 
 @Injectable({
     providedIn: 'root',
@@ -10,10 +9,15 @@ export class GlobalErrorHandler {
     private message = new BehaviorSubject('' as string);
 
     handleHttpError(error: HttpErrorResponse) {
-        this.message.next(error.error);
+        let errorMessage = '';
+
+        if (typeof error.error === 'object') errorMessage = error.statusText;
+        else errorMessage = error.error;
+
+        this.message.next(errorMessage);
     }
 
-    getUser() {
+    getErrorMessage() {
         return this.message.asObservable();
     }
 }

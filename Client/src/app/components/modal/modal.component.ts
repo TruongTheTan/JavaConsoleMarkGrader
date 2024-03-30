@@ -1,13 +1,4 @@
-import {
-    Component,
-    effect,
-    Injectable,
-    OnChanges,
-    OnInit,
-    signal,
-    SimpleChanges,
-} from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Component, effect, OnInit, signal } from '@angular/core';
 import { GlobalErrorHandler } from 'src/app/utils/global-error-handler';
 
 @Component({
@@ -18,22 +9,28 @@ import { GlobalErrorHandler } from 'src/app/utils/global-error-handler';
 export class ModalComponent implements OnInit {
     message = signal('');
 
+    private openModalButton = {} as HTMLButtonElement | null;
+    private closeModalButton = {} as HTMLButtonElement | null;
+
     constructor(private errorHander: GlobalErrorHandler) {
         this.showDialog();
     }
 
     ngOnInit(): void {
-        this.errorHander.getUser().subscribe((message) => this.message.set(message));
-        //this.showDialog();
+        this.errorHander.getErrorMessage().subscribe((message) => this.message.set(message));
+        this.openModalButton = document.getElementById('openModalButton') as HTMLButtonElement;
+        this.closeModalButton = document.getElementById('closeModalButton') as HTMLButtonElement;
     }
 
     showDialog() {
         effect(() => {
             if (this.message()) {
-                const button = document.getElementById('button') as HTMLButtonElement;
-                button.click();
+                this.openModalButton?.click();
 
-                setTimeout(() => this.message.set(''), 3000);
+                setTimeout(() => {
+                    this.message.set('');
+                    this.closeModalButton?.click();
+                }, 2300);
             }
         });
     }

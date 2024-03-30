@@ -22,18 +22,4 @@ export class UserStore {
     getUserList(): Observable<GetUser[]> {
         return this.userList;
     }
-
-    listLenth() {
-        return this.userList.value.length;
-    }
-
-    add() {
-        this.userList.value.push({
-            id: '',
-            email: '',
-            userName: 'sss',
-            roleName: '',
-            phoneNumber: '',
-        });
-    }
 }
