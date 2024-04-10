@@ -1,10 +1,9 @@
 ﻿using System.Diagnostics;
 using Repositories.DTOs;
-using Services;
 
-namespace MarkGrader
+namespace Services.StudentService
 {
-	public static class StudentMarkGrader
+	public static class StudentMarkGraderService
 	{
 
 		private static StreamWriter? streamWriter;
@@ -22,17 +21,19 @@ namespace MarkGrader
 			get => testCaseList;
 			set
 			{
-				bool isTestCasesExistInDB = value != null || value!.Count > 0;
+				bool isTestCasesExistInDB = (value != null || value!.Count > 0);
 
 				if (isTestCasesExistInDB)
 					testCaseList ??= value;
+				else
+					testCaseList = new List<GetTestCaseDTO>();
 			}
 		}
 
 
 
 
-		static StudentMarkGrader()
+		static StudentMarkGraderService()
 		{
 			myProcess = new Process();
 			myProcess.StartInfo.UseShellExecute = false;
@@ -63,7 +64,7 @@ namespace MarkGrader
 				// Grade mark by each test case
 				foreach (GetTestCaseDTO testCase in TestCaseList!)
 				{
-					// Plus 1 unit when is the last test case, so the second block if below can run
+					// Plus 1 unit when is the last test case in order the second block if below can run
 					if (TestCaseList.Last().Equals(testCase))
 						currentTestCaseNumber++;
 
@@ -82,9 +83,9 @@ namespace MarkGrader
 					currentTestCaseNumber++;
 
 
-
 					string studentFolderName = StudentFileSubmitManager.SplittedStudentFileName;
 					string studentJarPath = $@"{studentQuestionsFolder}\{studentFolderName}\Q{currentQuestionNumber}.jar";
+
 
 					// Start grading mark if question number submmited
 					if (File.Exists(studentJarPath))
@@ -100,11 +101,9 @@ namespace MarkGrader
 						ProvideTestCaseInputToConsole(testCase);
 
 						string studentOuputResult = GetStudentConsoleOutput();
-
 						studentQuestionTotalMark += GetMarkByTestCaseOutput(testCase, studentOuputResult);
 					}
 				}
-
 				streamWriter?.Close();
 				streamReader?.Close();
 				myProcess.Close();
@@ -147,7 +146,6 @@ namespace MarkGrader
 		{
 			string consoleOutput = streamReader!.ReadToEnd().Trim();
 			string studentOutputResult = consoleOutput[(consoleOutput.IndexOf("OUTPUT:") + "OUTPUT:".Length)..].Trim();
-
 			return studentOutputResult ??= "";
 		}
 
@@ -159,7 +157,6 @@ namespace MarkGrader
 		{
 			string studentOutputString = string.Join(" ", studentOutputResult.Split("\r\n").ToList());
 			string testCaseOutputString = string.Join(testCase.IsInputByLine ? "\n" : " ", testCase.Output!);
-
 
 			// Grade mark by output
 			if (testCaseOutputString.Equals(studentOutputString))
