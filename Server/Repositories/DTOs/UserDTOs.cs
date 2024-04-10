@@ -83,4 +83,19 @@ namespace Repositories.DTOs
 		[DataType(DataType.Password)]
 		public string NewPassword { get; set; } = null!;
 	}
+
+
+	public class UserConfirmEmail
+	{
+		[Required, EmailAddress]
+		[DataType(DataType.EmailAddress, ErrorMessage = "E-mail is not valid")]
+		[RegularExpression(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$", ErrorMessage = "Invalid email format")]
+		public string Email { get; set; } = null!;
+
+
+		[Required]
+		[DataType(DataType.Text)]
+		public string Token { get; set; } = null!;
+
+	}
 }

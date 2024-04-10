@@ -6,7 +6,7 @@ using Repositories.Models;
 
 namespace Services.TestCaseService
 {
-	public class TestCaseService : ITestCaseService
+	public partial class TestCaseService : ITestCaseService
 	{
 
 
@@ -67,4 +67,5 @@ namespace Services.TestCaseService
 		}
 
 	}
+
 }

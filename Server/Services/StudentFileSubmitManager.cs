@@ -9,12 +9,12 @@ namespace Services
 	public static class StudentFileSubmitManager
 	{
 
-		private static string studentFileName = string.Empty;
-		private static readonly string SAVE_FILE_LOCATION = string.Empty;
-		private static readonly string EXTRACT_FILE_LOCATION = string.Empty;
+		private static string? studentFileName;
+		private static readonly string SAVE_FILE_LOCATION;
+		private static readonly string EXTRACT_FILE_LOCATION;
 		private static readonly string SOLUTION_PATH = Directory.GetParent(Environment.CurrentDirectory)!.FullName;
 
-		public static string SplittedStudentFileName { get => studentFileName.Split(".rar")[0]; }
+		public static string SplittedStudentFileName { get => studentFileName!.Split(".rar")[0]; }
 
 
 		static StudentFileSubmitManager()

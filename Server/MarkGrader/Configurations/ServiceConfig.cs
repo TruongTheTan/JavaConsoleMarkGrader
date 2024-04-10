@@ -17,7 +17,7 @@ namespace MarkGrader.Configurations
 	public class ServiceConfig
 	{
 
-		public static IServiceCollection Services { get; set; }
+		public static IServiceCollection Services { get; set; } = null!;
 
 
 
@@ -102,8 +102,20 @@ namespace MarkGrader.Configurations
 			Services.AddScoped<Java_Console_Auto_GraderContext>();
 
 
-			Services.AddScoped<IUserService, UserService>();
-			Services.AddScoped<IStudentService, StudentService>();
+			// Add User services
+			Services.AddScoped<UserService>();
+			Services.AddScoped<UserGetService>();
+			Services.AddScoped<UserLoginService>();
+			Services.AddScoped<UserCreateService>();
+			Services.AddScoped<UserPasswordService>();
+
+			// Add User services
+			Services.AddScoped<StudentService>();
+			Services.AddScoped<StudentGetService>();
+			Services.AddScoped<StudentCreateService>();
+
+
+
 			Services.AddScoped<ISemesterService, SemesterService>();
 			Services.AddScoped<ITestCaseService, TestCaseService>();
 
@@ -164,8 +176,6 @@ namespace MarkGrader.Configurations
 			{
 				options.Password.RequireDigit = false;
 				options.Password.RequireLowercase = false;
-				options.User.RequireUniqueEmail = true;
-				//options.SignIn.RequireConfirmedEmail = true;
 
 
 				// Password settings
@@ -181,6 +191,8 @@ namespace MarkGrader.Configurations
 				//options.Lockout.AllowedForNewUsers = true;
 
 				// User settings
+				options.User.RequireUniqueEmail = true;
+				options.SignIn.RequireConfirmedEmail = true;
 
 
 			});
