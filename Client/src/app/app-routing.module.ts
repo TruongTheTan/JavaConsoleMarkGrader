@@ -1,12 +1,12 @@
-import { ChangePasswordComponent } from './components/auth/change-password/change-password.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ChangePasswordComponent } from './components/auth/change-password/change-password.component';
 import { LoginComponent } from './components/auth/login/login.component';
+import { CommonLayoutComponent } from './components/layout/common-layout/common-layout.component';
+import { TestCaseListComponent } from './components/roles/admin/test-case/test-case-list/test-case-list.component';
+import { UsersComponent } from './components/roles/admin/user/user-list/users.component';
 import { StudentComponent } from './components/roles/student/student.component';
 import { TeacherComponent } from './components/roles/teacher/teacher.component';
-import { UsersComponent } from './components/roles/admin/user/user-list/users.component';
-import { CommonLayoutComponent } from './components/layout/common-layout/common-layout.component';
-import { TestCaseComponent } from './components/roles/admin/test-case/test-case.component';
 
 const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -16,7 +16,7 @@ const routes: Routes = [
         component: CommonLayoutComponent,
         children: [
             { path: '', component: UsersComponent },
-            { path: 'test-case', component: TestCaseComponent },
+            { path: 'test-case', component: TestCaseListComponent },
         ],
     },
     {

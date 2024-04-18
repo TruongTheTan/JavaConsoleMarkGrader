@@ -1,7 +1,6 @@
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AdminService } from '../../../../../services/admin.service';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { CreateUser } from 'src/app/models/user';
 
 @Component({
     selector: 'app-create-user',
@@ -11,13 +10,16 @@ import { CreateUser } from 'src/app/models/user';
 export class CreateUserComponent {
     //
 
-    createUserForm = new FormGroup({
+    readonly createUserForm = new FormGroup({
         username: new FormControl('', Validators.required),
         email: new FormControl('', [
             Validators.required,
             Validators.pattern('^[A-Za-z0-9_.]+@gmail.com$'),
         ]),
-        role: new FormControl('', Validators.required),
+        role: new FormControl('', [
+            Validators.required,
+            Validators.pattern('^(Admin|Teacher|Student)$'),
+        ]),
     });
 
     constructor(private adminService: AdminService) {}
@@ -26,11 +28,8 @@ export class CreateUserComponent {
         if (this.createUserForm.invalid) {
             alert('Invalid info');
         } else {
-            this.adminService.createNewUser({
-                name: this.createUserForm.value.username!,
-                email: this.createUserForm.value.email!,
-                role: this.createUserForm.value.role!,
-            });
+            const { email, username, role } = this.createUserForm.value;
+            this.adminService.createNewUser({ email: email!, username: username!, role: role! });
         }
     }
 

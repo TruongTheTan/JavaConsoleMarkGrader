@@ -4,9 +4,9 @@ using SharpCompress.Archives.Rar;
 using SharpCompress.Common;
 
 
-namespace Services
+namespace Services.StudentService
 {
-	public static class StudentFileSubmitManager
+	public static class StudentFileSubmitService
 	{
 
 		private static string? studentFileName;
@@ -17,7 +17,8 @@ namespace Services
 		public static string SplittedStudentFileName { get => studentFileName!.Split(".rar")[0]; }
 
 
-		static StudentFileSubmitManager()
+
+		static StudentFileSubmitService()
 		{
 			SAVE_FILE_LOCATION = $@"{SOLUTION_PATH}\Storage\StudentCompressedFiles\";
 			EXTRACT_FILE_LOCATION = $@"{SOLUTION_PATH}\Storage\StudentExtractedFiles\";

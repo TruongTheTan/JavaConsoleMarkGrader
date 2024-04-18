@@ -3,7 +3,7 @@
 namespace Repositories.DTOs
 {
 
-	public class AuthenticationUser
+	public sealed class AuthenticationUser
 	{
 		public string? Id { get; set; }
 		public string? Name { get; set; }
@@ -13,7 +13,8 @@ namespace Repositories.DTOs
 	}
 
 
-	public class GetUserDTO
+
+	public sealed class GetUserDTO
 	{
 		public string? Id { get; set; }
 		public string? UserName { get; set; }
@@ -24,11 +25,13 @@ namespace Repositories.DTOs
 
 
 
-	public class UserLoginDTO
+
+	public sealed class UserLoginDTO
 	{
 		[Required, EmailAddress]
 		[DataType(DataType.EmailAddress, ErrorMessage = "E-mail is not valid")]
 		public string Email { get; set; } = null!;
+
 
 		[Required]
 		[DataType(DataType.Password)]
@@ -38,10 +41,13 @@ namespace Repositories.DTOs
 
 
 
-	public class GoogleLoginDTO
+
+	public sealed class GoogleLoginDTO
 	{
 		[Required, DataType(DataType.Text)]
 		public string? Provider { get; set; }
+
+
 
 		[Required, DataType(DataType.Text)]
 		public string? IdToken { get; set; }
@@ -50,19 +56,26 @@ namespace Repositories.DTOs
 
 
 
-	public class CreateUserDTO
+
+	public sealed class CreateUserDTO
 	{
 		[Required]
+		[StringLength(100, MinimumLength = 1, ErrorMessage = "Name must not empty")]
 		public string? Name { get; set; }
+
 
 		[Required, EmailAddress]
 		[DataType(DataType.EmailAddress, ErrorMessage = "E-mail is not valid")]
 		[RegularExpression(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$", ErrorMessage = "Invalid email format")]
 		public string Email { get; set; } = null!;
 
+
 		[Required]
+		[StringLength(100, MinimumLength = 1, ErrorMessage = "Role name must not empty")]
+		[RegularExpression("^(Admin|Teacher|Student)$", ErrorMessage = "Valid roles are 'Admin', 'Teacher' and 'Student'.")]
 		public string? RoleName { get; set; }
 	}
+
 
 
 
@@ -75,14 +88,18 @@ namespace Repositories.DTOs
 		public string Email { get; set; } = null!;
 
 
+
 		[Required]
 		[DataType(DataType.Password)]
 		public string OldPassword { get; set; } = null!;
+
 
 		[Required]
 		[DataType(DataType.Password)]
 		public string NewPassword { get; set; } = null!;
 	}
+
+
 
 
 	public class UserConfirmEmail

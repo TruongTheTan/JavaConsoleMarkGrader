@@ -7,7 +7,7 @@ export type AuthenticationUser = {
 };
 
 export type CreateUser = {
-    name: string;
+    username: string;
     email: string;
     role: string;
 };

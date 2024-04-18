@@ -1,6 +1,6 @@
 <div
     class="modal fade"
-    id="exampleModal"
+    id="createUserModal"
     tabindex="-1"
     aria-labelledby="exampleModalLabel"
     aria-hidden="true"
@@ -49,7 +49,7 @@
 
                         <!-- Error msg -->
                         <div class="error text-danger">
-                            <p *ngIf="createUserForm.controls.email.errors?.['required']">
+                            <p *ngIf="createUserForm.controls.email.hasError('required')">
                                 Email is required
                             </p>
                             <p *ngIf="createUserForm.controls.email.hasError('pattern')">
@@ -69,6 +69,17 @@
                                 <option value="Teacher">Teacher</option>
                                 <option value="Student">Student</option>
                             </select>
+                        </div>
+
+                        <!-- Error msg -->
+                        <div class="error text-danger">
+                            <p *ngIf="createUserForm.controls.role.hasError('required')">
+                                Role is required
+                            </p>
+
+                            <p *ngIf="createUserForm.controls.role.hasError('pattern')">
+                                Valid roles are Admin, Teacher, Student
+                            </p>
                         </div>
                     </div>
                 </div>

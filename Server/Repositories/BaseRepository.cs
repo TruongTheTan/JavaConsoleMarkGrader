@@ -6,10 +6,10 @@ namespace Repositories
 	public abstract class BaseRepository<T> where T : class
 	{
 
-
-
 		protected DbSet<T> dbSet;
 		protected Java_Console_Auto_GraderContext context;
+
+
 
 		protected BaseRepository(Java_Console_Auto_GraderContext context)
 		{
@@ -34,9 +34,12 @@ namespace Repositories
 		public async Task<bool> UpdateAsync(T entity)
 		{
 			dbSet.Update(entity);
-			bool saveChangesSucessfull = await this.SaveChangesAsync();
+
+			bool isSaveChangesSuccessful = await this.SaveChangesAsync();
+
 			this.context.Entry(entity).State = EntityState.Modified;
-			return saveChangesSucessfull;
+
+			return isSaveChangesSuccessful;
 		}
 
 

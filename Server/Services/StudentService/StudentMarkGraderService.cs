@@ -83,11 +83,11 @@ namespace Services.StudentService
 					currentTestCaseNumber++;
 
 
-					string studentFolderName = StudentFileSubmitManager.SplittedStudentFileName;
+					string studentFolderName = StudentFileSubmitService.SplittedStudentFileName;
 					string studentJarPath = $@"{studentQuestionsFolder}\{studentFolderName}\Q{currentQuestionNumber}.jar";
 
 
-					// Start grading mark if question number submmited
+					// Start grading mark if question number submitted
 					if (File.Exists(studentJarPath))
 					{
 						myProcess.StartInfo.Arguments = "-jar " + studentJarPath; // run jar console command
@@ -100,8 +100,8 @@ namespace Services.StudentService
 
 						ProvideTestCaseInputToConsole(testCase);
 
-						string studentOuputResult = GetStudentConsoleOutput();
-						studentQuestionTotalMark += GetMarkByTestCaseOutput(testCase, studentOuputResult);
+						string studentOutputResult = GetStudentConsoleOutput();
+						studentQuestionTotalMark += GetMarkByTestCaseOutput(testCase, studentOutputResult);
 					}
 				}
 				streamWriter?.Close();
@@ -117,7 +117,6 @@ namespace Services.StudentService
 			createStudentSubmissionDetailsDTO.GradingTime = DateTime.Now;
 			createStudentSubmissionDetailsDTO.TotalMark = (short?)tempMark;
 			createStudentSubmissionDetailsDTO.QuestionDescription = questionDescription.Trim();
-
 
 			return createStudentSubmissionDetailsDTO;
 		}

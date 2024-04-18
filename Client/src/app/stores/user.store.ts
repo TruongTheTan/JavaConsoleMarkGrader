@@ -1,6 +1,6 @@
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { AuthenticationUser, GetUser } from '../models/user';
-import { Injectable, signal } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class UserStore {

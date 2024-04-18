@@ -1,9 +1,9 @@
 import {
+    HTTP_INTERCEPTORS,
+    HttpEvent,
+    HttpHandler,
     HttpInterceptor,
     HttpRequest,
-    HttpHandler,
-    HttpEvent,
-    HTTP_INTERCEPTORS,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';

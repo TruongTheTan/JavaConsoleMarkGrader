@@ -1,0 +1,80 @@
+<app-create-test-case></app-create-test-case>
+
+<div class="card shadow border-0 mb-7">
+    <header class="bg-surface-primary border-bottom pt-6 pb-4">
+        <div class="container-fluid">
+            <div class="mb-npx">
+                <div class="row align-items-center">
+                    <div class="col-sm-6 col-12 mb-4 mb-sm-0">
+                        <!-- Title -->
+                        <h1 class="h2 mb-0 ls-tight">Test case List</h1>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="col-sm-6 col-12 text-sm-end">
+                        <div class="mx-n1">
+                            <button
+                                class="btn d-inline-flex btn-sm btn-primary mx-1"
+                                data-bs-toggle="modal"
+                                data-bs-target="#createTestCaseModal"
+                            >
+                                <span class="pe-2">
+                                    <i class="bi bi-plus"></i>
+                                </span>
+                                <span>Create new test case</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Table -->
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Inputs</th>
+                    <th scope="col">Outputs</th>
+                    <th scope="col">Mark</th>
+                    <th scope="col">Semester</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let testCase of testCaseList; let i = index">
+                    <!-- Numerical order -->
+                    <td>
+                        <span class="text-heading font-semibold"> {{ i + 1 }} </span>
+                    </td>
+
+                    <td>{{ testCase.inputs }}</td>
+
+                    <td>
+                        <a class="text-heading font-semibold"> {{ testCase.outputs }} </a>
+                    </td>
+
+                    <td>
+                        <a class="text-heading font-semibold"> {{ testCase.mark }} </a>
+                    </td>
+
+                    <td>{{ testCase.semesterName }}</td>
+
+                    <!-- Buttons -->
+                    <td class="text-end">
+                        <button type="button" class="btn btn-sm btn-info m-1">Detail</button>
+
+                        <button type="button" class="btn btn-sm btn-danger btn-square">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer border-0 py-5">
+        <span class="text-muted text-sm"> </span>
+    </div>
+</div>

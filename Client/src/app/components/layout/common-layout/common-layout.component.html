@@ -89,7 +89,10 @@
                     </li>
 
                     <li class="nav-item" (click)="logout()">
-                        <a class="nav-link"> <i class="bi bi-box-arrow-left"></i> Logout </a>
+                        <a class="nav-link">
+                            <i class="bi bi-box-arrow-left"></i>
+                            {{ isAuthenticated ? "Logout" : "Login" }}
+                        </a>
                     </li>
                 </ul>
             </div>

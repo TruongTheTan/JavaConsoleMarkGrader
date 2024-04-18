@@ -1,6 +1,6 @@
-import { SocialAuthService } from '@abacritt/angularx-social-login';
+import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
 import { Component } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { AuthService } from 'src/app/services/auth.service';
     styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
-    loginForm = new FormGroup({
+    readonly loginForm = new FormGroup({
         email: new FormControl('', [
             Validators.required,
             Validators.pattern('^[A-Za-z0-9_.]+@gmail.com$'),
@@ -26,16 +26,16 @@ export class LoginComponent {
         // teacher@gmail.com, 123@123A, teacher
         // admin@gmail.com, 123@123A, admin
 
-        if (!this.loginForm.invalid) {
+        if (this.loginForm.valid) {
             const { email, password } = this.loginForm.controls;
             this.authService.login(email.value!, password.value!);
         }
     }
 
-    googleLogin() {
-        this.socialAuth.authState.subscribe((user) => {
+    private googleLogin() {
+        this.socialAuth.authState.subscribe((user: SocialUser) => {
             if (user !== null) {
-                console.log(user);
+                console.table(user);
                 this.authService.googleLogin(user.idToken, user.provider);
             }
         });

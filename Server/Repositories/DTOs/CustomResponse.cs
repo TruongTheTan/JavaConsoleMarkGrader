@@ -1,9 +1,11 @@
 ﻿namespace Repositories.DTOs
 {
-	public class CustomResponse<T>
+	public sealed class CustomResponse<T>
 	{
-		public int? StatusCode { get; set; } = 200;
-		public string? Message { get; set; }
 		public T? Data { get; set; }
+		public int? StatusCode { get; set; }
+		public List<T>? DataList { get; set; }
+		public string? Message { get; set; } = string.Empty;
+		public bool IsSuccess { get => StatusCode >= 200 && StatusCode <= 299; }
 	}
 }

@@ -1,3 +1,7 @@
+<!-- <div class="position-absolute bottom-50 spinner-border text-primary">
+    <span class="visually-hidden">Loading...</span>
+</div> -->
+
 <div class="login-page">
     <div class="form">
         <h1>Login</h1>
@@ -15,7 +19,7 @@
                 <!-- Error msg -->
                 <div class="error text-danger text-start">
                     <p *ngIf="loginForm.controls.email.hasError('required')">Email is required</p>
-                    <p *ngIf="loginForm.controls.email.hasError('pattern')">Invalid Email</p>
+                    <p *ngIf="loginForm.controls.email.hasError('pattern')">Invalid email format</p>
                 </div>
             </div>
 

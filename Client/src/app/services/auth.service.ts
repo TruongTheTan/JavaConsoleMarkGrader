@@ -1,17 +1,19 @@
-import { GlobalErrorHandler } from '../utils/global-error-handler';
-import { UserStore } from './../stores/user.store';
+import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable, signal } from '@angular/core';
-import { AuthenticationUser, GetUser } from '../models/user';
-import { CookieService } from 'ngx-cookie-service';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
+import { GlobalHttpHandler } from '../utils/global-http-handler';
+import { CustomResponse } from './../models/customer-response';
+import { AuthenticationUser } from './../models/user';
+import { UserStore } from './../stores/user.store';
 
 @Injectable({
     providedIn: 'root',
 })
 export class AuthService {
-    private readonly BASIC_LOGIN_API = 'User/basic-login';
-    private readonly GOOGLE_LOGIN_API = 'User/google-login';
+    private readonly BASIC_LOGIN_API = 'Auth/basic-login';
+    private readonly GOOGLE_LOGIN_API = 'Auth/google-login';
     private readonly RESET_PASSWORD_API = 'User/reset-password';
     private readonly CHANGE_PASSWORD_API = 'User/change-password';
 
@@ -20,7 +22,8 @@ export class AuthService {
         private cookie: CookieService,
         private userStore: UserStore,
         private router: Router,
-        private errorHander: GlobalErrorHandler
+        private socialAuth: SocialAuthService,
+        private globalHttpHandler: GlobalHttpHandler
     ) {}
 
     login(email: string, password: string) {
@@ -29,31 +32,44 @@ export class AuthService {
             password,
         };
 
-        this.http.post<AuthenticationUser>(this.BASIC_LOGIN_API, loginObject).subscribe({
-            next: (user) => {
-                this.handleUserStorage(user);
-                this.redirectToPageByRole(user.roleName);
-            },
-            error: (error: HttpErrorResponse) => this.errorHander.handleHttpError(error),
-        });
+        this.http
+            .post<CustomResponse<AuthenticationUser>>(this.BASIC_LOGIN_API, loginObject)
+            .subscribe({
+                next: (customResponse) => {
+                    this.globalHttpHandler.handleSuccess(customResponse);
+
+                    const authenticationUser = { ...customResponse.data };
+                    this.handleUserStorage(authenticationUser);
+                    this.redirectToPageByRole(authenticationUser.roleName);
+                },
+                error: (error) => this.globalHttpHandler.handleError(error),
+            });
     }
 
     googleLogin(idToken: string, provider: string) {
         const googleLoginObject = { idToken, provider };
 
-        this.http.post<AuthenticationUser>(this.GOOGLE_LOGIN_API, googleLoginObject).subscribe({
-            next: (user) => {
-                this.handleUserStorage(user);
-                this.redirectToPageByRole(user.roleName);
-            },
-            error: (error: HttpErrorResponse) => this.errorHander.handleHttpError(error),
-        });
+        this.http
+            .post<CustomResponse<AuthenticationUser>>(this.GOOGLE_LOGIN_API, googleLoginObject)
+            .subscribe({
+                next: (customResponse) => {
+                    this.globalHttpHandler.handleSuccess(customResponse);
+
+                    const authenticationUser = { ...customResponse.data };
+                    this.handleUserStorage(authenticationUser);
+                    this.redirectToPageByRole(authenticationUser.roleName);
+                },
+                error: (error) => {
+                    this.globalHttpHandler.handleError(error);
+                    this.socialAuth.signOut();
+                },
+            });
     }
 
     resetPasswordToDefault(email: string) {
         this.http.patch(this.RESET_PASSWORD_API, { email }).subscribe({
             next: (user) => alert('Password reset to default'),
-            error: (error: HttpErrorResponse) => this.errorHander.handleHttpError(error),
+            error: (error: HttpErrorResponse) => this.globalHttpHandler.handleError(error),
         });
     }
 
@@ -66,18 +82,21 @@ export class AuthService {
 
         this.http.patch(this.CHANGE_PASSWORD_API, changePasswordObj).subscribe({
             next: () => alert('ok'),
-            error: (error: HttpErrorResponse) => this.errorHander.handleHttpError(error),
+            error: (error: HttpErrorResponse) => this.globalHttpHandler.handleError(error),
         });
     }
 
     logout() {
+        this.socialAuth.signOut();
         this.cookie.delete('token');
         this.router.navigateByUrl('');
+        localStorage.removeItem('role');
     }
 
     private handleUserStorage(user: AuthenticationUser) {
         this.userStore.setUser({ ...user });
         this.cookie.set('token', user.token);
+        localStorage.setItem('role', user.roleName);
     }
 
     private redirectToPageByRole(role: string) {

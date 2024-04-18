@@ -1,17 +1,18 @@
-import { AuthService } from './../../../services/auth.service';
 import { Component } from '@angular/core';
-import { UserStore } from 'src/app/stores/user.store';
-
+import { CookieService } from 'ngx-cookie-service';
+import { AuthService } from './../../../services/auth.service';
 @Component({
     selector: 'app-common-layout',
     templateUrl: './common-layout.component.html',
     styleUrls: ['./common-layout.component.css'],
 })
 export class CommonLayoutComponent {
-    role = 'Admin';
+    role = '';
+    isAuthenticated = false;
 
-    constructor(private userStore: UserStore, private authService: AuthService) {
-        //this.role = userStore.getUser().roleName;
+    constructor(private authService: AuthService, private cookie: CookieService) {
+        this.role = localStorage.getItem('role')?.toString()!;
+        this.isAuthenticated = this.cookie.get('token') ? true : false;
     }
 
     logout() {

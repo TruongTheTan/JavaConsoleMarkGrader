@@ -128,10 +128,10 @@
     ora "5.4.1"
     rxjs "7.8.1"
 
-"@angular/animations@^16.2.0":
-  version "16.2.12"
-  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-16.2.12.tgz#27744d8176e09e70e0f6d837c3abcfcee843a936"
-  integrity sha512-MD0ElviEfAJY8qMOd6/jjSSvtqER2RDAi0lxe6EtUacC1DHCYkaPrKW4vLqY+tmZBg1yf+6n+uS77pXcHHcA3w==
+"@angular/animations@^17.3.2":
+  version "17.3.2"
+  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-17.3.2.tgz#ab2408e9ca18e10ab6dda356563e85ab1659c0ef"
+  integrity sha512-9RplCRS3dS7I8UeMmnwVCAxEaixQCj98UkSqjErO+GX5KJwMsFPydh7HKWH0/yclidJe5my41psEiQkyEyGKww==
   dependencies:
     tslib "^2.3.0"
 
@@ -4857,6 +4857,20 @@ neo-async@^2.6.2:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
+
+ng-angular-popup@^0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/ng-angular-popup/-/ng-angular-popup-0.5.2.tgz#3a04d5d2900a9e0aa77d473d366331052e30a633"
+  integrity sha512-7KLXG1NbQkmdBZjfM9ih/+x6oaSaWxTLQsY2hNTG/kzqJytzIedyPVGy3XgaBooliLZNDMMKLqno8AKWEMxiSw==
+  dependencies:
+    tslib "^2.3.0"
+
+ngx-bootstrap@^12.0.0:
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/ngx-bootstrap/-/ngx-bootstrap-12.0.0.tgz#fc1c7f74aef3d098cf5ca458121e28d3790eedff"
+  integrity sha512-6/Hs+FT6peMc+Y2uiOm3IawG06Jh3gLQwwKRBF0U1OMlRbpx4KIyHS9GpZtMevtZaBsCRNfHKiSxwsnvn9wx0Q==
+  dependencies:
+    tslib "^2.3.0"
 
 ngx-cookie-service@^17.0.1:
   version "17.0.1"

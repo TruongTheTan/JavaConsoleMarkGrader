@@ -14,7 +14,7 @@ namespace Repositories.EntiyRepository
 
 		public async Task<List<TestCase>> GetAllTestCaseBySemesterIdAsync(int semesterId)
 		{
-			return await dbSet.Where(t => t.SemesterId == semesterId).AsNoTracking().ToListAsync();
+			return await dbSet.Where(t => t.SemesterId == semesterId).AsNoTracking().ToListAsync(); ;
 		}
 
 

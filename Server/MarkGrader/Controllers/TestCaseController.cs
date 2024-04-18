@@ -1,99 +1,79 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MarkGrader.Helpers;
+using Microsoft.AspNetCore.Mvc;
 using Repositories.DTOs;
 using Services.TestCaseService;
 
-namespace MarkGrader.Controllers
+namespace MarkGrader.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class TestCaseController : ControllerBase
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class TestCaseController : ControllerBase
+
+	private readonly TestCaseService testCaseService;
+
+
+
+	public TestCaseController(TestCaseService testCaseService)
 	{
-		private readonly ITestCaseService testService;
+		this.testCaseService = testCaseService;
+	}
 
 
 
-		public TestCaseController(ITestCaseService testService)
+
+	[HttpGet]
+	//[Authorize(Policy = "AdminAndTeacherRole")]
+	public async Task<IActionResult> GetTestCaseById([FromQuery] int testCaseId)
+	{
+		CustomResponse<GetTestCaseDTO> customResponse = await testCaseService.GetTestCaseByIdAsync(testCaseId);
+		return HttpsUtility.ReturnActionResult(customResponse);
+	}
+
+
+
+
+
+
+	[HttpGet("list")]
+	public async Task<IActionResult> GetAllTestCaseBySemester([FromQuery] int semesterId)
+	{
+		CustomResponse<List<GetTestCaseDTO>> customResponse = await testCaseService.GetAllTestCaseBySemesterIdAsync(semesterId);
+		return HttpsUtility.ReturnActionResult(customResponse);
+	}
+
+
+
+
+
+
+
+
+	[HttpPost("create")]
+	public async Task<IActionResult> CreateTestCase([FromBody] CreateTestCaseDTO testCase)
+	{
+		if (ModelState.IsValid && testCase.CheckValidInputType)
 		{
-			this.testService = testService;
+			CustomResponse<dynamic> customResponse = await testCaseService.CreateNewTestCaseAsync(testCase);
+			return HttpsUtility.ReturnActionResult(customResponse);
 		}
+		return BadRequest(ModelState);
+	}
 
 
 
 
-
-		[HttpGet]
-		//[Authorize(Policy = "AdminAndTeacherRole")]
-		public async Task<IActionResult> GetTestCaseById([FromQuery] int testCaseId)
+	[HttpPut("update")]
+	public async Task<IActionResult> UpdateTestCase([FromBody] UpdateTestCaseDTO testCase)
+	{
+		if (ModelState.IsValid)
 		{
-			GetTestCaseDTO getTestCaseDTO = await this.testService.GetTestCaseByIdAsync(testCaseId);
-
-
-			if (getTestCaseDTO == null)
-				return NotFound("No test case found");
-
-			return Ok(getTestCaseDTO);
+			CustomResponse<dynamic> customResponse = await testCaseService.UpdateTestCaseAsync(testCase);
+			return HttpsUtility.ReturnActionResult(customResponse);
 		}
-
-
-
-
-
-
-		[HttpGet("list")]
-		public async Task<IActionResult> GetAllTestCaseBySemester([FromQuery] int semesterId)
-		{
-			List<GetTestCaseDTO> testCaseDTOList = await this.testService.GetAllTestCaseBySemesterIdAsync(semesterId);
-
-
-			if (testCaseDTOList == null)
-				return Problem();
-
-			if (testCaseDTOList.Count <= 0)
-				return NotFound("No test case found");
-
-			return Ok(testCaseDTOList);
-		}
-
-
-
-
-
-
-
-
-		[HttpPost("create")]
-		public async Task<IActionResult> CreateTestCase([FromBody] CreateTestCaseDTO testCase)
-		{
-			if (ModelState.IsValid && testCase.CheckValidInputType == true)
-			{
-				bool createSuccessfull = await this.testService.CreateNewTestCaseAsync(testCase);
-
-				if (!createSuccessfull)
-					return Problem("Unable to add new test case, check again");
-
-				return Created(nameof(CreateTestCase), testCase);
-			}
-			return BadRequest();
-		}
-
-
-
-
-		[HttpPut("update")]
-		public async Task<IActionResult> UpdateTestCase([FromBody] UpdateTestCaseDTO testCase)
-		{
-			if (ModelState.IsValid)
-			{
-				bool updateSuccessfull = await this.testService.UpdateTestCaseAsync(testCase);
-
-				if (!updateSuccessfull)
-					return Problem("Unable to update test case, check again");
-
-				return Ok("Test case updated successfully");
-			}
-			return BadRequest();
-		}
-
+		return BadRequest(ModelState);
 	}
 
 }
+
+

@@ -13,12 +13,12 @@ namespace Repositories.DTOs
 
 
 		[Required, MinLength(1)]
-		[NotNull, ListNotContainEmptyString(ErrorMessage = "Ouputs must not contain empty string ")]
+		[NotNull, ListNotContainEmptyString(ErrorMessage = "Outputs must not contain empty string ")]
 		public List<string>? Output { get; set; }
 
 
 
-		[Required, Range(1, 10), NotNull]
+		[Required, NotNull, Range(1, 10, ErrorMessage = "Mark must between 1 to 10")]
 		public int? Mark { get; set; }
 
 
@@ -35,16 +35,7 @@ namespace Repositories.DTOs
 
 
 		[JsonIgnore]
-		public bool CheckValidInputType
-		{
-			get
-			{
-				if (IsInputArray != IsInputByLine || IsInputByLine != IsInputArray)
-					return true;
-
-				return false;
-			}
-		}
+		public bool CheckValidInputType { get => (IsInputArray != IsInputByLine || IsInputByLine != IsInputArray); }
 
 	}
 

@@ -5,66 +5,82 @@ using Repositories;
 using Repositories.DTOs;
 using Repositories.EntiyRepository;
 
-namespace Services.UserService
+namespace Services.UserService;
+
+
+/// <summary>
+/// For configuration
+/// </summary>
+public partial class UserService
 {
+	private readonly IMapper mapper;
+	private readonly UnitOfWork unitOfWork;
+	private readonly UserRepository userRepository;
+	private readonly IConfigurationRoot configuration;
+	private readonly UserManager<IdentityUser> userManager;
 
-	/* Use for getting user */
-	public class UserService
+
+
+	public UserService(IMapper mapper, UnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
 	{
-		protected readonly IMapper mapper;
-		protected readonly UnitOfWork unitOfWork;
-		protected readonly UserRepository userRepository;
-		protected readonly IConfigurationRoot configuration;
-		protected readonly UserManager<IdentityUser> userManager;
+		this.mapper = mapper;
+		this.unitOfWork = unitOfWork;
+		this.userManager = userManager;
+		this.userRepository = unitOfWork.UserRepository;
 
 
+		var builder = new ConfigurationBuilder();
 
-		public UserService(IMapper mapper, UnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
-		{
-			this.mapper = mapper;
-			this.unitOfWork = unitOfWork;
-			this.userManager = userManager;
-			this.userRepository = unitOfWork.UserRepository;
+		builder.SetBasePath(Directory.GetCurrentDirectory());
+		builder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
-
-			var builder = new ConfigurationBuilder();
-
-			builder.SetBasePath(Directory.GetCurrentDirectory());
-			builder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-
-			this.configuration = builder.Build();
-		}
-
-
-
-
-		public async Task<bool> ConfirmEmail(UserConfirmEmail userConfirmEmail)
-		{
-			IdentityUser identityUser = await userManager.FindByEmailAsync(userConfirmEmail.Email.Trim());
-			var result = await userManager.ConfirmEmailAsync(identityUser, userConfirmEmail.Token);
-
-
-			if (result.Succeeded)
-			{
-				const string body = "Your email has been confirmed successfully, now you can login";
-				_ = Utils.SendEmailAsync("Confirm email successfully", body, userConfirmEmail.Email.Trim());
-
-				return true;
-			}
-			return false;
-		}
+		this.configuration = builder.Build();
 	}
 
 
 
+	public async Task<CustomResponse<dynamic>> ConfirmEmail(UserConfirmEmail userConfirmEmail)
+	{
+		IdentityUser identityUser = await userManager.FindByEmailAsync(userConfirmEmail.Email.Trim());
+		bool isConfirmSuccess = (await userManager.ConfirmEmailAsync(identityUser, userConfirmEmail.Token)).Succeeded;
 
 
+		CustomResponse<dynamic> customResponse = new();
 
 
+		if (isConfirmSuccess)
+		{
+			const string emailTitle = "Confirm email successfully";
+			const string emailBody = "Your email has been confirmed successfully, now you can login";
 
+			bool isSendEmailSuccess = await ServiceUtilities.SendEmailAsync(emailTitle, emailBody, userConfirmEmail.Email);
 
-
-
-
+			if (isSendEmailSuccess)
+			{
+				customResponse.StatusCode = ServiceUtilities.OK;
+				customResponse.Message = "Email confirm has been sent to your mail box, please check";
+			}
+		}
+		else
+		{
+			customResponse.StatusCode = ServiceUtilities.INTERNAL_SERVER_ERROR;
+			customResponse.Message = "Fail to confirm your email";
+		}
+		return customResponse;
+	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
