@@ -36,34 +36,57 @@
             <thead class="thead-light">
                 <tr>
                     <th scope="col"></th>
-                    <th scope="col">Inputs</th>
-                    <th scope="col">Outputs</th>
-                    <th scope="col">Mark</th>
-                    <th scope="col">Semester</th>
-                    <th></th>
+                    <th scope="col" class="text-center">Test Case Inputs</th>
+                    <th scope="col" class="text-center">Test Case Outputs</th>
+                    <th scope="col" class="text-center">Mark</th>
+                    <th scope="col" class="text-center">Semester</th>
+                    <th scope="col" class="text-center">Is input by line</th>
+                    <th scope="col" class="text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let testCase of testCaseList; let i = index">
                     <!-- Numerical order -->
-                    <td>
+                    <td class="text-center">
                         <span class="text-heading font-semibold"> {{ i + 1 }} </span>
                     </td>
 
-                    <td>{{ testCase.inputs }}</td>
-
-                    <td>
-                        <a class="text-heading font-semibold"> {{ testCase.outputs }} </a>
+                    <!-- Inputs -->
+                    <td class="text-center">
+                        <a class="text-heading font-semibold">
+                            {{ testCase.inputs.join(" ") }}
+                        </a>
                     </td>
 
-                    <td>
+                    <!-- Outputs -->
+                    <td class="text-center">
+                        <a class="text-heading font-semibold">
+                            {{ testCase.outputs.join(" ") }}
+                        </a>
+                    </td>
+
+                    <!-- Mark -->
+                    <td class="text-center">
                         <a class="text-heading font-semibold"> {{ testCase.mark }} </a>
                     </td>
 
-                    <td>{{ testCase.semesterName }}</td>
+                    <!-- Semester -->
+                    <td class="text-center">
+                        <a class="text-heading font-semibold">
+                            {{ testCase.semesterName }}
+                        </a>
+                    </td>
+
+                    <!-- Is input by line -->
+                    <td class="text-center">
+                        <a class="badge badge-lg badge-dot text-heading font-semibold">
+                            <i [class]="testCase.isInputByLine ? 'bg-success' : 'bg-danger'"></i>
+                            {{ testCase.isInputByLine }}
+                        </a>
+                    </td>
 
                     <!-- Buttons -->
-                    <td class="text-end">
+                    <td class="text-center">
                         <button type="button" class="btn btn-sm btn-info m-1">Detail</button>
 
                         <button type="button" class="btn btn-sm btn-danger btn-square">
@@ -75,6 +98,8 @@
         </table>
     </div>
     <div class="card-footer border-0 py-5">
-        <span class="text-muted text-sm"> </span>
+        <span class="text-muted text-sm"
+            >Showing 10 items out of {{ testCaseList.length }} results found
+        </span>
     </div>
 </div>

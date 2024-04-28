@@ -1,7 +1,7 @@
+import { Component, inject, OnInit } from '@angular/core';
+import { GetUser } from 'src/app/models/user';
 import { UserStore } from 'src/app/stores/user.store';
 import { AdminService } from '../../../../../services/admin.service';
-import { Component, OnInit } from '@angular/core';
-import { GetUser } from 'src/app/models/user';
 
 @Component({
     selector: 'app-users',
@@ -9,9 +9,11 @@ import { GetUser } from 'src/app/models/user';
     styleUrls: ['./users.component.css'],
 })
 export class UsersComponent implements OnInit {
-    userList = [] as GetUser[];
+    //
+    private readonly adminService = inject(AdminService);
+    private readonly userStore = inject(UserStore);
 
-    constructor(private adminService: AdminService, private userStore: UserStore) {}
+    userList = [] as GetUser[];
 
     ngOnInit(): void {
         this.adminService.getUserList();

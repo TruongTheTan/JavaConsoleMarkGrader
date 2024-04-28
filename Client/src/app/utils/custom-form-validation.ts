@@ -1,6 +1,6 @@
 import { AbstractControl, ValidatorFn } from '@angular/forms';
 
-export class FormValidation {
+export class CustomFormValidation {
     static match(controlName: string, checkControlName: string): ValidatorFn {
         return (controls: AbstractControl) => {
             const control = controls.get(controlName);
@@ -16,6 +16,16 @@ export class FormValidation {
             } else {
                 return null;
             }
+        };
+    }
+
+    static checkEmptyString(): ValidatorFn {
+        return (control: AbstractControl): { [key: string]: any } | null => {
+            const value = control.value as string;
+            if (typeof value !== 'string' || value.trim() === '') {
+                return { emptyString: true };
+            }
+            return null;
         };
     }
 }

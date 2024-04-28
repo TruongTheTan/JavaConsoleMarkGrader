@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { CustomResponse } from '../models/customer-response';
+import { inject, Injectable } from '@angular/core';
+import { CustomResponse } from '../models/custom-response';
 import { CreateUser, GetUser } from '../models/user';
 import { UserStore } from '../stores/user.store';
 import { GlobalHttpHandler } from '../utils/global-http-handler';
@@ -9,16 +9,17 @@ import { GlobalHttpHandler } from '../utils/global-http-handler';
     providedIn: 'root',
 })
 export class AdminService {
+    // APIs
     private readonly USER_LIST_API = 'User/list';
     private readonly CREATE_USER_API = 'User/create';
     private readonly TEST_CASE_LIST_API = '';
     private readonly CREATE_TEST_CASE_API = '';
 
-    constructor(
-        private http: HttpClient,
-        private userStore: UserStore,
-        private errorHandler: GlobalHttpHandler
-    ) {}
+    // Inject services
+    private readonly http = inject(HttpClient);
+    private readonly userStore = inject(UserStore);
+    private readonly errorHandler = inject(GlobalHttpHandler);
+    //
 
     getUserList() {
         this.http.get<CustomResponse<GetUser[]>>(this.USER_LIST_API).subscribe({

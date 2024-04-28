@@ -1,11 +1,12 @@
 ﻿using Repositories.DTOs;
 
-namespace Services.SemesterService
+namespace Services.SemesterService;
+
+public interface ISemesterService
 {
-	public interface ISemesterService
-	{
-		Task<GetSemesterDTO> GetSemesterByIdAsync(int semesterId);
-		Task<bool> CreateNewSemesterAsync(CreateSemesterDTO semesterCreate);
-		Task<bool> UpdateSemesterAsync(UpdateSemesterDTO semesterUpdate);
-	}
+	Task<CustomResponse<GetSemesterDTO>> GetSemesterByIdAsync(int semesterId);
+	Task<CustomResponse<List<GetSemesterDTO>>> GetListSemesterAsync();
+	Task<CustomResponse<dynamic>> CreateNewSemesterAsync(CreateSemesterDTO semesterCreate);
+	Task<CustomResponse<dynamic>> UpdateSemesterAsync(UpdateSemesterDTO semesterUpdate);
 }
+

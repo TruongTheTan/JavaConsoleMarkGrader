@@ -4,8 +4,10 @@ import { AuthenticationUser, GetUser } from '../models/user';
 
 @Injectable({ providedIn: 'root' })
 export class UserStore {
-    private userList = new BehaviorSubject([] as GetUser[]);
-    private authenticationUser = new BehaviorSubject({} as AuthenticationUser);
+    private readonly userList = new BehaviorSubject([] as GetUser[]);
+    private readonly authenticationUser = new BehaviorSubject({} as AuthenticationUser);
+
+    private readonly a = new BehaviorSubject(10);
 
     setUser(user: AuthenticationUser) {
         this.authenticationUser.next(user);
@@ -21,5 +23,17 @@ export class UserStore {
 
     getUserList(): Observable<GetUser[]> {
         return this.userList;
+    }
+
+    getA() {
+        return this.a.getValue();
+    }
+
+    getGGG() {
+        return this.a.asObservable();
+    }
+
+    addA() {
+        this.a.getValue();
     }
 }

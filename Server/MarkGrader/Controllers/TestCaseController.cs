@@ -1,12 +1,16 @@
 ﻿using MarkGrader.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.DTOs;
 using Services.TestCaseService;
 
 namespace MarkGrader.Controllers;
 
+
+
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Roles = "Admin")]
 public class TestCaseController : ControllerBase
 {
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AdminService } from '../../../../../services/admin.service';
 
@@ -9,6 +9,7 @@ import { AdminService } from '../../../../../services/admin.service';
 })
 export class CreateUserComponent {
     //
+    private adminService = inject(AdminService);
 
     readonly createUserForm = new FormGroup({
         username: new FormControl('', Validators.required),
@@ -21,8 +22,6 @@ export class CreateUserComponent {
             Validators.pattern('^(Admin|Teacher|Student)$'),
         ]),
     });
-
-    constructor(private adminService: AdminService) {}
 
     submit() {
         if (this.createUserForm.invalid) {

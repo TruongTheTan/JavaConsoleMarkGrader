@@ -17,87 +17,213 @@
                 ></button>
             </div>
 
-            <form [formGroup]="createTestCaseForm" (ngSubmit)="submit()">
+            <form [formGroup]="createTestCaseForm" (ngSubmit)="submitForm()">
                 <div class="modal-body">
+                    <!-- Test case inputs -->
                     <div class="mb-3 row">
-                        <label class="col-sm-2 col-form-label">Username</label>
-                        <div class="col-sm-10">
-                            <input
-                                type="text"
-                                class="form-control"
-                                [formControl]="createTestCaseForm.controls.username"
-                            />
+                        <div class="col-sm-3 col-form-label">Inputs</div>
+
+                        <div class="col-sm-9">
+                            <div
+                                class="mb-2"
+                                *ngFor="
+                                    let input of createTestCaseForm.controls.testCaseInputs
+                                        .controls;
+                                    let i = index
+                                "
+                            >
+                                <div class="input-group">
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        [formControl]="input"
+                                        [placeholder]="'Test case output ' + (i + 1)"
+                                    />
+
+                                    <button
+                                        class="btn btn-danger"
+                                        type="button"
+                                        *ngIf="i !== 0"
+                                        (click)="deleteTestCaseInputField(i)"
+                                    >
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Error msg -->
+                                <div class="error text-danger">
+                                    <p *ngIf="input.hasError('required')">
+                                        Test case input is required
+                                    </p>
+
+                                    <p *ngIf="input.hasError('emptyString')">
+                                        Test case input must not empty
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Button add and delete input fields -->
+                            <div
+                                *ngIf="isInputByMultipleLine()"
+                                class="d-flex align-items-center justify-content-between mb-3"
+                            >
+                                <button
+                                    type="button"
+                                    class="btn btn-success mt-3 btn-sm"
+                                    (click)="addTestCaseInputField()"
+                                >
+                                    New input field
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Test case Outputs -->
+                    <div class="mb-3 row">
+                        <div class="col-sm-3 col-form-label">Outputs</div>
+
+                        <div class="col-sm-9">
+                            <div
+                                class="mb-3"
+                                *ngFor="
+                                    let input of createTestCaseForm.controls.testCaseOutputs
+                                        .controls;
+                                    let i = index
+                                "
+                            >
+                                <div class="input-group">
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        [formControl]="input"
+                                        [placeholder]="'Test case output ' + (i + 1)"
+                                    />
+
+                                    <button
+                                        class="btn btn-danger"
+                                        type="button"
+                                        *ngIf="i !== 0"
+                                        (click)="deleteTestCaseOutputField(i)"
+                                    >
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Error msg -->
+                                <div class="error text-danger">
+                                    <p *ngIf="input.hasError('required')">
+                                        Test case output is required
+                                    </p>
+
+                                    <p *ngIf="input.hasError('emptyString')">
+                                        Test case output must not empty
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Button add and delete output fields -->
+                            <div class="d-flex align-items-center justify-content-between mb-5">
+                                <button
+                                    type="button"
+                                    class="btn btn-success mt-3 btn-sm"
+                                    (click)="addTestCaseOutputField()"
+                                >
+                                    New output field
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Error msg -->
-                        <div class="error text-danger">
-                            <p *ngIf="createTestCaseForm.controls.username.hasError('required')">
-                                Username is required
-                            </p>
-                        </div>
+                        <div class="error text-danger"></div>
                     </div>
 
                     <!-- Mark -->
                     <div class="mb-3 row">
-                        <label class="col-sm-2 col-form-label">Mark</label>
-                        <div class="col-sm-10">
+                        <label class="col-sm-3 col-form-label">Mark</label>
+                        <div class="col-sm-9">
                             <input
                                 min="1"
                                 max="10"
                                 type="number"
                                 class="form-control"
+                                placeholder="Test case mark"
                                 [formControl]="createTestCaseForm.controls.mark"
                             />
-                        </div>
 
-                        <!-- Error msg -->
-                        <div class="error text-danger">
-                            <p *ngIf="createTestCaseForm.controls.mark.hasError('required')">
-                                Mark is required
-                            </p>
+                            <!-- Error msg -->
+                            <div class="error text-danger">
+                                <p *ngIf="createTestCaseForm.controls.mark.hasError('required')">
+                                    Mark is required
+                                </p>
 
-                            <p *ngIf="createTestCaseForm.controls.mark.hasError('min')">
-                                Mark must be at least 1.
-                            </p>
+                                <p *ngIf="createTestCaseForm.controls.mark.hasError('min')">
+                                    Mark must be at least 1.
+                                </p>
 
-                            <p *ngIf="createTestCaseForm.controls.mark.hasError('max')">
-                                Mark cannot exceed 10.
-                            </p>
+                                <p *ngIf="createTestCaseForm.controls.mark.hasError('max')">
+                                    Mark cannot exceed 10.
+                                </p>
 
-                            <p *ngIf="createTestCaseForm.controls.mark.hasError('pattern')">
-                                Mark contains only number
-                            </p>
+                                <p *ngIf="createTestCaseForm.controls.mark.hasError('pattern')">
+                                    Mark contains only number
+                                </p>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Semester -->
                     <div class="mb-3 row">
-                        <label class="col-sm-2 col-form-label">Semester</label>
-                        <div class="col-sm-10">
+                        <label class="col-sm-3 col-form-label">Semester</label>
+                        <div class="col-sm-9">
                             <select
                                 class="form-select"
                                 [formControl]="createTestCaseForm.controls.semester"
                             >
-                                <option value="dsfsad">Spring2024</option>
+                                <option value="Spring2024">Spring2024</option>
                             </select>
+
+                            <!-- Error msg -->
+                            <div class="error text-danger">
+                                <p
+                                    *ngIf="
+                                        createTestCaseForm.controls.semester.hasError('required')
+                                    "
+                                >
+                                    Semester is required
+                                </p>
+
+                                <p *ngIf="createTestCaseForm.controls.semester.hasError('pattern')">
+                                    Valid semesters are {{ semesterList.join(", ") }}
+                                </p>
+                            </div>
                         </div>
+                    </div>
 
-                        <!-- Error msg -->
-                        <div class="error text-danger">
-                            <p *ngIf="createTestCaseForm.controls.semester.hasError('required')">
-                                Semester is required
-                            </p>
+                    <!-- Is input by line -->
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label"></label>
 
-                            <p *ngIf="createTestCaseForm.controls.semester.hasError('pattern')">
-                                Valid semesters are {{ semesterList.join(", ") }}
-                            </p>
+                        <div class="form-check col-sm-9 col-form-label">
+                            <input
+                                type="checkbox"
+                                id="flexCheckDefault"
+                                class="form-check-input"
+                                [formControl]="createTestCaseForm.controls.isInputByLine"
+                                (click)="isInputByMultipleLine.set(!isInputByMultipleLine())"
+                            />
+                            <label
+                                class="form-check-label"
+                                for="flexCheckDefault"
+                                style="font-size: medium"
+                            >
+                                Is input by multiple lines
+                            </label>
                         </div>
                     </div>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-secondary" (click)="reset()">Reset</button>
-
+                    <button type="reset" class="btn btn-secondary">Reset</button>
                     <button
                         type="submit"
                         class="btn btn-primary"

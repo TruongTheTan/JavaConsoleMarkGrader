@@ -63,8 +63,7 @@ public static class ServiceUtilities
 					new Claim(ClaimTypes.Name, user.Name!),
 					new Claim(ClaimTypes.Email, user.Email!),
 					new Claim(ClaimTypes.Role, user.RoleName!),
-				}),
-
+			}),
 			Expires = DateTime.UtcNow.AddMinutes(expiration),
 			SigningCredentials = signingCredentials,
 			IssuedAt = DateTime.Now
@@ -124,19 +123,19 @@ public static class ServiceUtilities
 	{
 
 		const string apiKey = "1d6495eafd9045e486e37c8d0d2b40b8";
-		string apiUrl = $"https://emailvalidation.abstractapi.com/v1/?api_key={apiKey}&email={email}";
+		string verificationAPI = $"https://emailvalidation.abstractapi.com/v1/?api_key={apiKey}&email={email}";
 
 
 		using HttpClient client = new();
-		HttpResponseMessage response = await client.GetAsync(apiUrl);
+		HttpResponseMessage response = await client.GetAsync(verificationAPI);
 
 
 		if (!response.IsSuccessStatusCode)
 			return false;
 
 
-		string resultJsonString = await response.Content.ReadAsStringAsync();
-		var responseObject = JsonConvert.DeserializeAnonymousType(resultJsonString, new { deliverability = "" });
+		string jsonStringResult = await response.Content.ReadAsStringAsync();
+		var responseObject = JsonConvert.DeserializeAnonymousType(jsonStringResult, new { deliverability = "" });
 
 
 		client.Dispose();

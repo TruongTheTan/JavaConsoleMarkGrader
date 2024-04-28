@@ -176,12 +176,6 @@ namespace Repositories.Models
 
 			modelBuilder.Entity<TestCase>(entity =>
 			{
-				entity.Property(e => e.Id).ValueGeneratedNever();
-
-				entity.Property(e => e.Mark)
-					.HasMaxLength(10)
-					.IsFixedLength();
-
 				entity.HasOne(d => d.Semester)
 					.WithMany(p => p.TestCases)
 					.HasForeignKey(d => d.SemesterId)

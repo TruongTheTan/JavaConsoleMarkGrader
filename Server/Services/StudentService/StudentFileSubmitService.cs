@@ -4,115 +4,115 @@ using SharpCompress.Archives.Rar;
 using SharpCompress.Common;
 
 
-namespace Services.StudentService
+namespace Services.StudentService;
+
+public static class StudentFileSubmitService
 {
-	public static class StudentFileSubmitService
+
+	private static string? studentFileName;
+	private static readonly string SAVE_FILE_LOCATION;
+	private static readonly string EXTRACT_FILE_LOCATION;
+	private static readonly string SOLUTION_PATH = Directory.GetParent(Environment.CurrentDirectory)!.FullName;
+
+	public static string SplittedStudentFileName => studentFileName!.Split(".rar")[0];
+
+
+
+	static StudentFileSubmitService()
 	{
-
-		private static string? studentFileName;
-		private static readonly string SAVE_FILE_LOCATION;
-		private static readonly string EXTRACT_FILE_LOCATION;
-		private static readonly string SOLUTION_PATH = Directory.GetParent(Environment.CurrentDirectory)!.FullName;
-
-		public static string SplittedStudentFileName { get => studentFileName!.Split(".rar")[0]; }
+		SAVE_FILE_LOCATION = $@"{SOLUTION_PATH}\Storage\StudentCompressedFiles\";
+		EXTRACT_FILE_LOCATION = $@"{SOLUTION_PATH}\Storage\StudentExtractedFiles\";
+	}
 
 
 
-		static StudentFileSubmitService()
+
+
+	public static async Task<bool> SaveStudentFileAsync(IFormFile file)
+	{
+		studentFileName = file.FileName.Trim();
+
+		// Only .rar extension allow
+		if (Path.GetExtension(studentFileName).ToLower() == ".rar")
 		{
-			SAVE_FILE_LOCATION = $@"{SOLUTION_PATH}\Storage\StudentCompressedFiles\";
-			EXTRACT_FILE_LOCATION = $@"{SOLUTION_PATH}\Storage\StudentExtractedFiles\";
+			string filePath = Path.Combine(SAVE_FILE_LOCATION, studentFileName);
+
+			using FileStream stream = new(filePath, FileMode.Create);
+
+			await file.CopyToAsync(stream);
+			stream?.Close();
+
+
+			return File.Exists(SAVE_FILE_LOCATION + studentFileName);
 		}
+		return false;
+	}
 
 
 
 
 
-		public static async Task<bool> SaveStudentFileAsync(IFormFile file)
+
+	public static bool ExtractSavedFile()
+	{
+		string compressedFilePath = SAVE_FILE_LOCATION + studentFileName;
+
+		RarArchive rarArchive = RarArchive.Open(compressedFilePath);
+
+		rarArchive.WriteToDirectory(EXTRACT_FILE_LOCATION, new ExtractionOptions()
 		{
-			studentFileName = file.FileName.Trim();
+			ExtractFullPath = true,
+			Overwrite = true,
+		});
 
-			// Only .rar extension allow
-			if (Path.GetExtension(studentFileName).ToLower() == ".rar")
-			{
-				string filePath = Path.Combine(SAVE_FILE_LOCATION, studentFileName);
+		rarArchive.Dispose();
 
-				using FileStream stream = new(filePath, FileMode.Create);
-
-				await file.CopyToAsync(stream);
-				stream?.Close();
-
-
-				return File.Exists(SAVE_FILE_LOCATION + studentFileName);
-			}
-			return false;
-		}
+		return Directory.Exists(EXTRACT_FILE_LOCATION + SplittedStudentFileName);
+	}
 
 
 
 
 
-
-		public static bool ExtractSavedFile()
+	public static Task DeleteStudentCompressedFileAsync()
+	{
+		return Task.Run(() =>
 		{
-			string compressedFilePath = SAVE_FILE_LOCATION + studentFileName;
+			string studentCompressedFile = $"{SAVE_FILE_LOCATION}{studentFileName}";
 
-			RarArchive rarArchive = RarArchive.Open(compressedFilePath);
-
-			rarArchive.WriteToDirectory(EXTRACT_FILE_LOCATION, new ExtractionOptions()
+			if (File.Exists(studentCompressedFile))
 			{
-				ExtractFullPath = true,
-				Overwrite = true,
-			});
-
-			rarArchive.Dispose();
-
-			return Directory.Exists(EXTRACT_FILE_LOCATION + SplittedStudentFileName);
-		}
-
-
-
-
-
-		public static Task DeleteStudentCompressedFileAsync()
-		{
-			return Task.Run(() =>
-			{
-				string studentCompressedFile = $"{SAVE_FILE_LOCATION}{studentFileName}";
-
-				if (File.Exists(studentCompressedFile))
-				{
-					try
-					{
-						File.Delete(studentCompressedFile);
-					}
-					catch (Exception)
-					{
-						throw;
-					}
-				}
-			});
-		}
-
-
-
-
-		public static Task DeleteStudentExtractedFileAsync()
-		{
-			return Task.Run(() =>
-			{
-				string studentExtractedFile = $"{EXTRACT_FILE_LOCATION}{SplittedStudentFileName}";
-
 				try
 				{
-					Directory.Delete(studentExtractedFile, true);
+					File.Delete(studentCompressedFile);
 				}
 				catch (Exception)
 				{
 					throw;
 				}
-			});
+			}
+		});
+	}
 
-		}
+
+
+
+	public static Task DeleteStudentExtractedFileAsync()
+	{
+		return Task.Run(() =>
+		{
+			string studentExtractedFile = $"{EXTRACT_FILE_LOCATION}{SplittedStudentFileName}";
+
+			try
+			{
+				Directory.Delete(studentExtractedFile, true);
+			}
+			catch (Exception)
+			{
+				throw;
+			}
+		});
+
 	}
 }
+

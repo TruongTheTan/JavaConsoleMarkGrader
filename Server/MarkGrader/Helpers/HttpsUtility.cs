@@ -14,6 +14,7 @@ internal sealed class HttpsUtility
 		// Handle success codes
 		if (customResponse.IsSuccess)
 			return GetSuccessActionResult(customResponse);
+
 		// Handle fail codes
 		else
 			return GetFailActionResult(customResponse);

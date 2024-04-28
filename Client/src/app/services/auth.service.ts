@@ -1,10 +1,10 @@
 import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import { CustomResponse } from '../models/custom-response';
 import { GlobalHttpHandler } from '../utils/global-http-handler';
-import { CustomResponse } from './../models/customer-response';
 import { AuthenticationUser } from './../models/user';
 import { UserStore } from './../stores/user.store';
 
@@ -12,19 +12,20 @@ import { UserStore } from './../stores/user.store';
     providedIn: 'root',
 })
 export class AuthService {
+    // APIs
     private readonly BASIC_LOGIN_API = 'Auth/basic-login';
     private readonly GOOGLE_LOGIN_API = 'Auth/google-login';
     private readonly RESET_PASSWORD_API = 'User/reset-password';
     private readonly CHANGE_PASSWORD_API = 'User/change-password';
 
-    constructor(
-        private http: HttpClient,
-        private cookie: CookieService,
-        private userStore: UserStore,
-        private router: Router,
-        private socialAuth: SocialAuthService,
-        private globalHttpHandler: GlobalHttpHandler
-    ) {}
+    // Inject services
+    private readonly http = inject(HttpClient);
+    private readonly cookie = inject(CookieService);
+    private readonly userStore = inject(UserStore);
+    private readonly router = inject(Router);
+    private readonly socialAuth = inject(SocialAuthService);
+    private readonly globalHttpHandler = inject(GlobalHttpHandler);
+    //
 
     login(email: string, password: string) {
         const loginObject = {
@@ -38,7 +39,7 @@ export class AuthService {
                 next: (customResponse) => {
                     this.globalHttpHandler.handleSuccess(customResponse);
 
-                    const authenticationUser = { ...customResponse.data };
+                    const authenticationUser = customResponse.data;
                     this.handleUserStorage(authenticationUser);
                     this.redirectToPageByRole(authenticationUser.roleName);
                 },

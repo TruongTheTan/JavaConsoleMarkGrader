@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
-import { FormValidation } from 'src/app/utils/form-validation';
+import { CustomFormValidation } from 'src/app/utils/custom-form-validation';
 
 @Component({
     selector: 'app-change-password',
@@ -20,7 +20,7 @@ export class ChangePasswordComponent {
             confirmPassword: new FormControl('', Validators.required),
         },
         {
-            validators: [FormValidation.match('newPassword', 'confirmPassword')],
+            validators: [CustomFormValidation.match('newPassword', 'confirmPassword')],
         }
     );
 
