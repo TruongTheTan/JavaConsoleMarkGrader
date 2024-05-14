@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="DTOs\User\**" />
+    <EmbeddedResource Remove="DTOs\User\**" />
+    <None Remove="DTOs\User\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Server.4_DAL\Server_4.DAL.csproj" />
+  </ItemGroup>
+	
+
+
+</Project>
