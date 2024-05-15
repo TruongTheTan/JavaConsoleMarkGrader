@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 import { CommonLayoutComponent } from './layout/common-layout/common-layout.component';
 import { TestCaseListComponent } from './pages/admin/test-case/test-case-list/test-case-list.component';
 import { UsersComponent } from './pages/admin/user/user-list/users.component';
@@ -7,7 +8,6 @@ import { ChangePasswordComponent } from './pages/auth/change-password/change-pas
 import { LoginComponent } from './pages/auth/login/login.component';
 import { StudentComponent } from './pages/student/student.component';
 import { TeacherComponent } from './pages/teacher/teacher.component';
-import { NotFoundComponent } from './shared/not-found/not-found.component';
 
 const routes: Routes = [
     { path: 'login', component: LoginComponent },
