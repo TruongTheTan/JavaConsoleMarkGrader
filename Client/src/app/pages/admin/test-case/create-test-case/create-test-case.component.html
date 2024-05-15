@@ -1,0 +1,290 @@
+<div
+    class="modal fade"
+    id="createTestCaseModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title text-center" id="exampleModalLabel">Add new test case</h2>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+
+            <form [formGroup]="createTestCaseForm" (ngSubmit)="submitForm()">
+                <div class="modal-body row p-0 px-4">
+                    <!-- Test case inputs and mark column -->
+                    <div class="col">
+                        <div class="col-sm-3 col-form-label">Inputs</div>
+                        <div class="flex justify-content-between">
+                            <!-- Test case inputs section -->
+                            <div>
+                                <div class="mb-3 row">
+                                    <div
+                                        class="mb-2 col-sm-9"
+                                        *ngFor="
+                                            let input of createTestCaseForm.controls.testCaseInputs
+                                                .controls;
+                                            let i = index
+                                        "
+                                    >
+                                        <div class="input-group">
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                [formControl]="input"
+                                                [placeholder]="'Test case input ' + (i + 1)"
+                                            />
+
+                                            <button
+                                                class="btn btn-danger"
+                                                type="button"
+                                                *ngIf="i !== 0"
+                                                (click)="deleteTestCaseInputField(i)"
+                                            >
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+
+                                        <!-- Error msg -->
+                                        <div class="error text-danger">
+                                            <p *ngIf="input.hasError('required') && input.touched">
+                                                Test case input is required
+                                            </p>
+
+                                            <p
+                                                *ngIf="
+                                                    input.hasError('emptyString') && input.touched
+                                                "
+                                            >
+                                                Test case input must not empty
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Button add input fields -->
+                                    <div
+                                        *ngIf="isInputByMultipleLine()"
+                                        class="d-flex align-items-center justify-content-between mb-3 col-sm-2"
+                                    >
+                                        <button
+                                            type="button"
+                                            class="btn btn-success mt-3 btn-sm"
+                                            (click)="addTestCaseInputField()"
+                                        >
+                                            Add new input field
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div></div>
+                        </div>
+
+                        <!-- Mark section -->
+                        <div>
+                            <label class="col-sm-3 col-form-label">Mark</label>
+                            <div class="mb-3 row">
+                                <div class="col-sm-9">
+                                    <input
+                                        min="1"
+                                        max="10"
+                                        type="number"
+                                        class="form-control"
+                                        placeholder="Test case mark"
+                                        [formControl]="createTestCaseForm.controls.mark"
+                                    />
+
+                                    <!-- Error msg -->
+                                    <div class="error text-danger">
+                                        <p
+                                            *ngIf="
+                                                createTestCaseForm.controls.mark.hasError(
+                                                    'required'
+                                                ) && createTestCaseForm.controls.mark.touched
+                                            "
+                                        >
+                                            Mark is required
+                                        </p>
+
+                                        <p
+                                            *ngIf="
+                                                createTestCaseForm.controls.mark.hasError('min') &&
+                                                createTestCaseForm.controls.mark.touched
+                                            "
+                                        >
+                                            Mark must be at least 1.
+                                        </p>
+
+                                        <p
+                                            *ngIf="
+                                                createTestCaseForm.controls.mark.hasError('max') &&
+                                                createTestCaseForm.controls.mark.touched
+                                            "
+                                        >
+                                            Mark cannot exceed 10.
+                                        </p>
+
+                                        <p
+                                            *ngIf="
+                                                createTestCaseForm.controls.mark.hasError(
+                                                    'pattern'
+                                                ) && createTestCaseForm.controls.mark.touched
+                                            "
+                                        >
+                                            Mark contains only number
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Test case outputs and semester column -->
+                    <div class="col">
+                        <!-- Outputs section -->
+                        <div>
+                            <div class="col-sm-3 col-form-label">Outputs</div>
+                            <div class="mb-3 row">
+                                <div class="col-sm-9">
+                                    <div
+                                        class="mb-2"
+                                        *ngFor="
+                                            let input of createTestCaseForm.controls.testCaseOutputs
+                                                .controls;
+                                            let i = index
+                                        "
+                                    >
+                                        <div class="input-group">
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                [formControl]="input"
+                                                [placeholder]="'Test case output ' + (i + 1)"
+                                            />
+
+                                            <button
+                                                class="btn btn-danger"
+                                                type="button"
+                                                *ngIf="i !== 0"
+                                                (click)="deleteTestCaseOutputField(i)"
+                                            >
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+
+                                        <!-- Error msg -->
+                                        <div class="error text-danger">
+                                            <p *ngIf="input.hasError('required') && input.touched">
+                                                Test case output is required
+                                            </p>
+
+                                            <p
+                                                *ngIf="
+                                                    input.hasError('emptyString') && input.touched
+                                                "
+                                            >
+                                                Test case output must not empty
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Button add and delete output fields -->
+                                    <div
+                                        class="d-flex align-items-center justify-content-between mb-5 w-100"
+                                    >
+                                        <button
+                                            type="button"
+                                            class="btn btn-success mt-3 btn-sm w-100"
+                                            (click)="addTestCaseOutputField()"
+                                        >
+                                            Add new output field
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Error msg -->
+                                <div class="error text-danger"></div>
+                            </div>
+                        </div>
+
+                        <!--  Semester section -->
+                        <div>
+                            <label class="col-sm-3 col-form-label">Semester</label>
+                            <div class="mb-3 row">
+                                <div class="col-sm-9">
+                                    <select
+                                        class="form-select"
+                                        [formControl]="createTestCaseForm.controls.semester"
+                                    >
+                                        <option value="Spring2024">Spring2024</option>
+                                    </select>
+
+                                    <!-- Error msg -->
+                                    <div class="error text-danger">
+                                        <p
+                                            *ngIf="
+                                                createTestCaseForm.controls.semester.hasError(
+                                                    'required'
+                                                ) && createTestCaseForm.controls.semester.touched
+                                            "
+                                        >
+                                            Semester is required
+                                        </p>
+
+                                        <p
+                                            *ngIf="
+                                                createTestCaseForm.controls.semester.hasError(
+                                                    'pattern'
+                                                ) && createTestCaseForm.controls.semester.touched
+                                            "
+                                        >
+                                            Valid semesters are {{ semesterList.join(", ") }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Is input by line -->
+                <div class="mb-3 row">
+                    <div class="form-check col-sm-12 col-form-label">
+                        <input
+                            type="checkbox"
+                            id="flexCheckDefault"
+                            class="form-check-input mx-2"
+                            [formControl]="createTestCaseForm.controls.isInputByLine"
+                            (click)="isInputByMultipleLine.set(!isInputByMultipleLine())"
+                        />
+                        <label
+                            class="form-check-label"
+                            for="flexCheckDefault"
+                            style="font-size: medium"
+                        >
+                            Is input by multiple lines
+                        </label>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="reset" class="btn btn-secondary">Reset</button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        [disabled]="createTestCaseForm.invalid"
+                    >
+                        Create
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

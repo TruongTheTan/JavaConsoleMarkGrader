@@ -10,17 +10,17 @@ import { SemesterStore } from './../stores/semester.store';
 })
 export class SemesterService {
     // APIs
+    private readonly GET_SEMESTER_API = '';
     private readonly SEMESTER_LIST_API = '';
     private readonly CREATE_SEMESTER_API = '';
     private readonly UPDATE_SEMESTER_API = '';
-    private readonly GET_SEMESTER_API = '';
 
     // Injection
     private readonly http = inject(HttpClient);
     private readonly semesterStore = inject(SemesterStore);
     private readonly httpResultHandler = inject(GlobalHttpHandler);
 
-    GetSemesterList() {
+    getSemesterList() {
         this.http.get<CustomResponse<GetSemester[]>>(this.SEMESTER_LIST_API).subscribe({
             next: (customResponse) => {
                 this.httpResultHandler.handleSuccess(customResponse);
@@ -30,7 +30,7 @@ export class SemesterService {
         });
     }
 
-    GetSemesterById(id: number) {
+    getSemesterById(id: number) {
         this.http.get<CustomResponse<GetSemester>>(`${this.GET_SEMESTER_API}/${id}`).subscribe({
             next: (customResponse) => {
                 this.httpResultHandler.handleSuccess(customResponse);

@@ -9,7 +9,8 @@ import { CustomFormValidation } from 'src/app/utils/custom-form-validation';
     styleUrls: ['./change-password.component.css'],
 })
 export class ChangePasswordComponent {
-    changePasswordForm = new FormGroup(
+    // Form
+    readonly changePasswordForm = new FormGroup(
         {
             email: new FormControl('', [
                 Validators.required,
@@ -29,7 +30,6 @@ export class ChangePasswordComponent {
     submitForm() {
         if (!this.changePasswordForm.invalid) {
             const { email, oldPassword, newPassword } = this.changePasswordForm.controls;
-
             this.authService.changePassword(email.value!, oldPassword.value!, newPassword.value!);
         }
     }

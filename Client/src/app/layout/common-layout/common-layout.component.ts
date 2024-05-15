@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { AuthService } from './../../../services/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
+
 @Component({
     selector: 'app-common-layout',
     templateUrl: './common-layout.component.html',

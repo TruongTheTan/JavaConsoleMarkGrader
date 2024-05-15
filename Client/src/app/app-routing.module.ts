@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ChangePasswordComponent } from './components/auth/change-password/change-password.component';
-import { LoginComponent } from './components/auth/login/login.component';
-import { CommonLayoutComponent } from './components/layout/common-layout/common-layout.component';
-import { TestCaseListComponent } from './components/roles/admin/test-case/test-case-list/test-case-list.component';
-import { UsersComponent } from './components/roles/admin/user/user-list/users.component';
-import { StudentComponent } from './components/roles/student/student.component';
-import { TeacherComponent } from './components/roles/teacher/teacher.component';
-import { NotFoundComponent } from './components/shared/not-found/not-found.component';
+import { CommonLayoutComponent } from './layout/common-layout/common-layout.component';
+import { TestCaseListComponent } from './pages/admin/test-case/test-case-list/test-case-list.component';
+import { UsersComponent } from './pages/admin/user/user-list/users.component';
+import { ChangePasswordComponent } from './pages/auth/change-password/change-password.component';
+import { LoginComponent } from './pages/auth/login/login.component';
+import { StudentComponent } from './pages/student/student.component';
+import { TeacherComponent } from './pages/teacher/teacher.component';
+import { NotFoundComponent } from './shared/not-found/not-found.component';
 
 const routes: Routes = [
     { path: 'login', component: LoginComponent },

@@ -6,7 +6,7 @@ import { GetTestCase } from '../models/test-case';
 export class TestCaseStore {
     private readonly testCaseList = new BehaviorSubject([] as GetTestCase[]);
 
-    getTestCaseList(): Observable<GetTestCase[]> {
+    get getTestCaseList(): Observable<GetTestCase[]> {
         return this.testCaseList.asObservable();
     }
 

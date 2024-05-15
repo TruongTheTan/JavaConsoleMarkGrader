@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 @Injectable({
     providedIn: 'root',
@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
 export class StudentService {
     private readonly studentAPI = 'Student/submit?semesterId=1';
 
-    constructor(private http: HttpClient) {}
+    private readonly http = inject(HttpClient);
 
     submitFile(file: File) {
         const formData: FormData = new FormData();

@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AdminService } from '../../../../../services/admin.service';
+import { AdminService } from '../../../../services/admin.service';
 
 @Component({
     selector: 'app-create-user',
@@ -11,6 +11,7 @@ export class CreateUserComponent {
     //
     private adminService = inject(AdminService);
 
+    // Form
     readonly createUserForm = new FormGroup({
         username: new FormControl('', Validators.required),
         email: new FormControl('', [
@@ -24,9 +25,7 @@ export class CreateUserComponent {
     });
 
     submit() {
-        if (this.createUserForm.invalid) {
-            alert('Invalid info');
-        } else {
+        if (this.createUserForm.valid) {
             const { email, username, role } = this.createUserForm.value;
             this.adminService.createNewUser({ email: email!, username: username!, role: role! });
         }

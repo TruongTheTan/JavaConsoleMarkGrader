@@ -1,6 +1,6 @@
-import { StudentService } from '../../../services/student.service';
 import { Component } from '@angular/core';
 import { UserStore } from 'src/app/stores/user.store';
+import { StudentService } from '../../services/student.service';
 
 @Component({
     selector: 'app-student',

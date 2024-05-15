@@ -7,7 +7,7 @@ export class SemesterStore {
     private readonly semester = new BehaviorSubject({} as GetSemester);
     private readonly semesterList = new BehaviorSubject([] as GetSemester[]);
 
-    getSemesterList(): Observable<GetSemester[]> {
+    get getSemesterList(): Observable<GetSemester[]> {
         return this.semesterList.asObservable();
     }
 
@@ -15,7 +15,7 @@ export class SemesterStore {
         this.semesterList.next(semesterList);
     }
 
-    getSemester(): Observable<GetSemester> {
+    get getSemester(): Observable<GetSemester> {
         return this.semester.asObservable();
     }
 

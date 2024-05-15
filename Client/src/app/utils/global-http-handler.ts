@@ -21,6 +21,8 @@ export class GlobalHttpHandler {
 
         if (error.error instanceof ProgressEvent) {
             errorMessage = error.statusText;
+        } else if (error.status === 401) {
+            errorMessage = 'Unauthorized';
         } else {
             const customResponse = error.error as CustomResponse<unknown>;
             errorMessage = customResponse.message;
@@ -30,11 +32,11 @@ export class GlobalHttpHandler {
         this.isSuccessResponse.next(false);
     }
 
-    getErrorMessage(): Observable<string> {
+    get getErrorMessage(): Observable<string> {
         return this.message.asObservable();
     }
 
-    getResponseType(): Observable<boolean> {
+    get getResponseType(): Observable<boolean> {
         return this.isSuccessResponse.asObservable();
     }
 }

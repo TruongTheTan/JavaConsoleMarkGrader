@@ -11,14 +11,14 @@ export class AppComponent {
     private responseType = true;
     private readonly message = signal('');
 
-    constructor(private globalHttpHandler: GlobalHttpHandler, private toast: NgToastService) {
+    constructor(private toast: NgToastService, private globalHttpHandler: GlobalHttpHandler) {
         this.setupErrorMessage();
         this.displayToast();
     }
 
     private setupErrorMessage() {
-        this.globalHttpHandler.getErrorMessage().subscribe((message) => this.message.set(message));
-        this.globalHttpHandler.getResponseType().subscribe((type) => (this.responseType = type));
+        this.globalHttpHandler.getResponseType.subscribe((type) => (this.responseType = type));
+        this.globalHttpHandler.getErrorMessage.subscribe((message) => this.message.set(message));
     }
 
     private displayToast() {

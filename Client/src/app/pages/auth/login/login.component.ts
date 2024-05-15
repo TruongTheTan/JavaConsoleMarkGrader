@@ -1,8 +1,8 @@
 import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
 import { Component, inject } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
-import { UserStore } from 'src/app/stores/user.store';
 
 @Component({
     selector: 'app-login',
@@ -11,19 +11,14 @@ import { UserStore } from 'src/app/stores/user.store';
 })
 export class LoginComponent {
     // Injection
-    private authService = inject(AuthService);
-    private socialAuth = inject(SocialAuthService);
-    private store = inject(UserStore);
-
-    aaa = 0;
+    private readonly authService = inject(AuthService);
+    private readonly formBuilder = inject(FormBuilder);
+    private readonly socialAuth = inject(SocialAuthService);
 
     // Form
-    readonly loginForm = new FormGroup({
-        email: new FormControl('', [
-            Validators.required,
-            Validators.pattern('^[A-Za-z0-9_.]+@gmail.com$'),
-        ]),
-        password: new FormControl('', Validators.required),
+    readonly loginForm = this.formBuilder.group({
+        email: ['', [Validators.required, Validators.pattern('^[A-Za-z0-9_.]+@gmail.com$')]],
+        password: ['', Validators.required],
     });
 
     constructor() {
@@ -42,7 +37,7 @@ export class LoginComponent {
     }
 
     private googleLogin() {
-        this.socialAuth.authState.pipe().subscribe((user: SocialUser) => {
+        this.socialAuth.authState.pipe(takeUntilDestroyed()).subscribe((user: SocialUser) => {
             if (user !== null) {
                 console.table(user);
                 this.authService.googleLogin(user.idToken, user.provider);

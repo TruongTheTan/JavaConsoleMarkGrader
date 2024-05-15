@@ -1,8 +1,8 @@
 import { Component, effect, inject, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CustomFormValidation } from 'src/app/utils/custom-form-validation';
-import { CreateTestCase } from './../../../../../models/test-case';
-import { TestCaseService } from './../../../../../services/test-case.service';
+import { CreateTestCase } from '../../../../models/test-case';
+import { TestCaseService } from '../../../../services/test-case.service';
 
 @Component({
     selector: 'app-create-test-case',

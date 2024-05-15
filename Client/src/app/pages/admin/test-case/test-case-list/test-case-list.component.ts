@@ -1,7 +1,8 @@
 import { Component, inject } from '@angular/core';
+import { Observable } from 'rxjs';
 import { GetTestCase } from 'src/app/models/test-case';
 import { TestCaseStore } from 'src/app/stores/test-case.store';
-import { TestCaseService } from './../../../../../services/test-case.service';
+import { TestCaseService } from '../../../../services/test-case.service';
 
 @Component({
     selector: 'app-test-case-list',
@@ -9,14 +10,14 @@ import { TestCaseService } from './../../../../../services/test-case.service';
     styleUrls: ['./test-case-list.component.css'],
 })
 export class TestCaseListComponent {
-    testCaseList = [] as GetTestCase[];
+    testCaseList = {} as Observable<GetTestCase[]>;
 
     //
-    private readonly testCaseService = inject(TestCaseService);
     private readonly testCaseStore = inject(TestCaseStore);
+    private readonly testCaseService = inject(TestCaseService);
 
     constructor() {
         this.testCaseService.getTestCaseList();
-        this.testCaseStore.getTestCaseList().subscribe((list) => (this.testCaseList = list));
+        this.testCaseList = this.testCaseStore.getTestCaseList;
     }
 }

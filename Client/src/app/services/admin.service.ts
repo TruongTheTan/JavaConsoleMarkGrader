@@ -12,13 +12,12 @@ export class AdminService {
     // APIs
     private readonly USER_LIST_API = 'User/list';
     private readonly CREATE_USER_API = 'User/create';
-    private readonly TEST_CASE_LIST_API = '';
-    private readonly CREATE_TEST_CASE_API = '';
 
     // Inject services
     private readonly http = inject(HttpClient);
     private readonly userStore = inject(UserStore);
     private readonly errorHandler = inject(GlobalHttpHandler);
+
     //
 
     getUserList() {
@@ -30,12 +29,8 @@ export class AdminService {
 
     createNewUser(createUser: CreateUser) {
         this.http.post(this.CREATE_USER_API, createUser).subscribe({
-            next: (a) => this.userStore.getUserList(),
+            next: (a) => {},
             error: (error) => this.errorHandler.handleError(error),
         });
     }
-
-    getTestCaseList() {}
-
-    createNewTestCase() {}
 }

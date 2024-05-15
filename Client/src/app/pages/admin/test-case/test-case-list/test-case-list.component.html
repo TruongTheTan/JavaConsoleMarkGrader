@@ -45,7 +45,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let testCase of testCaseList; let i = index">
+                <tr *ngFor="let testCase of testCaseList | async; let i = index">
                     <!-- Numerical order -->
                     <td class="text-center">
                         <span class="text-heading font-semibold"> {{ i + 1 }} </span>
@@ -99,7 +99,7 @@
     </div>
     <div class="card-footer border-0 py-5">
         <span class="text-muted text-sm"
-            >Showing 10 items out of {{ testCaseList.length }} results found
+            >Showing 10 items out of {{ (testCaseList | async)?.length }} results found
         </span>
     </div>
 </div>

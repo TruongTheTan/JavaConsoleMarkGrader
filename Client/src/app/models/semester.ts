@@ -3,9 +3,7 @@ export type GetSemester = {
     semesterName: string;
 };
 
-export type CreateSemester = {
-    semesterName: string;
-};
+export type CreateSemester = Omit<GetSemester, 'id'>;
 
 export type UpdateSemester = {
     id: number;
