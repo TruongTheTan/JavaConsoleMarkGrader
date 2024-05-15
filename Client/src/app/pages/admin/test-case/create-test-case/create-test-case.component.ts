@@ -1,5 +1,7 @@
 import { Component, effect, inject, signal } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { SemesterService } from 'src/app/services/semester.service';
+import { SemesterStore } from 'src/app/stores/semester.store';
 import { CustomFormValidation } from 'src/app/utils/custom-form-validation';
 import { CreateTestCase } from '../../../../models/test-case';
 import { TestCaseService } from '../../../../services/test-case.service';
@@ -12,34 +14,43 @@ import { TestCaseService } from '../../../../services/test-case.service';
 export class CreateTestCaseComponent {
     // Injection
     private readonly formBuilder = inject(FormBuilder);
+    private readonly semesterStore = inject(SemesterStore);
     private readonly testCaseService = inject(TestCaseService);
+    private readonly semesterService = inject(SemesterService);
 
+    semesterList = [] as string[];
     readonly isInputByMultipleLine = signal(false); // For display or remove test case input fields
-    readonly semesterList = ['Spring2024', 'Spring2025', 'Spring2026'];
 
     // Form
-    readonly createTestCaseForm = new FormGroup({
-        isInputByLine: new FormControl(false),
+    readonly createTestCaseForm = this.formBuilder.group({
+        isInputByLine: [false],
         testCaseInputs: this.formBuilder.array<FormControl[]>([]),
         testCaseOutputs: this.formBuilder.array<FormControl[]>([]),
 
-        mark: new FormControl(0, [
-            Validators.required,
-            Validators.min(1),
-            Validators.max(10),
-            Validators.pattern('^[1-9]+$'),
-        ]),
-
-        semester: new FormControl(0, [
-            Validators.required,
-            Validators.pattern(`^(${this.semesterList.join('|')})$`),
-        ]),
+        mark: [
+            0,
+            [
+                Validators.required,
+                Validators.min(1),
+                Validators.max(10),
+                Validators.pattern('^[1-9]+$'),
+            ],
+        ],
+        semester: [
+            0,
+            [Validators.required, Validators.pattern(`^(${this.semesterList.join('|')})$`)],
+        ],
     });
 
     constructor() {
         this.addTestCaseInputField();
         this.addTestCaseOutputField();
         this.clearAllTestCaseInputsByMultipleLineIsFalse();
+
+        this.semesterService.getSemesterList();
+        this.semesterStore.getSemesterList.subscribe(
+            (data) => (this.semesterList = data.map((s) => s.semesterName))
+        );
     }
 
     submitForm() {

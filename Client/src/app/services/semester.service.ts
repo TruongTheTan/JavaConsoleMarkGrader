@@ -17,10 +17,7 @@ export class SemesterService {
 
     getSemesterList() {
         this.http.get<CustomResponse<GetSemester[]>>(api.SEMESTER_LIST_API).subscribe({
-            next: (customResponse) => {
-                this.httpResultHandler.handleSuccess(customResponse);
-                this.semesterStore.updateSemesterList(customResponse.data);
-            },
+            next: (customResponse) => this.semesterStore.updateSemesterList(customResponse.data),
             error: (error) => this.httpResultHandler.handleError(error),
         });
     }

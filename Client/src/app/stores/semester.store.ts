@@ -5,7 +5,10 @@ import { GetSemester } from '../models/semester';
 @Injectable({ providedIn: 'root' })
 export class SemesterStore {
     private readonly semester = new BehaviorSubject({} as GetSemester);
-    private readonly semesterList = new BehaviorSubject([] as GetSemester[]);
+    private readonly semesterList = new BehaviorSubject([
+        { id: 1, semesterName: 'hola' },
+        { id: 1, semesterName: 'ddddd' },
+    ] as GetSemester[]);
 
     get getSemesterList(): Observable<GetSemester[]> {
         return this.semesterList.asObservable();

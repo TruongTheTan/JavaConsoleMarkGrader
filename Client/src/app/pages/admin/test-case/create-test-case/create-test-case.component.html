@@ -24,67 +24,60 @@
                         <div class="col-sm-3 col-form-label">Inputs</div>
                         <div class="flex justify-content-between">
                             <!-- Test case inputs section -->
-                            <div>
-                                <div class="mb-3 row">
-                                    <div
-                                        class="mb-2 col-sm-9"
-                                        *ngFor="
-                                            let input of createTestCaseForm.controls.testCaseInputs
-                                                .controls;
-                                            let i = index
-                                        "
-                                    >
-                                        <div class="input-group">
-                                            <input
-                                                type="text"
-                                                class="form-control"
-                                                [formControl]="input"
-                                                [placeholder]="'Test case input ' + (i + 1)"
-                                            />
+                            <div class="mb-3 row">
+                                <!-- Inputs -->
+                                <div
+                                    class="mb-2 col-sm-9"
+                                    *ngFor="
+                                        let input of createTestCaseForm.controls.testCaseInputs
+                                            .controls;
+                                        let i = index
+                                    "
+                                >
+                                    <div class="input-group">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            [formControl]="input"
+                                            [placeholder]="'Test case input ' + (i + 1)"
+                                        />
 
-                                            <button
-                                                class="btn btn-danger"
-                                                type="button"
-                                                *ngIf="i !== 0"
-                                                (click)="deleteTestCaseInputField(i)"
-                                            >
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-
-                                        <!-- Error msg -->
-                                        <div class="error text-danger">
-                                            <p *ngIf="input.hasError('required') && input.touched">
-                                                Test case input is required
-                                            </p>
-
-                                            <p
-                                                *ngIf="
-                                                    input.hasError('emptyString') && input.touched
-                                                "
-                                            >
-                                                Test case input must not empty
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <!-- Button add input fields -->
-                                    <div
-                                        *ngIf="isInputByMultipleLine()"
-                                        class="d-flex align-items-center justify-content-between mb-3 col-sm-2"
-                                    >
                                         <button
+                                            class="btn btn-danger"
                                             type="button"
-                                            class="btn btn-success mt-3 btn-sm"
-                                            (click)="addTestCaseInputField()"
+                                            *ngIf="i !== 0"
+                                            (click)="deleteTestCaseInputField(i)"
                                         >
-                                            Add new input field
+                                            <i class="bi bi-trash"></i>
                                         </button>
                                     </div>
+
+                                    <!-- Error msg -->
+                                    <div class="error text-danger">
+                                        <p *ngIf="input.hasError('required') && input.touched">
+                                            Test case input is required
+                                        </p>
+
+                                        <p *ngIf="input.hasError('emptyString') && input.touched">
+                                            Test case input must not empty
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Button add input fields -->
+                                <div
+                                    *ngIf="isInputByMultipleLine()"
+                                    class="d-flex align-items-center justify-content-between mb-3 col-sm-2"
+                                >
+                                    <button
+                                        type="button"
+                                        class="btn btn-success"
+                                        (click)="addTestCaseInputField()"
+                                    >
+                                        <i class="bi bi-plus-circle"></i>
+                                    </button>
                                 </div>
                             </div>
-
-                            <div></div>
                         </div>
 
                         <!-- Mark section -->
@@ -151,10 +144,11 @@
                         <!-- Outputs section -->
                         <div>
                             <div class="col-sm-3 col-form-label">Outputs</div>
-                            <div class="mb-3 row">
-                                <div class="col-sm-9">
+                            <div class="flex justify-content-between">
+                                <div class="mb-3 row">
+                                    <!-- Inputs -->
                                     <div
-                                        class="mb-2"
+                                        class="mb-2 col-sm-9"
                                         *ngFor="
                                             let input of createTestCaseForm.controls.testCaseOutputs
                                                 .controls;
@@ -170,12 +164,12 @@
                                             />
 
                                             <button
-                                                class="btn btn-danger"
                                                 type="button"
                                                 *ngIf="i !== 0"
+                                                class="btn btn-danger"
                                                 (click)="deleteTestCaseOutputField(i)"
                                             >
-                                                <i class="bi bi-trash"></i>
+                                                <i class="bi bi-trash fs-6"></i>
                                             </button>
                                         </div>
 
@@ -195,22 +189,22 @@
                                         </div>
                                     </div>
 
-                                    <!-- Button add and delete output fields -->
+                                    <!-- Button add input fields -->
                                     <div
-                                        class="d-flex align-items-center justify-content-between mb-5 w-100"
+                                        class="d-flex align-items-center justify-content-between mb-3 col-sm-2"
                                     >
                                         <button
                                             type="button"
-                                            class="btn btn-success mt-3 btn-sm w-100"
+                                            class="btn btn-success"
                                             (click)="addTestCaseOutputField()"
                                         >
-                                            Add new output field
+                                            <i
+                                                class="bi bi-plus-circle"
+                                                style="font-weight: bolder"
+                                            ></i>
                                         </button>
                                     </div>
                                 </div>
-
-                                <!-- Error msg -->
-                                <div class="error text-danger"></div>
                             </div>
                         </div>
 
@@ -223,7 +217,9 @@
                                         class="form-select"
                                         [formControl]="createTestCaseForm.controls.semester"
                                     >
-                                        <option value="Spring2024">Spring2024</option>
+                                        <option [value]="item" *ngFor="let item of semesterList">
+                                            {{ item }}
+                                        </option>
                                     </select>
 
                                     <!-- Error msg -->
