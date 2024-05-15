@@ -1,12 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import api from '../api/api';
 
 @Injectable({
     providedIn: 'root',
 })
 export class StudentService {
-    private readonly studentAPI = 'Student/submit?semesterId=1';
-
     private readonly http = inject(HttpClient);
 
     submitFile(file: File) {
@@ -14,7 +13,7 @@ export class StudentService {
 
         formData.append('file', file);
 
-        this.http.post(this.studentAPI, formData).subscribe((data) => {
+        this.http.post(api.SUBMIT_FILE, formData).subscribe((data) => {
             console.log(data);
         });
     }
