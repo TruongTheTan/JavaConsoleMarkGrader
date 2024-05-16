@@ -7,7 +7,7 @@ namespace Repositories.EntityRepository
 
 	public class SemesterRepository : BaseRepository<Semester>
 	{
-		public SemesterRepository(Java_Console_Auto_GraderContext context) : base(context)
+		public SemesterRepository(JavaConsoleAutoGraderContext context) : base(context)
 		{
 		}
 

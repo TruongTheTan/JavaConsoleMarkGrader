@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Repositories.DTOs;
+﻿using Repositories.DTOs;
+using Server.DAL.Entities;
 
 namespace Services.UserService;
 
@@ -31,7 +31,7 @@ public partial class UserService
 	public async Task<CustomResponse<dynamic>> ResetPassword(string email)
 	{
 		CustomResponse<dynamic> customResponse = new();
-		IdentityUser user = await userManager.FindByEmailAsync(email);
+		AppUser user = await userManager.FindByEmailAsync(email);
 
 		if (user != null)
 		{

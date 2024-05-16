@@ -17,9 +17,8 @@ public class UserController : ControllerBase
 	public UserController(UserService userService)
 	{
 		this.userService = userService;
+
 	}
-
-
 
 
 

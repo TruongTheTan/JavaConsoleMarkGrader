@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Repositories.DTOs;
+﻿using Repositories.DTOs;
+using Server.DAL.Entities;
 
 namespace Services.UserService;
 
@@ -29,10 +29,11 @@ public partial class UserService
 		}
 		else
 		{
-			var user = new IdentityUser()
+			var user = new AppUser()
 			{
 				Email = createUserDTO.Email,
 				UserName = createUserDTO.Name!,
+				IsActive = true,
 			};
 
 

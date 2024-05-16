@@ -7,11 +7,11 @@ public abstract class BaseRepository<T> where T : class
 {
 
 	protected DbSet<T> dbSet;
-	protected Java_Console_Auto_GraderContext context;
+	protected JavaConsoleAutoGraderContext context;
 
 
 
-	protected BaseRepository(Java_Console_Auto_GraderContext context)
+	protected BaseRepository(JavaConsoleAutoGraderContext context)
 	{
 		this.context = context;
 		dbSet = context.Set<T>();

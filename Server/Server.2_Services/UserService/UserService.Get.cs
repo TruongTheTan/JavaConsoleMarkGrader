@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Repositories.DTOs;
+using Server.DAL.Entities;
 
 namespace Services.UserService;
 
@@ -9,7 +9,7 @@ public partial class UserService
 	public async Task<CustomResponse<GetUserDTO>> GetUserByEmail(string email)
 	{
 		CustomResponse<GetUserDTO> customResponse = new();
-		IdentityUser identityUser = await userManager.FindByEmailAsync(email.Trim());
+		AppUser identityUser = await userManager.FindByEmailAsync(email.Trim());
 
 		if (identityUser == null)
 		{
@@ -33,7 +33,7 @@ public partial class UserService
 
 	public async Task<CustomResponse<GetUserDTO>> GetUserByGuid(Guid Id)
 	{
-		IdentityUser user = await userManager.FindByIdAsync(Id.ToString().Trim());
+		AppUser user = await userManager.FindByIdAsync(Id.ToString().Trim());
 
 		bool isUserNotNull = user != null;
 
@@ -53,7 +53,7 @@ public partial class UserService
 	{
 
 		CustomResponse<List<GetUserDTO>> customResponse = new();
-		List<IdentityUser> list = await userManager.Users.ToListAsync();
+		List<AppUser> list = await userManager.Users.ToListAsync();
 
 
 		if (list != null && list.Count > 0)

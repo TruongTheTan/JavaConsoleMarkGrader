@@ -6,7 +6,7 @@ namespace Server_4.DAL.Models
     public partial class StudentSubmissionDetail
     {
         public int Id { get; set; }
-        public string? StudentId { get; set; }
+        public Guid? StudentId { get; set; }
         public int? SemesterId { get; set; }
         public byte? TotalMark { get; set; }
         public string? QuestionDescription { get; set; }

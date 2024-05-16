@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Repositories.DTOs;
+﻿using Repositories.DTOs;
+using Server.DAL.Entities;
 using Server_4.DAL.Models;
 
 namespace Services.StudentService;
@@ -12,7 +12,7 @@ public partial class StudentService
 
 	public async Task<GetStudentDTO> GetStudentByIdAsync(Guid id)
 	{
-		IdentityUser studentFound = await userManager.FindByIdAsync(id.ToString());
+		AppUser studentFound = await userManager.FindByIdAsync(id.ToString());
 
 
 		if (studentFound != null)

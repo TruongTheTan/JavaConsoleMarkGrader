@@ -1,18 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Repositories.Repositories;
+using Server.DAL.Entities;
 using Server_4.DAL.Models;
 
 namespace Repositories.EntityRepository;
 
 
 
-public class StudentRepository : BaseRepository<AspNetUser>
+public class StudentRepository : BaseRepository<AppUser>
 {
 
 	private readonly DbSet<StudentSubmissionDetail> studentSubmissionDetailTable;
 
 
-	public StudentRepository(Java_Console_Auto_GraderContext context) : base(context)
+	public StudentRepository(JavaConsoleAutoGraderContext context) : base(context)
 	{
 
 		studentSubmissionDetailTable = context.StudentSubmissionDetails;

@@ -93,33 +93,17 @@ public static class ServiceConfig
 
 
 
-	public static void AddDIs()
+	public static void AddDependencyInjection()
 	{
-		/*
-		Services.AddIdentity<IdentityUser, IdentityRole>()
-			.AddEntityFrameworkStores<Java_Console_Auto_GraderContext>()
-			.AddDefaultTokenProviders();
-		*/
-		Services.AddIdentityCore<IdentityUser>().AddEntityFrameworkStores<Java_Console_Auto_GraderContext>();
-
-
-		Services.AddScoped<UserManager<IdentityUser>>();
-
+		Services.AddIdentityCore<AppUser>().AddEntityFrameworkStores<MigrationDBContext>();
 
 		Services.AddScoped<UnitOfWork>();
-		Services.AddScoped<Java_Console_Auto_GraderContext>();
+		Services.AddScoped<JavaConsoleAutoGraderContext>();
 
-
-		// Add User services
 		Services.AddScoped<UserService>();
-
-		// Add student services
 		Services.AddScoped<StudentService>();
-
-		// Add test case services
 		Services.AddScoped<TestCaseService>();
-
-
+		Services.AddScoped<UserManager<AppUser>>();
 		Services.AddScoped<ISemesterService, SemesterService>();
 
 
@@ -128,6 +112,42 @@ public static class ServiceConfig
 	}
 
 
+	public static void AddIdentityUser()
+	{
+		Services.AddScoped<MigrationDBContext>();
+
+
+		const string connectionString = "server=(local);database=JavaConsoleAutoGrader;Trusted_Connection=True;uid=sa;pwd=sa;";
+		Services.AddDbContext<MigrationDBContext>(options => options.UseSqlServer(connectionString));
+
+
+
+		Services.AddIdentity<AppUser, IdentityRole<Guid>>()
+			.AddEntityFrameworkStores<MigrationDBContext>()
+			.AddDefaultTokenProviders();
+
+
+		Services.Configure<IdentityOptions>(options =>
+		{
+			// Password settings
+			options.Password.RequireDigit = false;
+			options.Password.RequireLowercase = false;
+			options.Password.RequireNonAlphanumeric = false;
+			options.Password.RequireUppercase = false;
+			options.Password.RequireLowercase = false;
+
+
+			// Lockout settings
+			//options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+			//options.Lockout.MaxFailedAccessAttempts = 10;
+			//options.Lockout.AllowedForNewUsers = true;
+
+			// User settings
+			options.User.RequireUniqueEmail = true;
+			options.SignIn.RequireConfirmedEmail = true;
+		});
+
+	}
 
 
 	public static void AddSwagger()
@@ -163,40 +183,6 @@ public static class ServiceConfig
 
 
 
-	public static void AddIdentityUser()
-	{
 
-		Services.AddScoped<MigrationDBContext>();
-
-		const string connectionString = "server=(local);database=Java_Console_Auto_Grader;Trusted_Connection=True;uid=sa;pwd=sa;";
-		Services.AddDbContext<MigrationDBContext>(options => options.UseSqlServer(connectionString));
-
-
-		Services.AddIdentity<AppUser, IdentityRole>()
-			.AddEntityFrameworkStores<MigrationDBContext>()
-			.AddDefaultTokenProviders();
-
-
-		Services.Configure<IdentityOptions>(options =>
-		{
-			// Password settings
-			options.Password.RequireDigit = false;
-			options.Password.RequireLowercase = false;
-			options.Password.RequireNonAlphanumeric = false;
-			options.Password.RequireUppercase = false;
-			options.Password.RequireLowercase = false;
-
-
-			// Lockout settings
-			//options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-			//options.Lockout.MaxFailedAccessAttempts = 10;
-			//options.Lockout.AllowedForNewUsers = true;
-
-			// User settings
-			options.User.RequireUniqueEmail = true;
-			options.SignIn.RequireConfirmedEmail = true;
-		});
-
-	}
 }
 

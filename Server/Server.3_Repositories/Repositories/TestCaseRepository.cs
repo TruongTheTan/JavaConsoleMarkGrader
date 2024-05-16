@@ -7,7 +7,7 @@ namespace Repositories.EntityRepository
 
 	public class TestCaseRepository : BaseRepository<TestCase>
 	{
-		public TestCaseRepository(Java_Console_Auto_GraderContext context) : base(context)
+		public TestCaseRepository(JavaConsoleAutoGraderContext context) : base(context)
 		{
 		}
 

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Repositories;
 using Repositories.DTOs;
 using Repositories.EntityRepository;
+using Server.DAL.Entities;
 using Server_4.DAL.Models;
 
 namespace Services.StudentService;
@@ -15,10 +16,10 @@ public partial class StudentService
 	private readonly IMapper mapper;
 	private readonly UnitOfWork unitOfWork;
 	private readonly StudentRepository studentRepository;
-	private readonly UserManager<IdentityUser> userManager;
+	private readonly UserManager<AppUser> userManager;
 
 
-	public StudentService(IMapper mapper, UnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
+	public StudentService(IMapper mapper, UnitOfWork unitOfWork, UserManager<AppUser> userManager)
 	{
 		this.mapper = mapper;
 		this.unitOfWork = unitOfWork;

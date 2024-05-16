@@ -9,10 +9,13 @@ namespace Server_4.DAL.Models
         {
             AspNetUserClaims = new HashSet<AspNetUserClaim>();
             AspNetUserLogins = new HashSet<AspNetUserLogin>();
+            AspNetUserTokens = new HashSet<AspNetUserToken>();
             StudentSemesterSubmissions = new HashSet<StudentSemesterSubmission>();
+            Roles = new HashSet<AspNetRole>();
         }
 
-        public string Id { get; set; } = null!;
+        public Guid Id { get; set; }
+        public bool? IsActive { get; set; }
         public string? UserName { get; set; }
         public string? NormalizedUserName { get; set; }
         public string? Email { get; set; }
@@ -30,6 +33,9 @@ namespace Server_4.DAL.Models
 
         public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; }
+        public virtual ICollection<AspNetUserToken> AspNetUserTokens { get; set; }
         public virtual ICollection<StudentSemesterSubmission> StudentSemesterSubmissions { get; set; }
+
+        public virtual ICollection<AspNetRole> Roles { get; set; }
     }
 }

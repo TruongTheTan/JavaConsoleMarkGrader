@@ -10,4 +10,9 @@ public class MigrationDBContext : IdentityDbContext<AppUser, IdentityRole<Guid>,
 	public MigrationDBContext(DbContextOptions options) : base(options)
 	{
 	}
+
+	protected override void OnModelCreating(ModelBuilder modelBuilder)
+	{
+		base.OnModelCreating(modelBuilder);
+	}
 }

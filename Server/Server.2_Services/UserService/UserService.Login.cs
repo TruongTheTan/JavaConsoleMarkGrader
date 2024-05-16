@@ -1,6 +1,7 @@
 ﻿using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
 using Repositories.DTOs;
+using Server.DAL.Entities;
 
 namespace Services.UserService;
 
@@ -9,7 +10,7 @@ public partial class UserService
 	public async Task<CustomResponse<AuthenticationUser>> BasicLogin(UserLoginDTO userLoginDTO)
 	{
 		CustomResponse<AuthenticationUser> customResponse = new();
-		IdentityUser? user = await userManager.FindByEmailAsync(userLoginDTO.Email.Trim());
+		AppUser? user = await userManager.FindByEmailAsync(userLoginDTO.Email.Trim());
 
 
 		if (user is null)
@@ -84,7 +85,7 @@ public partial class UserService
 		else
 		{
 			UserLoginInfo info = new(googleLoginDTO.Provider, payload.Subject, googleLoginDTO.Provider);
-			IdentityUser? user = await userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+			AppUser? user = await userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
 
 
 			// User is not login with google (No record in DB)

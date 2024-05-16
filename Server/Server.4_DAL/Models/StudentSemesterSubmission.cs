@@ -10,10 +10,11 @@ namespace Server_4.DAL.Models
             StudentSubmissionDetails = new HashSet<StudentSubmissionDetail>();
         }
 
-        public string StudentId { get; set; } = null!;
+        public Guid StudentId { get; set; }
         public int SemesterId { get; set; }
         public bool? IsActive { get; set; }
 
+        public virtual Semester Semester { get; set; } = null!;
         public virtual AspNetUser Student { get; set; } = null!;
         public virtual ICollection<StudentSubmissionDetail> StudentSubmissionDetails { get; set; }
     }

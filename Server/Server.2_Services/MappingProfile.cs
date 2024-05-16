@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using Repositories.DTOs;
+using Server.DAL.Entities;
 using Server_4.DAL.Models;
 
 namespace Server_2.Services;
@@ -24,14 +24,14 @@ public class MappingProfile : Profile
 		//   .ReverseMap();
 
 
-		CreateMap<IdentityUser, AuthenticationUser>()
+		CreateMap<AppUser, AuthenticationUser>()
 			.ForMember(des => des.Name, option => option.MapFrom(user => user.UserName))
 			.ReverseMap();
 
-		CreateMap<IdentityUser, GetUserDTO>().ReverseMap();
+		CreateMap<AppUser, GetUserDTO>().ReverseMap();
 		CreateMap<AspNetUser, GetUserDTO>().ReverseMap();
 		CreateMap<AspNetUser, AuthenticationUser>().ReverseMap();
-		CreateMap<IdentityUser, CreateUserDTO>().ReverseMap();
+		CreateMap<AppUser, CreateUserDTO>().ReverseMap();
 	}
 
 

@@ -7,7 +7,7 @@ namespace Server_4.DAL.Contexts
 	{
 		public MigrationDBContext CreateDbContext(string[] args)
 		{
-			const string connectionString = "server=(local);database=HelloThere;Trusted_Connection=True;uid=sa;pwd=sa;";
+			const string connectionString = "server=(local);database=JavaConsoleAutoGrader;Trusted_Connection=True;uid=sa;pwd=sa;";
 
 			var optionBuilder = new DbContextOptionsBuilder<MigrationDBContext>();
 			optionBuilder.UseSqlServer(connectionString);

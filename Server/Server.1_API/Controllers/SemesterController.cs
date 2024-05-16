@@ -1,4 +1,5 @@
 ﻿using MarkGrader.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.DTOs;
 using Services.SemesterService;
@@ -9,7 +10,7 @@ namespace MarkGrader.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin")]
 public class SemesterController : ControllerBase
 {
 

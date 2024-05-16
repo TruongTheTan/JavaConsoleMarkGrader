@@ -10,7 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 ServiceConfig.Services = builder.Services;
 ServiceConfig.AddIdentityUser();
-ServiceConfig.AddDIs();
+ServiceConfig.AddDependencyInjection();
 ServiceConfig.AddCors();
 ServiceConfig.AddSwagger();
 ServiceConfig.AddJWTAuthentication(builder.Configuration["JWT:SecretKey"]!);

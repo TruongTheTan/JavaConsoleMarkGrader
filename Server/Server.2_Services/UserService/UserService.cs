@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Repositories;
 using Repositories.DTOs;
 using Repositories.EntityRepository;
+using Server.DAL.Entities;
 
 namespace Services.UserService;
 
@@ -17,11 +18,11 @@ public partial class UserService
 	private readonly UnitOfWork unitOfWork;
 	private readonly UserRepository userRepository;
 	private readonly IConfigurationRoot configuration;
-	private readonly UserManager<IdentityUser> userManager;
+	private readonly UserManager<AppUser> userManager;
 
 
 
-	public UserService(IMapper mapper, UnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
+	public UserService(IMapper mapper, UnitOfWork unitOfWork, UserManager<AppUser> userManager)
 	{
 		this.mapper = mapper;
 		this.unitOfWork = unitOfWork;
@@ -41,7 +42,7 @@ public partial class UserService
 
 	public async Task<CustomResponse<dynamic>> ConfirmEmail(UserConfirmEmail userConfirmEmail)
 	{
-		IdentityUser identityUser = await userManager.FindByEmailAsync(userConfirmEmail.Email.Trim());
+		AppUser identityUser = await userManager.FindByEmailAsync(userConfirmEmail.Email.Trim());
 		bool isConfirmSuccess = (await userManager.ConfirmEmailAsync(identityUser, userConfirmEmail.Token)).Succeeded;
 
 
