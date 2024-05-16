@@ -1,5 +1,6 @@
 import { Component, effect, inject, signal } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { GetSemester } from 'src/app/models/semester';
 import { SemesterService } from 'src/app/services/semester.service';
 import { SemesterStore } from 'src/app/stores/semester.store';
 import { CustomFormValidation } from 'src/app/utils/custom-form-validation';
@@ -18,7 +19,7 @@ export class CreateTestCaseComponent {
     private readonly testCaseService = inject(TestCaseService);
     private readonly semesterService = inject(SemesterService);
 
-    semesterList = [] as string[];
+    semesterList = [] as GetSemester[];
     readonly isInputByMultipleLine = signal(false); // For display or remove test case input fields
 
     // Form
@@ -36,10 +37,7 @@ export class CreateTestCaseComponent {
                 Validators.pattern('^[1-9]+$'),
             ],
         ],
-        semester: [
-            0,
-            [Validators.required, Validators.pattern(`^(${this.semesterList.join('|')})$`)],
-        ],
+        semester: [0, [Validators.required]],
     });
 
     constructor() {
@@ -48,9 +46,9 @@ export class CreateTestCaseComponent {
         this.clearAllTestCaseInputsByMultipleLineIsFalse();
 
         this.semesterService.getSemesterList();
-        this.semesterStore.getSemesterList.subscribe(
-            (data) => (this.semesterList = data.map((s) => s.semesterName))
-        );
+        this.semesterStore.getSemesterList.subscribe((data) => {
+            this.semesterList = data;
+        });
     }
 
     submitForm() {
@@ -60,13 +58,17 @@ export class CreateTestCaseComponent {
             if (result) {
                 const { mark, isInputByLine, semester } = this.createTestCaseForm.controls;
 
+                const semeserId = semester.value as number;
+
                 const createTestCase = {
                     mark: mark.value,
                     isInputByLine: isInputByLine.value,
-                    semesterId: semester.value,
+                    semesterId: semeserId === 0 ? this.semesterList[0].id : +semeserId,
                     inputs: this.convertInputTestCaseFormControlToStringArray(),
                     outputs: this.convertOutputTestCaseFormControlToStringArray(),
                 } as CreateTestCase;
+
+                console.log(createTestCase);
 
                 this.testCaseService.createNewTestCase(createTestCase);
             }

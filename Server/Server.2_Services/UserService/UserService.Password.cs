@@ -11,17 +11,17 @@ public partial class UserService
 		CustomResponse<dynamic> customResponse = new();
 		var user = await userManager.FindByEmailAsync(changeUserPasswordDTO.Email);
 
-		if (user != null)
+		if (user == null)
+		{
+			customResponse.StatusCode = ServiceUtilities.NOT_FOUND;
+			customResponse.Message = "User not found by email";
+		}
+		else
 		{
 			var result = await userManager.ChangePasswordAsync(user, changeUserPasswordDTO.OldPassword, changeUserPasswordDTO.NewPassword);
 
 			customResponse.StatusCode = result.Succeeded ? ServiceUtilities.OK : ServiceUtilities.INTERNAL_SERVER_ERROR;
 			customResponse.Message = result.Succeeded ? "Password has been changed successfully" : "Fail to change password";
-		}
-		else
-		{
-			customResponse.StatusCode = ServiceUtilities.NOT_FOUND;
-			customResponse.Message = "User not found by email";
 		}
 		return customResponse;
 	}
@@ -33,23 +33,41 @@ public partial class UserService
 		CustomResponse<dynamic> customResponse = new();
 		AppUser user = await userManager.FindByEmailAsync(email);
 
-		if (user != null)
+		if (user is null)
 		{
+			customResponse.StatusCode = ServiceUtilities.NOT_FOUND;
+			customResponse.Message = "User not found by email";
+		}
+		else
+		{
+
 			string defaultPassword = configuration.GetSection("DefaultPassword").Value!;
+			bool isRemoveOldPasswordSuccessful = false, isAddNewPasswordSuccessful = false;
 
-			bool isRemoveOldPasswordSuccessful = (await userManager.RemovePasswordAsync(user)).Succeeded;
-			bool isAddNewPasswordSuccessful = (await userManager.AddPasswordAsync(user, defaultPassword)).Succeeded;
+			using var transaction = await unitOfWork.Context.Database.BeginTransactionAsync();
 
+			try
+			{
+				isRemoveOldPasswordSuccessful = (await userManager.RemovePasswordAsync(user)).Succeeded;
+				isAddNewPasswordSuccessful = (await userManager.AddPasswordAsync(user, defaultPassword)).Succeeded;
+
+				await transaction.CommitAsync();
+			}
+			catch (Exception ex)
+			{
+				await transaction.RollbackAsync();
+				customResponse.StatusCode = ServiceUtilities.INTERNAL_SERVER_ERROR;
+				customResponse.Message = ex.Message;
+			}
+			finally
+			{
+				await transaction.DisposeAsync();
+			}
 
 			bool isResetPasswordSuccessful = isRemoveOldPasswordSuccessful && isAddNewPasswordSuccessful;
 
 			customResponse.StatusCode = isResetPasswordSuccessful ? ServiceUtilities.OK : ServiceUtilities.INTERNAL_SERVER_ERROR;
 			customResponse.Message = isResetPasswordSuccessful ? "Password reset successfully" : "Failed to reset password";
-		}
-		else
-		{
-			customResponse.StatusCode = ServiceUtilities.NOT_FOUND;
-			customResponse.Message = "User not found by email";
 		}
 		return customResponse;
 	}

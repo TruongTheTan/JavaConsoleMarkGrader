@@ -79,10 +79,13 @@
 
                     <!-- Is input by line -->
                     <td class="text-center">
-                        <a class="badge badge-lg badge-dot text-heading font-semibold">
-                            <i [class]="testCase.isInputByLine ? 'bg-success' : 'bg-danger'"></i>
+                        <span
+                            class="badge badge-sm rounded-pill"
+                            style="font-size: 13px"
+                            [class]="testCase.isInputByLine ? 'bg-success' : 'bg-danger'"
+                        >
                             {{ testCase.isInputByLine }}
-                        </a>
+                        </span>
                     </td>
 
                     <!-- Buttons -->

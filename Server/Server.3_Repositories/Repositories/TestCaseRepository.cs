@@ -12,6 +12,11 @@ namespace Repositories.EntityRepository
 		}
 
 
+		public override async Task<List<TestCase>> GetAllAsync()
+		{
+			return await dbSet.Include(t => t.Semester).AsNoTracking().ToListAsync();
+		}
+
 
 		public async Task<List<TestCase>> GetAllTestCaseBySemesterIdAsync(int semesterId)
 		{

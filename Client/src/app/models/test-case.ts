@@ -7,10 +7,6 @@ export type GetTestCase = {
     isInputByLine: boolean;
 };
 
-export type CreateTestCase = {
-    inputs: string[];
-    outputs: string[];
-    mark: number;
+export type CreateTestCase = Omit<GetTestCase, 'id' | 'semesterName'> & {
     semesterId: number;
-    isInputByLine: boolean;
 };

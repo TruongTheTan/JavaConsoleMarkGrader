@@ -8,13 +8,13 @@ public class CreateTestCaseDTO
 {
 	[Required, MinLength(1)]
 	[NotNull, ListNotContainEmptyString(ErrorMessage = "Inputs must not contain empty string ")]
-	public List<string>? Input { get; set; }
+	public List<string>? Inputs { get; set; }
 
 
 
 	[Required, MinLength(1)]
 	[NotNull, ListNotContainEmptyString(ErrorMessage = "Outputs must not contain empty string ")]
-	public List<string>? Output { get; set; }
+	public List<string>? Outputs { get; set; }
 
 
 
@@ -23,20 +23,11 @@ public class CreateTestCaseDTO
 
 
 	[Required]
-	public bool? IsInputArray { get; set; }
-
-
-	[Required]
 	public bool? IsInputByLine { get; set; }
 
 
 	[Required, Range(1, int.MaxValue), NotNull]
 	public int? SemesterId { get; set; }
-
-
-	[JsonIgnore]
-	public bool CheckValidInputType { get => (IsInputArray != IsInputByLine || IsInputByLine != IsInputArray); }
-
 }
 
 
@@ -51,9 +42,6 @@ public class GetTestCaseDTO
 	public List<string>? Inputs { get; set; }
 	public List<string>? Outputs { get; set; }
 	public byte? Mark { get; set; }
-
-	[JsonIgnore]
-	public bool IsInputArray { get => !IsInputByLine; }
 	public bool IsInputByLine { get; set; } = false;
 	public int? SemesterId { get; set; }
 	public string? SemesterName { get; set; }

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import api from '../api/api';
+import { CREATE_USER_API, USER_LIST_API } from '../api/api';
 import { CustomResponse } from '../models/custom-response';
 import { CreateUser, GetUser } from '../models/user';
 import { UserStore } from '../stores/user.store';
@@ -18,14 +18,14 @@ export class AdminService {
     //
 
     getUserList() {
-        this.http.get<CustomResponse<GetUser[]>>(api.USER_LIST_API).subscribe({
+        this.http.get<CustomResponse<GetUser[]>>(USER_LIST_API).subscribe({
             next: (customResponse) => this.userStore.updateList(customResponse.data),
             error: (error) => this.errorHandler.handleError(error),
         });
     }
 
     createNewUser(createUser: CreateUser) {
-        this.http.post(api.CREATE_USER_API, createUser).subscribe({
+        this.http.post(CREATE_USER_API, createUser).subscribe({
             next: (a) => {},
             error: (error) => this.errorHandler.handleError(error),
         });

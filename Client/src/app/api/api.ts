@@ -1,28 +1,23 @@
-class Api {
-    // Auth APIs
-    public readonly BASIC_LOGIN_API = 'Auth/basic-login';
-    public readonly GOOGLE_LOGIN_API = 'Auth/google-login';
-    public readonly RESET_PASSWORD_API = 'User/reset-password';
-    public readonly CHANGE_PASSWORD_API = 'User/change-password';
+// Auth APIs
+export const BASIC_LOGIN_API = 'Auth/basic-login';
+export const GOOGLE_LOGIN_API = 'Auth/google-login';
+export const RESET_PASSWORD_API = 'User/reset-password';
+export const CHANGE_PASSWORD_API = 'User/change-password';
 
-    // Admin APIs
-    public readonly USER_LIST_API = 'User/list';
-    public readonly CREATE_USER_API = 'User/create';
+// Admin APIs
+export const USER_LIST_API = 'User/list';
+export const CREATE_USER_API = 'User/create';
 
-    // Semester APIs
-    public readonly GET_SEMESTER_API = '';
-    public readonly SEMESTER_LIST_API = '';
-    public readonly CREATE_SEMESTER_API = '';
-    public readonly UPDATE_SEMESTER_API = '';
+// Semester APIs
+export const GET_SEMESTER_API = '';
+export const SEMESTER_LIST_API = 'Semester/list';
+export const CREATE_SEMESTER_API = 'Semester/create';
+export const UPDATE_SEMESTER_API = 'Semester/update';
 
-    // Student APIs
-    public readonly SUBMIT_FILE = 'Student/submit?semesterId=1';
+// Student APIs
+export const SUBMIT_FILE = 'Student/submit?semesterId=1';
 
-    // Test case APIs
-    public readonly TEST_CASE_LIST_API = 'TestCase/list?semesterId=1';
-    public readonly TEST_CASE_CREATE_API = 'TestCase/create';
-    public readonly TEST_CASE_UPDATE_API = 'TestCase/update';
-}
-
-const api = new Api();
-export default api;
+// Test case APIs
+export const TEST_CASE_LIST_API = 'TestCase/list';
+export const TEST_CASE_CREATE_API = 'TestCase/create';
+export const TEST_CASE_UPDATE_API = 'TestCase/update';

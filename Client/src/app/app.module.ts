@@ -7,15 +7,12 @@ import {
 import { HttpClientModule } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatBadgeModule } from '@angular/material/badge';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgToastModule } from 'ng-angular-popup';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { CookieService } from 'ngx-cookie-service';
+import { interceptorConfig } from './api/http-interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
@@ -36,7 +33,6 @@ import { SemesterStore } from './stores/semester.store';
 import { TestCaseStore } from './stores/test-case.store';
 import { UserStore } from './stores/user.store';
 import { GlobalHttpHandler } from './utils/global-http-handler';
-import { interceptorConfig } from './utils/http-interceptor';
 
 // Add services here
 const servicesProvider = [
@@ -49,12 +45,6 @@ const servicesProvider = [
 
 // Add stores here
 const storesProvider = [UserStore, TestCaseStore, SemesterStore];
-const angularMaterialModules = [
-    MatBadgeModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    MatButtonModule,
-];
 
 const clientId = '256438874185-qp91u851or88s8plr1p8ku8nv28vp0jh.apps.googleusercontent.com';
 const socialAuthProvider = {
@@ -102,7 +92,6 @@ const socialAuthProvider = {
         NgToastModule,
         BsDropdownModule.forRoot(),
         BrowserAnimationsModule,
-        ...angularMaterialModules,
     ],
     providers: [
         servicesProvider,

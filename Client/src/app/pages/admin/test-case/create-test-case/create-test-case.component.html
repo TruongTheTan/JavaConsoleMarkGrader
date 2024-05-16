@@ -217,8 +217,8 @@
                                         class="form-select"
                                         [formControl]="createTestCaseForm.controls.semester"
                                     >
-                                        <option [value]="item" *ngFor="let item of semesterList">
-                                            {{ item }}
+                                        <option [value]="item.id" *ngFor="let item of semesterList">
+                                            {{ item.semesterName }}
                                         </option>
                                     </select>
 
@@ -232,16 +232,6 @@
                                             "
                                         >
                                             Semester is required
-                                        </p>
-
-                                        <p
-                                            *ngIf="
-                                                createTestCaseForm.controls.semester.hasError(
-                                                    'pattern'
-                                                ) && createTestCaseForm.controls.semester.touched
-                                            "
-                                        >
-                                            Valid semesters are {{ semesterList.join(", ") }}
                                         </p>
                                     </div>
                                 </div>
@@ -271,7 +261,13 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-secondary">Reset</button>
+                    <button
+                        type="reset"
+                        class="btn btn-secondary"
+                        (click)="isInputByMultipleLine.set(false)"
+                    >
+                        Reset
+                    </button>
                     <button
                         type="submit"
                         class="btn btn-primary"

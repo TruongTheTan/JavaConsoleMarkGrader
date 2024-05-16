@@ -3,7 +3,12 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import api from '../api/api';
+import {
+    BASIC_LOGIN_API,
+    CHANGE_PASSWORD_API,
+    GOOGLE_LOGIN_API,
+    RESET_PASSWORD_API,
+} from '../api/api';
 import { CustomResponse } from '../models/custom-response';
 import { GlobalHttpHandler } from '../utils/global-http-handler';
 import { AuthenticationUser } from './../models/user';
@@ -28,25 +33,23 @@ export class AuthService {
             password,
         };
 
-        this.http
-            .post<CustomResponse<AuthenticationUser>>(api.BASIC_LOGIN_API, loginObject)
-            .subscribe({
-                next: (customResponse) => {
-                    this.globalHttpHandler.handleSuccess(customResponse);
+        this.http.post<CustomResponse<AuthenticationUser>>(BASIC_LOGIN_API, loginObject).subscribe({
+            next: (customResponse) => {
+                this.globalHttpHandler.handleSuccess(customResponse);
 
-                    const authenticationUser = customResponse.data;
-                    this.handleUserStorage(authenticationUser);
-                    this.redirectToPageByRole(authenticationUser.roleName);
-                },
-                error: (error) => this.globalHttpHandler.handleError(error),
-            });
+                const authenticationUser = customResponse.data;
+                this.handleUserStorage(authenticationUser);
+                this.redirectToPageByRole(authenticationUser.roleName);
+            },
+            error: (error) => this.globalHttpHandler.handleError(error),
+        });
     }
 
     googleLogin(idToken: string, provider: string) {
         const googleLoginObject = { idToken, provider };
 
         this.http
-            .post<CustomResponse<AuthenticationUser>>(api.GOOGLE_LOGIN_API, googleLoginObject)
+            .post<CustomResponse<AuthenticationUser>>(GOOGLE_LOGIN_API, googleLoginObject)
             .subscribe({
                 next: (customResponse) => {
                     this.globalHttpHandler.handleSuccess(customResponse);
@@ -63,7 +66,7 @@ export class AuthService {
     }
 
     resetPasswordToDefault(email: string) {
-        this.http.patch(api.RESET_PASSWORD_API, { email }).subscribe({
+        this.http.patch(RESET_PASSWORD_API, { email }).subscribe({
             next: (user) => alert('Password reset to default'),
             error: (error: HttpErrorResponse) => this.globalHttpHandler.handleError(error),
         });
@@ -76,7 +79,7 @@ export class AuthService {
             newPassword,
         };
 
-        this.http.patch(api.CHANGE_PASSWORD_API, changePasswordObj).subscribe({
+        this.http.patch(CHANGE_PASSWORD_API, changePasswordObj).subscribe({
             next: () => alert('ok'),
             error: (error: HttpErrorResponse) => this.globalHttpHandler.handleError(error),
         });

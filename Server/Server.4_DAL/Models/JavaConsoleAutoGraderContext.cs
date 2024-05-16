@@ -125,10 +125,8 @@ namespace Server_4.DAL.Models
 
             modelBuilder.Entity<Semester>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.SemesterName)
-                    .HasMaxLength(10)
+                    .HasMaxLength(11)
                     .IsFixedLength();
             });
 
@@ -151,8 +149,6 @@ namespace Server_4.DAL.Models
 
             modelBuilder.Entity<StudentSubmissionDetail>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.GradingTime).HasColumnType("datetime");
 
                 entity.Property(e => e.QuestionDescription).HasMaxLength(200);
@@ -167,8 +163,6 @@ namespace Server_4.DAL.Models
 
             modelBuilder.Entity<TestCase>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.HasOne(d => d.Semester)
                     .WithMany(p => p.TestCases)
                     .HasForeignKey(d => d.SemesterId)

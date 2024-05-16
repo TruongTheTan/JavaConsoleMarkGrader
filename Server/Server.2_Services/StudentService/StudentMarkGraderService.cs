@@ -128,15 +128,17 @@ public static class StudentMarkGraderService
 
 	private static void ProvideTestCaseInputToConsole(GetTestCaseDTO testCase)
 	{
-		// Input multiple line
-		if (testCase.IsInputArray)
-			testCase.Inputs!.ForEach(input => streamWriter!.WriteLine(input)); // Insert each line in list to java console
-
-		// Input 1 line
-		else
+		// Input by 1 line
+		if (testCase.IsInputByLine)
+		{
 			streamWriter!.WriteLine(string.Join(" ", testCase.Inputs!));
+		}
+		// Input by multiple line
+		else
+		{
+			testCase.Inputs!.ForEach(input => streamWriter!.WriteLine(input)); // Insert each line in list to java console}
+		}
 	}
-
 
 
 

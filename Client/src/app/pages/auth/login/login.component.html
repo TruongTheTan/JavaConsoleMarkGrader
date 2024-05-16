@@ -15,6 +15,7 @@
                                             type="email"
                                             class="form-control"
                                             placeholder="name@example.com"
+                                            autocomplete="email"
                                             [formControl]="loginForm.controls.email"
                                         />
                                         <label for="email" class="form-label">Email</label>
@@ -44,6 +45,7 @@
                                             class="form-control"
                                             type="password"
                                             placeholder="Password"
+                                            autocomplete="new-password"
                                             [formControl]="loginForm.controls.password"
                                         />
                                         <label for="password" class="form-label">Password</label>
@@ -86,9 +88,8 @@
                                     <div class="d-grid">
                                         <button
                                             type="submit"
-                                            class="p-2"
+                                            class="p-2 btn btn-success"
                                             [disabled]="loginForm.invalid"
-                                            mat-raised-button
                                             color="primary"
                                         >
                                             Log in now

@@ -54,8 +54,8 @@ public class MappingProfile : Profile
 
 
 		CreateMap<CreateTestCaseDTO, TestCase>()
-			.ForMember(dest => dest.Input, opt => opt.MapFrom(src => string.Join(" ", src.Input!)))
-			.ForMember(dest => dest.Output, opt => opt.MapFrom(src => string.Join(" ", src.Output!)));
+			.ForMember(dest => dest.Input, opt => opt.MapFrom(src => string.Join(" ", src.Inputs!)))
+			.ForMember(dest => dest.Output, opt => opt.MapFrom(src => string.Join(" ", src.Outputs!)));
 
 
 		CreateMap<UpdateTestCaseDTO, TestCase>()

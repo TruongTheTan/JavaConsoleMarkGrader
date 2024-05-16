@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import api from '../api/api';
+import { GET_SEMESTER_API, SEMESTER_LIST_API } from '../api/api';
 import { CustomResponse } from '../models/custom-response';
 import { GetSemester } from '../models/semester';
 import { GlobalHttpHandler } from '../utils/global-http-handler';
@@ -16,14 +16,14 @@ export class SemesterService {
     private readonly httpResultHandler = inject(GlobalHttpHandler);
 
     getSemesterList() {
-        this.http.get<CustomResponse<GetSemester[]>>(api.SEMESTER_LIST_API).subscribe({
+        this.http.get<CustomResponse<GetSemester[]>>(SEMESTER_LIST_API).subscribe({
             next: (customResponse) => this.semesterStore.updateSemesterList(customResponse.data),
             error: (error) => this.httpResultHandler.handleError(error),
         });
     }
 
     getSemesterById(id: number) {
-        this.http.get<CustomResponse<GetSemester>>(`${api.GET_SEMESTER_API}/${id}`).subscribe({
+        this.http.get<CustomResponse<GetSemester>>(`${GET_SEMESTER_API}/${id}`).subscribe({
             next: (customResponse) => {
                 this.httpResultHandler.handleSuccess(customResponse);
                 this.semesterStore.updateSemester(customResponse.data);

@@ -1,5 +1,4 @@
 ﻿using MarkGrader.Helpers;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.DTOs;
 using Services.TestCaseService;
@@ -10,7 +9,7 @@ namespace MarkGrader.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(Roles = "Admin")]
+//[Authorize(Roles = "Admin")]
 public class TestCaseController : ControllerBase
 {
 
@@ -36,10 +35,7 @@ public class TestCaseController : ControllerBase
 
 
 
-
-
-
-	[HttpGet("list")]
+	[HttpGet("list/{semesterId}")]
 	public async Task<IActionResult> GetAllTestCaseBySemester([FromQuery] int semesterId)
 	{
 		CustomResponse<List<GetTestCaseDTO>> customResponse = await testCaseService.GetAllTestCaseBySemesterIdAsync(semesterId);
@@ -49,6 +45,13 @@ public class TestCaseController : ControllerBase
 
 
 
+	[HttpGet("list")]
+	public async Task<IActionResult> GetAllTestCase()
+	{
+		CustomResponse<List<GetTestCaseDTO>> customResponse = await testCaseService.GetAllTestCaseAsync();
+		return HttpsUtility.ReturnActionResult(customResponse);
+	}
+
 
 
 
@@ -56,12 +59,8 @@ public class TestCaseController : ControllerBase
 	[HttpPost("create")]
 	public async Task<IActionResult> CreateTestCase([FromBody] CreateTestCaseDTO testCase)
 	{
-		if (ModelState.IsValid && testCase.CheckValidInputType)
-		{
-			CustomResponse<dynamic> customResponse = await testCaseService.CreateNewTestCaseAsync(testCase);
-			return HttpsUtility.ReturnActionResult(customResponse);
-		}
-		return BadRequest(ModelState);
+		CustomResponse<dynamic> customResponse = await testCaseService.CreateNewTestCaseAsync(testCase);
+		return HttpsUtility.ReturnActionResult(customResponse);
 	}
 
 

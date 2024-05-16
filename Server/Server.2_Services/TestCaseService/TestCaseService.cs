@@ -26,6 +26,29 @@ public class TestCaseService
 
 
 
+	public async Task<CustomResponse<List<GetTestCaseDTO>>> GetAllTestCaseAsync()
+	{
+		List<TestCase>? testCases = await testCaseRepository.GetAllAsync();
+
+		CustomResponse<List<GetTestCaseDTO>> customResponse = new();
+
+		if (testCases == null || testCases.Count == 0)
+		{
+			customResponse.StatusCode = ServiceUtilities.NOT_FOUND;
+			customResponse.Message = "No test case not found";
+		}
+		else
+		{
+			customResponse.StatusCode = ServiceUtilities.OK;
+			customResponse.Message = "Test cases found";
+			customResponse.Data = mapper.Map<List<GetTestCaseDTO>>(testCases);
+		}
+		return customResponse;
+	}
+
+
+
+
 	public async Task<CustomResponse<List<GetTestCaseDTO>>> GetAllTestCaseBySemesterIdAsync(int semesterId)
 	{
 
@@ -67,6 +90,8 @@ public class TestCaseService
 	{
 
 		TestCase newTestCase = mapper.Map<TestCase>(testCase);
+		newTestCase.IsInputArray = !newTestCase.IsInputByLine;
+
 		bool isCreateSuccessful = await testCaseRepository.CreateAsync(newTestCase);
 
 

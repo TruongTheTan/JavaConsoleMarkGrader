@@ -22,7 +22,7 @@ export class LoginComponent {
     });
 
     constructor() {
-        this.googleLogin();
+        this.displayGoogleLoginPopup();
     }
 
     login() {
@@ -36,7 +36,7 @@ export class LoginComponent {
         }
     }
 
-    private googleLogin() {
+    private displayGoogleLoginPopup() {
         this.socialAuth.authState.pipe(takeUntilDestroyed()).subscribe((user: SocialUser) => {
             if (user !== null) {
                 console.table(user);
