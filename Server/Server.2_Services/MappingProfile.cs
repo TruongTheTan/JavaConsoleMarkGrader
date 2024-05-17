@@ -5,7 +5,7 @@ using Server_4.DAL.Models;
 
 namespace Server_2.Services;
 
-public class MappingProfile : Profile
+public sealed class MappingProfile : Profile
 {
 	public MappingProfile()
 	{

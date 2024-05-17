@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
-using System.Text.Json.Serialization;
 
 namespace Repositories.DTOs;
 
@@ -72,12 +71,8 @@ public class UpdateTestCaseDTO
 	public byte? Mark { get; set; }
 
 
-
-	[JsonIgnore]
-	public bool IsInputArray { get => !IsInputByLine; }
-
-
-	public bool IsInputByLine { get; set; } = false;
+	[Required]
+	public bool IsInputByLine { get; set; }
 
 
 	[Required, Range(1, int.MaxValue), NotNull]

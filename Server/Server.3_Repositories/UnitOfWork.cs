@@ -10,10 +10,12 @@ public sealed class UnitOfWork
 	private StudentRepository? studentRepository;
 	private SemesterRepository? semesterRepository;
 	private TestCaseRepository? testCaseRepository;
-	private readonly JavaConsoleAutoGraderContext context = new();
+	private readonly JavaConsoleAutoGraderContext context;
 
-
-
+	public UnitOfWork(JavaConsoleAutoGraderContext context)
+	{
+		this.context = context;
+	}
 
 	public JavaConsoleAutoGraderContext Context => this.context;
 	public UserRepository UserRepository => this.userRepository ??= new UserRepository(context);

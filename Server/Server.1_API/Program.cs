@@ -31,7 +31,7 @@ app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
-//app.UseMiddleware<GlobalErrorHandlerMiddleware>();
+app.UseMiddleware<Middleware>();
 app.MapControllers();
 
 app.Run();

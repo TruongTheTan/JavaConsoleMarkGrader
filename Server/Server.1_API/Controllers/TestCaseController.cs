@@ -35,7 +35,7 @@ public class TestCaseController : ControllerBase
 
 
 
-	[HttpGet("list/{semesterId}")]
+	[HttpGet("list/by-semester-id")]
 	public async Task<IActionResult> GetAllTestCaseBySemester([FromQuery] int semesterId)
 	{
 		CustomResponse<List<GetTestCaseDTO>> customResponse = await testCaseService.GetAllTestCaseBySemesterIdAsync(semesterId);
@@ -57,9 +57,9 @@ public class TestCaseController : ControllerBase
 
 
 	[HttpPost("create")]
-	public async Task<IActionResult> CreateTestCase([FromBody] CreateTestCaseDTO testCase)
+	public async Task<IActionResult> CreateTestCase([FromBody] CreateTestCaseDTO createTestCaseDTO)
 	{
-		CustomResponse<dynamic> customResponse = await testCaseService.CreateNewTestCaseAsync(testCase);
+		CustomResponse<dynamic> customResponse = await testCaseService.CreateNewTestCaseAsync(createTestCaseDTO);
 		return HttpsUtility.ReturnActionResult(customResponse);
 	}
 

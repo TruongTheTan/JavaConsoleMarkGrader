@@ -18,6 +18,13 @@ public abstract class BaseRepository<T> where T : class
 	}
 
 
+
+	public async Task<T?> GetByIdAsync(object id)
+	{
+		return await dbSet.FindAsync(id);
+	}
+
+
 	public virtual async Task<List<T>> GetAllAsync()
 	{
 		return await dbSet.AsNoTracking().ToListAsync();

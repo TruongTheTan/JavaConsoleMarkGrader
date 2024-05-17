@@ -110,15 +110,22 @@ public class TestCaseService
 	public async Task<CustomResponse<dynamic>> UpdateTestCaseAsync(UpdateTestCaseDTO testCaseUpdateDTO)
 	{
 
-		TestCase testCaseToUpdate = mapper.Map<TestCase>(testCaseUpdateDTO);
-		bool isUpdateSuccess = await testCaseRepository.UpdateAsync(testCaseToUpdate);
+		CustomResponse<dynamic> customResponse = new();
 
-
-		return new CustomResponse<dynamic>()
+		if (testCaseRepository.GetByIdAsync(testCaseUpdateDTO.Id) == null)
 		{
-			StatusCode = isUpdateSuccess ? ServiceUtilities.OK : ServiceUtilities.INTERNAL_SERVER_ERROR,
-			Message = isUpdateSuccess ? "Test case updated successfully" : "Fail to update test case"
-		};
+			customResponse.StatusCode = ServiceUtilities.NOT_FOUND;
+			customResponse.Message = "Test case not found to update";
+		}
+		else
+		{
+			TestCase testCaseToUpdate = mapper.Map<TestCase>(testCaseUpdateDTO);
+			bool isUpdateSuccess = await testCaseRepository.UpdateAsync(testCaseToUpdate);
+
+			customResponse.StatusCode = isUpdateSuccess ? ServiceUtilities.OK : ServiceUtilities.INTERNAL_SERVER_ERROR;
+			customResponse.Message = isUpdateSuccess ? "Test case updated successfully" : "Fail to update test case";
+		}
+		return customResponse;
 	}
 
 }

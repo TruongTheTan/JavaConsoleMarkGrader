@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Repositories.Repositories;
+﻿using Repositories.Repositories;
 using Server_4.DAL.Models;
 
 namespace Repositories.EntityRepository
@@ -9,12 +8,6 @@ namespace Repositories.EntityRepository
 	{
 		public SemesterRepository(JavaConsoleAutoGraderContext context) : base(context)
 		{
-		}
-
-
-		public async Task<Semester> GetSemesterByIdAsync(int semesterId)
-		{
-			return (await dbSet.AsNoTracking().FirstOrDefaultAsync(e => e.Id == semesterId))!;
 		}
 
 	}

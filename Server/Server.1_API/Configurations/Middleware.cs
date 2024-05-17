@@ -3,9 +3,11 @@ using System.Text.Json;
 
 namespace MarkGrader.Configurations;
 
-public class Middleware
+public sealed class Middleware
 {
 	private readonly RequestDelegate _next;
+
+
 
 	public Middleware(RequestDelegate next)
 	{
@@ -13,7 +15,8 @@ public class Middleware
 	}
 
 
-	public async Task Invoke(HttpContext context)
+
+	public async Task InvokeAsync(HttpContext context)
 	{
 		try
 		{
@@ -30,7 +33,10 @@ public class Middleware
 				KeyNotFoundException => (int)HttpStatusCode.NotFound,
 				_ => (int)HttpStatusCode.InternalServerError,
 			};
-			var result = JsonSerializer.Serialize(new { message = error?.Message });
+
+			object errorObject = new { message = "Error occurred in server", stackTrace = error.StackTrace };
+
+			var result = JsonSerializer.Serialize(errorObject);
 			await response.WriteAsync(result);
 		}
 	}

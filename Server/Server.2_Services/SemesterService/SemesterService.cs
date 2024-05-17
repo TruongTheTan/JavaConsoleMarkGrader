@@ -67,6 +67,7 @@ public class SemesterService : ISemesterService
 			customResponse.StatusCode = ServiceUtilities.NOT_FOUND;
 			customResponse.Message = "Semester not found";
 		}
+
 		return customResponse;
 	}
 
@@ -78,7 +79,7 @@ public class SemesterService : ISemesterService
 	{
 		CustomResponse<GetSemesterDTO> customResponse = new();
 
-		Semester semester = await semesterRepository.GetSemesterByIdAsync(semesterId);
+		Semester? semester = await semesterRepository.GetByIdAsync(semesterId);
 
 		if (semester == null)
 		{
@@ -104,7 +105,7 @@ public class SemesterService : ISemesterService
 		Semester semester = mapper.Map<Semester>(semesterUpdateDTO);
 
 
-		var semesterFoundById = await semesterRepository.GetSemesterByIdAsync(semesterUpdateDTO.Id);
+		var semesterFoundById = await semesterRepository.GetByIdAsync(semesterUpdateDTO.Id);
 
 		if (semesterFoundById == null)
 		{

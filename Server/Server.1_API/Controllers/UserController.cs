@@ -23,7 +23,6 @@ public class UserController : ControllerBase
 
 
 	[HttpGet("list")]
-	[Authorize(Roles = "Admin")]
 	public async Task<IActionResult> GetUserList()
 	{
 		CustomResponse<List<GetUserDTO>> listUser = await userService.GetUserList();
@@ -33,9 +32,8 @@ public class UserController : ControllerBase
 
 
 
-	[HttpGet("{id:Guid}")]
-	[Authorize(Roles = "Admin")]
-	public async Task<IActionResult> GetUserById(Guid id)
+	[HttpGet("get-by-id")]
+	public async Task<IActionResult> GetUserById([FromQuery] Guid id)
 	{
 		CustomResponse<GetUserDTO> userFound = await userService.GetUserByGuid(id);
 		return HttpsUtility.ReturnActionResult(userFound);
@@ -44,9 +42,8 @@ public class UserController : ControllerBase
 
 
 
-	[HttpGet("{email}")]
-	//[Authorize(Roles = "Admin")]
-	public async Task<IActionResult> GetUserByEmail(string email)
+	[HttpGet("get-by-email")]
+	public async Task<IActionResult> GetUserByEmail([FromQuery] string email)
 	{
 		CustomResponse<GetUserDTO> userFound = await userService.GetUserByEmail(email);
 		return HttpsUtility.ReturnActionResult(userFound);
@@ -57,7 +54,6 @@ public class UserController : ControllerBase
 
 	[HttpPost("create")]
 	//[ValidateAntiForgeryToken]
-	[Authorize(Roles = "Admin")]
 	public async Task<IActionResult> CreateNewUser([FromBody] CreateUserDTO createUserDTO)
 	{
 		CustomResponse<dynamic> customResponse = await userService.CreateUserByEmail(createUserDTO);
@@ -69,6 +65,7 @@ public class UserController : ControllerBase
 
 
 	[HttpPatch("change-password")]
+	[AllowAnonymous]
 	public async Task<IActionResult> ChangePassword([FromBody] ChangeUserPasswordDTO changeUserPasswordDTO)
 	{
 		CustomResponse<dynamic> customResponse = await userService.ChangeUserPassword(changeUserPasswordDTO);
@@ -81,6 +78,7 @@ public class UserController : ControllerBase
 
 
 	[HttpPatch("reset-password")]
+	[AllowAnonymous]
 	public async Task<IActionResult> ResetPassword([FromBody] string email)
 	{
 		CustomResponse<dynamic> customResponse = await userService.ResetPassword(email);
@@ -92,6 +90,7 @@ public class UserController : ControllerBase
 
 
 	[HttpPatch("confirm-email")]
+	[AllowAnonymous]
 	public async Task<IActionResult> ConfirmEmail([FromBody] UserConfirmEmail userConfirmEmail)
 	{
 		CustomResponse<dynamic> customResponse = await userService.ConfirmEmail(userConfirmEmail);
