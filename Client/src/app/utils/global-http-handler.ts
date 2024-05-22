@@ -19,13 +19,23 @@ export class GlobalHttpHandler {
     handleError(error: HttpErrorResponse) {
         let errorMessage = '';
 
-        if (error.error instanceof ProgressEvent) {
-            errorMessage = error.statusText;
-        } else if (error.status === 401) {
-            errorMessage = 'Unauthorized';
-        } else {
-            const customResponse = error.error as CustomResponse<unknown>;
-            errorMessage = customResponse.message;
+        switch (true) {
+            case error.error instanceof ProgressEvent:
+                errorMessage = error.statusText;
+                break;
+
+            case error.status === 401:
+                errorMessage = 'Unauthorized, please login';
+                break;
+
+            case error.status === 429:
+                errorMessage = 'Too Many Requests';
+                break;
+
+            default:
+                const customResponse = error.error as CustomResponse<unknown>;
+                errorMessage = customResponse.message;
+                break;
         }
 
         this.message.next(errorMessage);

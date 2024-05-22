@@ -1,4 +1,5 @@
 <app-create-test-case></app-create-test-case>
+<app-update-test-case [a]="ss"></app-update-test-case>
 
 <div class="card shadow border-0 mb-7">
     <header class="bg-surface-primary border-bottom pt-6 pb-4">
@@ -30,76 +31,14 @@
         </div>
     </header>
 
-    <!-- Table -->
-    <div class="table-responsive">
-        <table class="table table-hover">
-            <thead class="thead-light">
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col" class="text-center">Test Case Inputs</th>
-                    <th scope="col" class="text-center">Test Case Outputs</th>
-                    <th scope="col" class="text-center">Mark</th>
-                    <th scope="col" class="text-center">Semester</th>
-                    <th scope="col" class="text-center">Is input by line</th>
-                    <th scope="col" class="text-center">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let testCase of testCaseList | async; let i = index">
-                    <!-- Numerical order -->
-                    <td class="text-center">
-                        <span class="text-heading font-semibold"> {{ i + 1 }} </span>
-                    </td>
+    <app-table
+        modalId="#updateTestCaseModal"
+        [keys]="testCaseKeys"
+        [dataList]="testCaseList | async"
+        [tableHeadings]="testCaseListHeaders"
+        (buttonClick)="onTableButtonClick($event)"
+    ></app-table>
 
-                    <!-- Inputs -->
-                    <td class="text-center">
-                        <a class="text-heading font-semibold">
-                            {{ testCase.inputs.join(" ") }}
-                        </a>
-                    </td>
-
-                    <!-- Outputs -->
-                    <td class="text-center">
-                        <a class="text-heading font-semibold">
-                            {{ testCase.outputs.join(" ") }}
-                        </a>
-                    </td>
-
-                    <!-- Mark -->
-                    <td class="text-center">
-                        <a class="text-heading font-semibold"> {{ testCase.mark }} </a>
-                    </td>
-
-                    <!-- Semester -->
-                    <td class="text-center">
-                        <a class="text-heading font-semibold">
-                            {{ testCase.semesterName }}
-                        </a>
-                    </td>
-
-                    <!-- Is input by line -->
-                    <td class="text-center">
-                        <span
-                            class="badge badge-sm rounded-pill"
-                            style="font-size: 13px"
-                            [class]="testCase.isInputByLine ? 'bg-success' : 'bg-danger'"
-                        >
-                            {{ testCase.isInputByLine }}
-                        </span>
-                    </td>
-
-                    <!-- Buttons -->
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-info m-1">Detail</button>
-
-                        <button type="button" class="btn btn-sm btn-danger btn-square">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
     <div class="card-footer border-0 py-5">
         <span class="text-muted text-sm"
             >Showing 10 items out of {{ (testCaseList | async)?.length }} results found

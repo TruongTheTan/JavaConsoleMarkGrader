@@ -10,37 +10,62 @@ import { StudentComponent } from './pages/student/student.component';
 import { TeacherComponent } from './pages/teacher/teacher.component';
 
 const routes: Routes = [
-    { path: 'login', component: LoginComponent },
-    { path: 'change-password', component: ChangePasswordComponent },
-
-    // Admin routes
-    {
-        path: 'admin',
-        component: CommonLayoutComponent,
-        children: [
-            { path: '', component: UsersComponent },
-            { path: 'test-case', component: TestCaseListComponent },
-        ],
-    },
-
-    // Student routes
-    {
-        path: 'student',
-        component: CommonLayoutComponent,
-        children: [{ path: '', component: StudentComponent }],
-    },
-
-    // Teacher routes
-    {
-        path: 'teacher',
-        component: CommonLayoutComponent,
-        children: [{ path: '', component: TeacherComponent }],
-    },
     {
         path: '',
         redirectTo: '/login',
         pathMatch: 'full',
     },
+    { path: 'login', component: LoginComponent },
+    { path: 'change-password', component: ChangePasswordComponent },
+    {
+        path: 'app',
+        component: CommonLayoutComponent,
+        children: [
+            {
+                path: 'admin',
+                children: [
+                    { path: 'user', component: UsersComponent },
+                    { path: 'test-case', component: TestCaseListComponent },
+                ],
+            },
+            // Student routes
+            {
+                path: 'student',
+                component: CommonLayoutComponent,
+                children: [{ path: '', component: StudentComponent }],
+            },
+
+            // Teacher routes
+            {
+                path: 'teacher',
+                component: CommonLayoutComponent,
+                children: [{ path: '', component: TeacherComponent }],
+            },
+        ],
+    },
+    // Admin routes
+    // {
+    //     path: 'admin',
+    //     component: CommonLayoutComponent,
+    //     children: [
+    //         { path: '', component: UsersComponent },
+    //         { path: 'test-case', component: TestCaseListComponent },
+    //     ],
+    // },
+
+    // // Student routes
+    // {
+    //     path: 'student',
+    //     component: CommonLayoutComponent,
+    //     children: [{ path: '', component: StudentComponent }],
+    // },
+
+    // // Teacher routes
+    // {
+    //     path: 'teacher',
+    //     component: CommonLayoutComponent,
+    //     children: [{ path: '', component: TeacherComponent }],
+    // },
     { path: '**', component: NotFoundComponent },
 ];
 

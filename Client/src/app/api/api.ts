@@ -21,3 +21,4 @@ export const SUBMIT_FILE = 'Student/submit?semesterId=1';
 export const TEST_CASE_LIST_API = 'TestCase/list';
 export const TEST_CASE_CREATE_API = 'TestCase/create';
 export const TEST_CASE_UPDATE_API = 'TestCase/update';
+export const GET_TEST_CASE_BY_ID_API = 'TestCase?testCaseId=';

@@ -3,13 +3,9 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import {
-    BASIC_LOGIN_API,
-    CHANGE_PASSWORD_API,
-    GOOGLE_LOGIN_API,
-    RESET_PASSWORD_API,
-} from '../api/api';
+import { BASIC_LOGIN_API, CHANGE_PASSWORD_API, GOOGLE_LOGIN_API, RESET_PASSWORD_API } from '../api/api';
 import { CustomResponse } from '../models/custom-response';
+import { Subscriptions } from '../models/subcription';
 import { GlobalHttpHandler } from '../utils/global-http-handler';
 import { AuthenticationUser } from './../models/user';
 import { UserStore } from './../stores/user.store';
@@ -17,7 +13,7 @@ import { UserStore } from './../stores/user.store';
 @Injectable({
     providedIn: 'root',
 })
-export class AuthService {
+export class AuthService extends Subscriptions {
     // Inject services
     private readonly http = inject(HttpClient);
     private readonly cookie = inject(CookieService);
@@ -33,7 +29,7 @@ export class AuthService {
             password,
         };
 
-        this.http.post<CustomResponse<AuthenticationUser>>(BASIC_LOGIN_API, loginObject).subscribe({
+        const sub = this.http.post<CustomResponse<AuthenticationUser>>(BASIC_LOGIN_API, loginObject).subscribe({
             next: (customResponse) => {
                 this.globalHttpHandler.handleSuccess(customResponse);
 
@@ -43,12 +39,13 @@ export class AuthService {
             },
             error: (error) => this.globalHttpHandler.handleError(error),
         });
+        this.subscriptions.push(sub);
     }
 
     googleLogin(idToken: string, provider: string) {
         const googleLoginObject = { idToken, provider };
 
-        this.http
+        const sub = this.http
             .post<CustomResponse<AuthenticationUser>>(GOOGLE_LOGIN_API, googleLoginObject)
             .subscribe({
                 next: (customResponse) => {
@@ -63,13 +60,17 @@ export class AuthService {
                     this.socialAuth.signOut();
                 },
             });
+
+        this.subscriptions.push(sub);
     }
 
     resetPasswordToDefault(email: string) {
-        this.http.patch(RESET_PASSWORD_API, { email }).subscribe({
+        const sub = this.http.patch(RESET_PASSWORD_API, { email }).subscribe({
             next: (user) => alert('Password reset to default'),
             error: (error: HttpErrorResponse) => this.globalHttpHandler.handleError(error),
         });
+
+        this.subscriptions.push(sub);
     }
 
     changePassword(email: string, oldPassword: string, newPassword: string) {
@@ -79,10 +80,12 @@ export class AuthService {
             newPassword,
         };
 
-        this.http.patch(CHANGE_PASSWORD_API, changePasswordObj).subscribe({
+        const sub = this.http.patch(CHANGE_PASSWORD_API, changePasswordObj).subscribe({
             next: () => alert('ok'),
             error: (error: HttpErrorResponse) => this.globalHttpHandler.handleError(error),
         });
+
+        this.subscriptions.push(sub);
     }
 
     logout() {
@@ -93,21 +96,26 @@ export class AuthService {
     }
 
     private handleUserStorage(user: AuthenticationUser) {
+        console.log(user);
+
         this.userStore.setUser({ ...user });
-        this.cookie.set('token', user.token);
         localStorage.setItem('role', user.roleName);
+        this.cookie.set('token', user.token, {
+            secure: true,
+            sameSite: 'Strict',
+        });
     }
 
     private redirectToPageByRole(role: string) {
         switch (role) {
             case 'Admin':
-                this.router.navigateByUrl('/admin');
+                this.router.navigateByUrl('/app/admin/user');
                 break;
             case 'Teacher':
-                this.router.navigateByUrl('/teacher');
+                this.router.navigateByUrl('/app/teacher');
                 break;
             case 'Student':
-                this.router.navigateByUrl('/student');
+                this.router.navigateByUrl('/app/student');
                 break;
         }
     }

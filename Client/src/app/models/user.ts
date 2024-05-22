@@ -18,4 +18,5 @@ export type GetUser = {
     userName: string;
     roleName: string;
     phoneNumber: string;
+    isActive: boolean;
 };

@@ -16,8 +16,17 @@ export class UsersComponent implements OnInit {
 
     userList = {} as Observable<GetUser[]>;
 
+    readonly userListHeaders = ['Name', 'Email', 'Phone', 'Role', 'Status (Is active)'];
+    readonly userKeys = ['userName', 'email', 'phoneNumber', 'roleName', 'isActive'] as (keyof GetUser)[];
+
     ngOnInit(): void {
         this.adminService.getUserList();
         this.userList = this.userStore.getUserList;
+    }
+
+    onTableButtonClick(event: { data: GetUser; eventName: string }) {
+        if (event.eventName === 'detail') {
+        } else {
+        }
     }
 }

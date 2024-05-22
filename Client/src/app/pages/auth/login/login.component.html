@@ -32,9 +32,7 @@
                                             Email is required
                                         </p>
 
-                                        <p *ngIf="loginForm.controls.email.hasError('pattern')">
-                                            Invalid email format
-                                        </p>
+                                        <p *ngIf="loginForm.controls.email.hasError('pattern')">Invalid email format</p>
                                     </div>
                                 </div>
 
@@ -74,10 +72,7 @@
                                             name="remember_me"
                                             id="remember_me"
                                         />
-                                        <label
-                                            class="form-check-label text-secondary"
-                                            for="remember_me"
-                                        >
+                                        <label class="form-check-label text-secondary" for="remember_me">
                                             Keep me logged in
                                         </label>
                                     </div>
@@ -103,19 +98,12 @@
                         <div class="row">
                             <div class="col-12">
                                 <hr class="mt-4 mb-2 border-secondary-subtle" />
-                                <div
-                                    class="d-flex gap-2 gap-md-4 flex-column flex-md-row justify-content-between"
-                                >
-                                    <a
-                                        routerLink="/change-password"
-                                        class="link-secondary text-decoration-none"
-                                    >
+                                <div class="d-flex gap-2 gap-md-4 flex-column flex-md-row justify-content-between">
+                                    <a routerLink="/change-password" class="link-secondary text-decoration-none">
                                         Change password
                                     </a>
 
-                                    <a routerLink="" class="link-secondary text-decoration-none">
-                                        Forgot password
-                                    </a>
+                                    <a routerLink="" class="link-secondary text-decoration-none"> Forgot password </a>
                                 </div>
                             </div>
                         </div>

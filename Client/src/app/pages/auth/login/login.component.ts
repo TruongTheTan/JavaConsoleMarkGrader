@@ -1,5 +1,5 @@
 import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
@@ -9,7 +9,7 @@ import { AuthService } from 'src/app/services/auth.service';
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.css'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnDestroy {
     // Injection
     private readonly authService = inject(AuthService);
     private readonly formBuilder = inject(FormBuilder);
@@ -23,6 +23,10 @@ export class LoginComponent {
 
     constructor() {
         this.displayGoogleLoginPopup();
+    }
+
+    ngOnDestroy(): void {
+        this.authService.unsubscribeAll();
     }
 
     login() {

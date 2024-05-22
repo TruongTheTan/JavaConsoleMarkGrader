@@ -1,9 +1,4 @@
-import {
-    GoogleLoginProvider,
-    GoogleSigninButtonModule,
-    SocialAuthServiceConfig,
-    SocialLoginModule,
-} from '@abacritt/angularx-social-login';
+import { GoogleSigninButtonModule, SocialLoginModule } from '@abacritt/angularx-social-login';
 import { HttpClientModule } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,6 +11,7 @@ import { interceptorConfig } from './api/http-interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { TableComponent } from './components/table/table.component';
 import { CommonLayoutComponent } from './layout/common-layout/common-layout.component';
 import { CreateTestCaseComponent } from './pages/admin/test-case/create-test-case/create-test-case.component';
 import { TestCaseListComponent } from './pages/admin/test-case/test-case-list/test-case-list.component';
@@ -33,38 +29,14 @@ import { SemesterStore } from './stores/semester.store';
 import { TestCaseStore } from './stores/test-case.store';
 import { UserStore } from './stores/user.store';
 import { GlobalHttpHandler } from './utils/global-http-handler';
-
-// Add services here
-const servicesProvider = [
-    AdminService,
-    AuthService,
-    StudentService,
-    GlobalHttpHandler,
-    TestCaseService,
-];
+import socialAuthProvider from './utils/social-auth-provider';
+import { UpdateTestCaseComponent } from './pages/admin/test-case/update-test-case/update-test-case.component';
 
 // Add stores here
 const storesProvider = [UserStore, TestCaseStore, SemesterStore];
 
-const clientId = '256438874185-qp91u851or88s8plr1p8ku8nv28vp0jh.apps.googleusercontent.com';
-const socialAuthProvider = {
-    provide: 'SocialAuthServiceConfig',
-    useValue: {
-        autoLogin: true,
-        providers: [
-            {
-                id: GoogleLoginProvider.PROVIDER_ID,
-                provider: new GoogleLoginProvider(clientId, {
-                    oneTapEnabled: true,
-                    prompt: 'select_account',
-                }),
-            },
-        ],
-        onError: (err) => {
-            console.error(err);
-        },
-    } as SocialAuthServiceConfig,
-};
+// Add services here
+const servicesProvider = [AdminService, AuthService, StudentService, GlobalHttpHandler, TestCaseService];
 
 @NgModule({
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -80,6 +52,8 @@ const socialAuthProvider = {
         TestCaseListComponent,
         CreateTestCaseComponent,
         NotFoundComponent,
+        TableComponent,
+        UpdateTestCaseComponent,
     ],
     imports: [
         BrowserModule,
@@ -90,16 +64,10 @@ const socialAuthProvider = {
         SocialLoginModule,
         GoogleSigninButtonModule,
         NgToastModule,
-        BsDropdownModule.forRoot(),
         BrowserAnimationsModule,
+        BsDropdownModule,
     ],
-    providers: [
-        servicesProvider,
-        storesProvider,
-        socialAuthProvider,
-        CookieService,
-        interceptorConfig,
-    ],
+    providers: [servicesProvider, storesProvider, socialAuthProvider, CookieService, interceptorConfig],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

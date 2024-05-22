@@ -1,4 +1,5 @@
 import { Component, effect, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { GetSemester } from 'src/app/models/semester';
 import { SemesterService } from 'src/app/services/semester.service';
@@ -28,15 +29,7 @@ export class CreateTestCaseComponent {
         testCaseInputs: this.formBuilder.array<FormControl[]>([]),
         testCaseOutputs: this.formBuilder.array<FormControl[]>([]),
 
-        mark: [
-            0,
-            [
-                Validators.required,
-                Validators.min(1),
-                Validators.max(10),
-                Validators.pattern('^[1-9]+$'),
-            ],
-        ],
+        mark: [0, [Validators.required, Validators.min(1), Validators.max(10), Validators.pattern('^[1-9]+$')]],
         semester: [0, [Validators.required]],
     });
 
@@ -46,9 +39,9 @@ export class CreateTestCaseComponent {
         this.clearAllTestCaseInputsByMultipleLineIsFalse();
 
         this.semesterService.getSemesterList();
-        this.semesterStore.getSemesterList.subscribe((data) => {
-            this.semesterList = data;
-        });
+        this.semesterStore.getSemesterList
+            .pipe(takeUntilDestroyed())
+            .subscribe((data) => (this.semesterList = data));
     }
 
     submitForm() {
@@ -68,9 +61,8 @@ export class CreateTestCaseComponent {
                     outputs: this.convertOutputTestCaseFormControlToStringArray(),
                 } as CreateTestCase;
 
-                console.log(createTestCase);
-
                 this.testCaseService.createNewTestCase(createTestCase);
+                this.createTestCaseForm.reset();
             }
         }
     }

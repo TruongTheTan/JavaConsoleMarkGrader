@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { CustomFormValidation } from 'src/app/utils/custom-form-validation';
 
@@ -10,25 +10,22 @@ import { CustomFormValidation } from 'src/app/utils/custom-form-validation';
 })
 export class ChangePasswordComponent {
     // Form
-    readonly changePasswordForm = new FormGroup(
+    readonly changePasswordForm = this.formBuilder.group(
         {
-            email: new FormControl('', [
-                Validators.required,
-                Validators.pattern('^[A-Za-z0-9_.]+@gmail.com$'),
-            ]),
-            oldPassword: new FormControl('', Validators.required),
-            newPassword: new FormControl('', Validators.required),
-            confirmPassword: new FormControl('', Validators.required),
+            email: ['', [Validators.required, Validators.pattern('^[A-Za-z0-9_.]+@gmail.com$')]],
+            oldPassword: ['', Validators.required],
+            newPassword: ['', Validators.required],
+            confirmPassword: ['', Validators.required],
         },
         {
             validators: [CustomFormValidation.match('newPassword', 'confirmPassword')],
         }
     );
 
-    constructor(private authService: AuthService) {}
+    constructor(private authService: AuthService, private formBuilder: FormBuilder) {}
 
     submitForm() {
-        if (!this.changePasswordForm.invalid) {
+        if (this.changePasswordForm.valid) {
             const { email, oldPassword, newPassword } = this.changePasswordForm.controls;
             this.authService.changePassword(email.value!, oldPassword.value!, newPassword.value!);
         }

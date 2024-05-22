@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { AdminService } from '../../../../services/admin.service';
 
 @Component({
@@ -10,24 +10,23 @@ import { AdminService } from '../../../../services/admin.service';
 export class CreateUserComponent {
     //
     private adminService = inject(AdminService);
+    private formBuilder = inject(FormBuilder);
 
     // Form
-    readonly createUserForm = new FormGroup({
-        username: new FormControl('', Validators.required),
-        email: new FormControl('', [
-            Validators.required,
-            Validators.pattern('^[A-Za-z0-9_.]+@gmail.com$'),
-        ]),
-        role: new FormControl('', [
-            Validators.required,
-            Validators.pattern('^(Admin|Teacher|Student)$'),
-        ]),
+    readonly createUserForm = this.formBuilder.group({
+        username: ['', Validators.required],
+        email: ['', [Validators.required, Validators.pattern('^[A-Za-z0-9_.]+@gmail.com$')]],
+        role: ['', [Validators.required, Validators.pattern('^(Admin|Teacher|Student)$')]],
     });
 
     submit() {
         if (this.createUserForm.valid) {
             const { email, username, role } = this.createUserForm.value;
-            this.adminService.createNewUser({ email: email!, username: username!, role: role! });
+            this.adminService.createNewUser({
+                email: email!.trim(),
+                username: username!.trim(),
+                role: role!.trim(),
+            });
         }
     }
 
