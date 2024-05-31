@@ -1,7 +1,9 @@
-﻿using Repositories.DTOs;
+﻿using System.Net;
+using Repositories.DTOs;
 using Server.DAL.Entities;
+using Services;
 
-namespace Services.UserService;
+namespace Server_2.Services.UserService;
 
 
 
@@ -19,12 +21,12 @@ public partial class UserService
 		// User has already existed
 		if (isValidEmail == false)
 		{
-			customResponse.StatusCode = ServiceUtilities.FORBBIDEN;
+			customResponse.StatusCode = (int)HttpStatusCode.Forbidden;
 			customResponse.Message = "Email is not valid, please check again";
 		}
 		else if (isUserExisted)
 		{
-			customResponse.StatusCode = ServiceUtilities.CONFLICT;
+			customResponse.StatusCode = (int)HttpStatusCode.Conflict;
 			customResponse.Message = "This email has been registered";
 		}
 		else
@@ -58,18 +60,18 @@ public partial class UserService
 
 					await ServiceUtilities.SendEmailAsync("Email confirmation", body, createUserDTO.Email);
 
-					customResponse.StatusCode = ServiceUtilities.CREATED;
+					customResponse.StatusCode = (int)HttpStatusCode.Created;
 					customResponse.Message = "User created successfully";
 				}
 				else
 				{
-					customResponse.StatusCode = ServiceUtilities.INTERNAL_SERVER_ERROR;
+					customResponse.StatusCode = (int)HttpStatusCode.InternalServerError;
 					customResponse.Message = "Create user fail";
 				}
 			}
 			catch (Exception ex)
 			{
-				customResponse.StatusCode = ServiceUtilities.INTERNAL_SERVER_ERROR;
+				customResponse.StatusCode = (int)HttpStatusCode.InternalServerError;
 				customResponse.Message = ex.Message;
 				await transaction.RollbackAsync();
 			}

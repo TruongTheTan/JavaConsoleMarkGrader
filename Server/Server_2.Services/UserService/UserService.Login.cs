@@ -1,9 +1,11 @@
-﻿using Google.Apis.Auth;
+﻿using System.Net;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
 using Repositories.DTOs;
 using Server.DAL.Entities;
+using Services;
 
-namespace Services.UserService;
+namespace Server_2.Services.UserService;
 
 public partial class UserService
 {
@@ -15,44 +17,49 @@ public partial class UserService
 
 		if (user is null)
 		{
-			customResponse.StatusCode = ServiceUtilities.NOT_FOUND;
+			customResponse.StatusCode = (int)HttpStatusCode.NotFound;
 			customResponse.Message = "User (email) not found, please check again";
+			return customResponse;
 		}
-		else
+
+
+		if (user.IsActive is false)
 		{
-			bool isEmailConfirmed = await userManager.IsEmailConfirmedAsync(user);
-
-
-			if (isEmailConfirmed == false)
-			{
-				customResponse.StatusCode = ServiceUtilities.FORBBIDEN;
-				customResponse.Message = "Email is not confirmed yet";
-			}
-			else
-			{
-				bool validPassword = await userManager.CheckPasswordAsync(user, userLoginDTO.Password);
-
-				if (validPassword == false)
-				{
-					customResponse.StatusCode = ServiceUtilities.UNAUTHORIZED;
-					customResponse.Message = "Incorrect password, please check again";
-				}
-				else
-				{
-					AuthenticationUser authenticationUser = mapper.Map<AuthenticationUser>(user);
-					authenticationUser.RoleName = (await userManager.GetRolesAsync(user))[0];
-
-					string secretKey = configuration.GetSection("JWT:SecretKey").Value!;
-					int expiration = Convert.ToInt32(configuration.GetSection("JWT:Expiration").Value!);
-
-					ServiceUtilities.CreateJwtToken(ref authenticationUser, secretKey, expiration);
-
-					customResponse.StatusCode = ServiceUtilities.OK;
-					customResponse.Data = authenticationUser;
-					customResponse.Message = "Basic login successfully";
-				}
-			}
+			customResponse.StatusCode = (int)HttpStatusCode.Unauthorized;
+			customResponse.Message = "Your account is not active to access";
+			return customResponse;
 		}
+
+
+
+		bool isEmailConfirmed = await userManager.IsEmailConfirmedAsync(user);
+		if (isEmailConfirmed == false)
+		{
+			customResponse.StatusCode = (int)HttpStatusCode.Forbidden;
+			customResponse.Message = "Email is not confirmed yet";
+			return customResponse;
+		}
+
+
+
+		bool isValidPassword = await userManager.CheckPasswordAsync(user, userLoginDTO.Password);
+		if (isValidPassword == false)
+		{
+			customResponse.StatusCode = (int)HttpStatusCode.Unauthorized;
+			customResponse.Message = "Incorrect password, please check again";
+			return customResponse;
+		}
+
+
+		AuthenticationUser authenticationUser = mapper.Map<AuthenticationUser>(user);
+		authenticationUser.RoleName = (await userManager.GetRolesAsync(user))[0].Trim();
+		authenticationUser.Token = ServiceUtilities.CreateJwtToken(authenticationUser.RoleName, configuration);
+
+
+		customResponse.StatusCode = (int)HttpStatusCode.OK;
+		customResponse.Data = authenticationUser;
+		customResponse.Message = "Basic login successfully";
+
 		return customResponse;
 	}
 
@@ -77,48 +84,44 @@ public partial class UserService
 		var payload = await GoogleJsonWebSignature.ValidateAsync(googleLoginDTO.IdToken, settings);
 
 
-		if (payload == null)
+		if (payload is null)
 		{
 			customResponse.Message = "Invalid google token";
-			customResponse.StatusCode = ServiceUtilities.FORBBIDEN;
+			customResponse.StatusCode = (int)HttpStatusCode.Forbidden;
+			return customResponse;
 		}
-		else
+
+
+		UserLoginInfo info = new(googleLoginDTO.Provider, payload.Subject, googleLoginDTO.Provider);
+		AppUser? user = await userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+
+
+		// User is not login with google (No record in DB)
+		if (user is null)
 		{
-			UserLoginInfo info = new(googleLoginDTO.Provider, payload.Subject, googleLoginDTO.Provider);
-			AppUser? user = await userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+			user = await userManager.FindByEmailAsync(payload.Email);
+			bool isEmailConfirmed = await userManager.IsEmailConfirmedAsync(user);
 
 
-			// User is not login with google (No record in DB)
-			if (user is null)
+			if (isEmailConfirmed == false)
 			{
-				user = await userManager.FindByEmailAsync(payload.Email);
-				bool isEmailConfirmed = await userManager.IsEmailConfirmedAsync(user);
-
-
-				if (isEmailConfirmed == false)
-				{
-					customResponse.Message = "Email is not confirmed yet";
-					customResponse.StatusCode = ServiceUtilities.FORBBIDEN;
-				}
-				else
-				{
-					await userManager.AddLoginAsync(user!, info);
-
-					AuthenticationUser authenticationUser = mapper.Map<AuthenticationUser>(user);
-					authenticationUser.RoleName = (await userManager.GetRolesAsync(user!))[0];
-
-
-					string secretKey = configuration.GetSection("JWT:SecretKey").Value!;
-					int expiration = Convert.ToInt32(configuration.GetSection("JWT:Expiration").Value!);
-
-					ServiceUtilities.CreateJwtToken(ref authenticationUser, secretKey, expiration);
-
-					customResponse.StatusCode = ServiceUtilities.OK;
-					customResponse.Data = authenticationUser;
-					customResponse.Message = "Google login successfully";
-				}
+				customResponse.Message = "Email is not confirmed yet";
+				customResponse.StatusCode = (int)HttpStatusCode.Forbidden;
+				return customResponse;
 			}
+
+			await userManager.AddLoginAsync(user!, info);
+
+			AuthenticationUser authenticationUser = mapper.Map<AuthenticationUser>(user);
+			authenticationUser.RoleName = (await userManager.GetRolesAsync(user!))[0];
+			authenticationUser.Token = ServiceUtilities.CreateJwtToken(authenticationUser.RoleName, configuration);
+
+			customResponse.StatusCode = (int)HttpStatusCode.OK;
+			customResponse.Data = authenticationUser;
+			customResponse.Message = "Google login successfully";
+
 		}
+
 		return customResponse;
 	}
 }

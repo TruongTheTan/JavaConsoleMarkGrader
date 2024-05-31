@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Net;
+using AutoMapper;
 using Repositories;
 using Repositories.DTOs;
 using Repositories.EntityRepository;
@@ -34,12 +35,12 @@ public class TestCaseService
 
 		if (testCases == null || testCases.Count == 0)
 		{
-			customResponse.StatusCode = ServiceUtilities.NOT_FOUND;
+			customResponse.StatusCode = (int)HttpStatusCode.NotFound;
 			customResponse.Message = "No test case not found";
 		}
 		else
 		{
-			customResponse.StatusCode = ServiceUtilities.OK;
+			customResponse.StatusCode = (int)HttpStatusCode.OK;
 			customResponse.Message = "Test cases found";
 			customResponse.Data = mapper.Map<List<GetTestCaseDTO>>(testCases);
 		}
@@ -61,7 +62,7 @@ public class TestCaseService
 		{
 			Message = testCaseAvailable ? "Test cases found" : "Test cases not found",
 			Data = testCaseAvailable ? mapper.Map<List<GetTestCaseDTO>>(testCaseList) : null,
-			StatusCode = testCaseAvailable ? ServiceUtilities.OK : ServiceUtilities.NOT_FOUND,
+			StatusCode = testCaseAvailable ? (int)HttpStatusCode.OK : (int)HttpStatusCode.NotFound,
 		};
 
 	}
@@ -76,7 +77,7 @@ public class TestCaseService
 
 		return new CustomResponse<GetTestCaseDTO>
 		{
-			StatusCode = isTestCaseNotNull ? ServiceUtilities.OK : ServiceUtilities.NOT_FOUND,
+			StatusCode = isTestCaseNotNull ? (int)HttpStatusCode.OK : (int)HttpStatusCode.InternalServerError,
 			Message = isTestCaseNotNull ? "Test case found" : "Test case not found",
 			Data = isTestCaseNotNull ? mapper.Map<GetTestCaseDTO>(testCase) : null
 		};
@@ -97,7 +98,7 @@ public class TestCaseService
 
 		return new CustomResponse<dynamic>()
 		{
-			StatusCode = isCreateSuccessful ? ServiceUtilities.CREATED : ServiceUtilities.INTERNAL_SERVER_ERROR,
+			StatusCode = isCreateSuccessful ? (int)HttpStatusCode.Created : (int)HttpStatusCode.InternalServerError,
 			Message = isCreateSuccessful ? "New test case created successfully" : "Fail to create new test case"
 		};
 	}
@@ -114,7 +115,7 @@ public class TestCaseService
 
 		if (testCaseRepository.GetByIdAsync(testCaseUpdateDTO.Id) == null)
 		{
-			customResponse.StatusCode = ServiceUtilities.NOT_FOUND;
+			customResponse.StatusCode = (int)HttpStatusCode.NotFound;
 			customResponse.Message = "Test case not found to update";
 		}
 		else
@@ -122,7 +123,7 @@ public class TestCaseService
 			TestCase testCaseToUpdate = mapper.Map<TestCase>(testCaseUpdateDTO);
 			bool isUpdateSuccess = await testCaseRepository.UpdateAsync(testCaseToUpdate);
 
-			customResponse.StatusCode = isUpdateSuccess ? ServiceUtilities.OK : ServiceUtilities.INTERNAL_SERVER_ERROR;
+			customResponse.StatusCode = isUpdateSuccess ? (int)HttpStatusCode.OK : (int)HttpStatusCode.InternalServerError;
 			customResponse.Message = isUpdateSuccess ? "Test case updated successfully" : "Fail to update test case";
 		}
 		return customResponse;

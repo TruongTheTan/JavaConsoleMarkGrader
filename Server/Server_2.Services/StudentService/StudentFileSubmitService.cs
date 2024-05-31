@@ -31,9 +31,14 @@ public static class StudentFileSubmitService
 	public static async Task<bool> SaveStudentFileAsync(IFormFile file)
 	{
 		studentFileName = file.FileName.Trim();
+		string extension = Path.GetExtension(studentFileName).ToLower();
 
 		// Only .rar extension allow
-		if (Path.GetExtension(studentFileName).ToLower() == ".rar")
+		if (extension != ".rar")
+		{
+			return false;
+		}
+		else
 		{
 			string filePath = Path.Combine(SAVE_FILE_LOCATION, studentFileName);
 
@@ -45,7 +50,6 @@ public static class StudentFileSubmitService
 
 			return File.Exists(SAVE_FILE_LOCATION + studentFileName);
 		}
-		return false;
 	}
 
 
@@ -67,14 +71,20 @@ public static class StudentFileSubmitService
 
 		rarArchive.Dispose();
 
-		return Directory.Exists(EXTRACT_FILE_LOCATION + SplittedStudentFileName);
+		return Directory.Exists($"{EXTRACT_FILE_LOCATION}{SplittedStudentFileName}");
 	}
 
 
 
+	public static async Task CleanUpAllFiles()
+	{
+		List<Task> tasks = new() { DeleteStudentCompressedFileAsync(), DeleteStudentExtractedFileAsync() };
+		await Task.WhenAll(tasks);
+	}
 
 
-	public static Task DeleteStudentCompressedFileAsync()
+
+	private static Task DeleteStudentCompressedFileAsync()
 	{
 		return Task.Run(() =>
 		{
@@ -97,7 +107,7 @@ public static class StudentFileSubmitService
 
 
 
-	public static Task DeleteStudentExtractedFileAsync()
+	private static Task DeleteStudentExtractedFileAsync()
 	{
 		return Task.Run(() =>
 		{

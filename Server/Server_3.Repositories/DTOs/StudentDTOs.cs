@@ -31,7 +31,7 @@ public class GetStudentSubmissionDetailsDTO
 
 public class CreateStudentSubmissionDetailsDTO
 {
-	public string? StudentId { get; set; }
+	public Guid? StudentId { get; set; }
 	public int SemesterId { get; set; }
 	public short? TotalMark { get; set; }
 	public string? QuestionDescription { get; set; }
@@ -40,3 +40,4 @@ public class CreateStudentSubmissionDetailsDTO
 	[DataType(DataType.DateTime)]
 	public DateTime? GradingTime { get; set; }
 }
+

@@ -29,6 +29,7 @@ public partial class JavaConsoleAutoGraderContext : DbContext
 		if (!optionsBuilder.IsConfigured)
 		{
 			optionsBuilder.UseSqlServer("server=(local);database=JavaConsoleAutoGrader;Trusted_Connection=True;uid=sa;pwd=sa;");
+			optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 		}
 	}
 

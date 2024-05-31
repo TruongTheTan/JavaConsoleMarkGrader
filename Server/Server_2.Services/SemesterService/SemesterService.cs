@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Net;
+using AutoMapper;
 using Repositories;
 using Repositories.DTOs;
 using Repositories.EntityRepository;
@@ -35,12 +36,12 @@ public class SemesterService : ISemesterService
 
 		if (isCreatedSuccessful)
 		{
-			customResponse.StatusCode = ServiceUtilities.OK;
+			customResponse.StatusCode = (int)HttpStatusCode.OK;
 			customResponse.Message = "New semester created successfully";
 		}
 		else
 		{
-			customResponse.StatusCode = ServiceUtilities.INTERNAL_SERVER_ERROR;
+			customResponse.StatusCode = (int)HttpStatusCode.InternalServerError;
 			customResponse.Message = "Fail to create semester";
 		}
 		return customResponse;
@@ -59,12 +60,12 @@ public class SemesterService : ISemesterService
 
 		if (semesters.Count > 0)
 		{
-			customResponse.StatusCode = ServiceUtilities.OK;
+			customResponse.StatusCode = (int)HttpStatusCode.OK;
 			customResponse.Data = mapper.Map<List<GetSemesterDTO>>(semesters);
 		}
 		else
 		{
-			customResponse.StatusCode = ServiceUtilities.NOT_FOUND;
+			customResponse.StatusCode = (int)HttpStatusCode.NotFound;
 			customResponse.Message = "Semester not found";
 		}
 
@@ -83,12 +84,12 @@ public class SemesterService : ISemesterService
 
 		if (semester == null)
 		{
-			customResponse.StatusCode = ServiceUtilities.NOT_FOUND;
+			customResponse.StatusCode = (int)HttpStatusCode.NotFound;
 			customResponse.Message = "Semester not found";
 		}
 		else
 		{
-			customResponse.StatusCode = ServiceUtilities.OK;
+			customResponse.StatusCode = (int)HttpStatusCode.OK;
 			customResponse.Message = "Semester found";
 			customResponse.Data = mapper.Map<GetSemesterDTO>(semester);
 		}
@@ -109,14 +110,14 @@ public class SemesterService : ISemesterService
 
 		if (semesterFoundById == null)
 		{
-			customResponse.StatusCode = ServiceUtilities.NOT_FOUND;
+			customResponse.StatusCode = (int)HttpStatusCode.NotFound;
 			customResponse.Message = "Semester not found";
 		}
 		else
 		{
 			bool isUpdateSuccessful = await semesterRepository.UpdateAsync(semester);
 
-			customResponse.StatusCode = isUpdateSuccessful ? ServiceUtilities.OK : ServiceUtilities.INTERNAL_SERVER_ERROR;
+			customResponse.StatusCode = isUpdateSuccessful ? (int)HttpStatusCode.OK : (int)HttpStatusCode.InternalServerError;
 			customResponse.Message = isUpdateSuccessful ? "Semester updated successfully" : "Failed to update semester";
 		}
 		return customResponse;

@@ -6,7 +6,6 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-using Repositories.DTOs;
 
 
 
@@ -19,17 +18,6 @@ public static class ServiceUtilities
 
 
 	public static int OK { get => 200; }
-	public static int CREATED { get => 201; }
-	public static int NO_CONTENT { get => 204; }
-
-
-	//
-	public static int BAD_REQUEST { get => 400; }
-	public static int UNAUTHORIZED { get => 401; }
-	public static int FORBBIDEN { get => 403; }
-	public static int NOT_FOUND { get => 404; }
-	public static int CONFLICT { get => 409; }
-	public static int INTERNAL_SERVER_ERROR { get => 500; }
 
 
 
@@ -46,8 +34,11 @@ public static class ServiceUtilities
 
 
 
-	public static void CreateJwtToken(ref AuthenticationUser user, string secretKey, int expiration)
+	public static string CreateJwtToken(string userRoleName, IConfigurationRoot configuration)
 	{
+
+		string secretKey = configuration.GetSection("JWT:SecretKey").Value!;
+		int expiration = Convert.ToInt32(configuration.GetSection("JWT:Expiration").Value!);
 
 		var jwtTokenHandle = new JwtSecurityTokenHandler();
 		byte[] secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
@@ -57,20 +48,14 @@ public static class ServiceUtilities
 
 		var tokenDescription = new SecurityTokenDescriptor()
 		{
-			Subject = new ClaimsIdentity(new[]
-			{
-					new Claim("Id", user.Id!),
-					new Claim(ClaimTypes.Name, user.Name!),
-					new Claim(ClaimTypes.Email, user.Email!),
-					new Claim(ClaimTypes.Role, user.RoleName!),
-			}),
+			Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Role, userRoleName), }),
 			Expires = DateTime.UtcNow.AddMinutes(expiration),
 			SigningCredentials = signingCredentials,
 			IssuedAt = DateTime.Now
 		};
 
 		SecurityToken token = jwtTokenHandle.CreateToken(tokenDescription);
-		user.Token = jwtTokenHandle.WriteToken(token);
+		return jwtTokenHandle.WriteToken(token);
 	}
 
 

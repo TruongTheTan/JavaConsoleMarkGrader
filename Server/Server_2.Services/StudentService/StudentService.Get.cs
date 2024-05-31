@@ -1,4 +1,5 @@
-﻿using Repositories.DTOs;
+﻿using System.Net;
+using Repositories.DTOs;
 using Server.DAL.Entities;
 using Server_4.DAL.Models;
 
@@ -41,15 +42,19 @@ public partial class StudentService
 
 
 
-	public async Task<GetStudentSubmissionDetailsDTO> GetStudentSubmissionDetails(int SubmissionId)
+	public async Task<CustomResponse<GetStudentSubmissionDetailsDTO>> GetStudentSubmissionDetails(int submissionId)
 	{
-		StudentSubmissionDetail? studentSubmissionDetail = await studentRepository.GetStudentSubmissionDetails(SubmissionId);
+		CustomResponse<GetStudentSubmissionDetailsDTO> customResponse = new();
+		StudentSubmissionDetail? studentSubmissionDetail = await studentRepository.GetStudentSubmissionDetails(submissionId);
 
 
-		if (studentSubmissionDetail != null)
-			return mapper.Map<GetStudentSubmissionDetailsDTO>(studentSubmissionDetail);
-
-		return null!;
+		if (studentSubmissionDetail is not null)
+		{
+			customResponse.StatusCode = (int)HttpStatusCode.OK;
+			customResponse.Message = "Submission found";
+			customResponse.Data = mapper.Map<GetStudentSubmissionDetailsDTO>(studentSubmissionDetail);
+		}
+		return customResponse;
 	}
 
 

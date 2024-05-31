@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Net;
+using Microsoft.EntityFrameworkCore;
 using Repositories.DTOs;
 using Server.DAL.Entities;
 
-namespace Services.UserService;
+namespace Server_2.Services.UserService;
 
 public partial class UserService
 {
@@ -13,7 +14,7 @@ public partial class UserService
 
 		if (identityUser == null)
 		{
-			customResponse.StatusCode = ServiceUtilities.NOT_FOUND;
+			customResponse.StatusCode = (int)HttpStatusCode.NotFound;
 			customResponse.Message = "User not found by email";
 		}
 		else
@@ -21,7 +22,7 @@ public partial class UserService
 			GetUserDTO getUserDTO = mapper.Map<GetUserDTO>(identityUser);
 			getUserDTO.RoleName = (await userManager.GetRolesAsync(identityUser))[0];
 
-			customResponse.StatusCode = ServiceUtilities.OK;
+			customResponse.StatusCode = (int)HttpStatusCode.OK;
 			customResponse.Message = "User found";
 			customResponse.Data = getUserDTO;
 		}
@@ -41,7 +42,7 @@ public partial class UserService
 		{
 			Data = isUserNotNull ? mapper.Map<GetUserDTO>(user) : null,
 			Message = isUserNotNull ? "User found" : "User not found",
-			StatusCode = isUserNotNull ? ServiceUtilities.OK : ServiceUtilities.NOT_FOUND
+			StatusCode = isUserNotNull ? (int)HttpStatusCode.OK : (int)HttpStatusCode.NotFound
 		};
 	}
 
@@ -56,7 +57,13 @@ public partial class UserService
 		List<AppUser> list = await userManager.Users.ToListAsync();
 
 
-		if (list != null && list.Count > 0)
+
+		if (list == null && list.Count == 0)
+		{
+			customResponse.StatusCode = (int)HttpStatusCode.NotFound;
+			customResponse.Message = "User list is empty";
+		}
+		else
 		{
 			customResponse.Data = new List<GetUserDTO>();
 
@@ -66,14 +73,10 @@ public partial class UserService
 				getUserDTO.RoleName = (await userManager.GetRolesAsync(user))[0];
 				customResponse.Data.Add(getUserDTO);
 			}
-			customResponse.StatusCode = ServiceUtilities.OK;
+			customResponse.StatusCode = (int)HttpStatusCode.OK;
 			customResponse.Message = "User list found";
 		}
-		else
-		{
-			customResponse.StatusCode = ServiceUtilities.NOT_FOUND;
-			customResponse.Message = "User list is empty";
-		}
+
 		return customResponse;
 	}
 }
