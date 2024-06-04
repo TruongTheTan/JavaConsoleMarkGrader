@@ -11,18 +11,13 @@ using Newtonsoft.Json;
 
 namespace Services;
 
-public static class ServiceUtilities
+public static class ServiceUtility
 {
 
 	private static readonly IConfigurationRoot configuration;
 
 
-	public static int OK { get => 200; }
-
-
-
-
-	static ServiceUtilities()
+	static ServiceUtility()
 	{
 		var builder = new ConfigurationBuilder();
 
@@ -48,7 +43,7 @@ public static class ServiceUtilities
 
 		var tokenDescription = new SecurityTokenDescriptor()
 		{
-			Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Role, userRoleName), }),
+			Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Role, userRoleName) }),
 			Expires = DateTime.UtcNow.AddMinutes(expiration),
 			SigningCredentials = signingCredentials,
 			IssuedAt = DateTime.Now
@@ -126,7 +121,7 @@ public static class ServiceUtilities
 		client.Dispose();
 		response.Dispose();
 
-		return responseObject!.deliverability.Equals("DELIVERABLE");
+		return responseObject!.deliverability.Equals("DELIVERABLE", StringComparison.OrdinalIgnoreCase);
 	}
 }
 

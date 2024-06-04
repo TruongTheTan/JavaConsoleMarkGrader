@@ -31,7 +31,10 @@ public class SemesterService : ISemesterService
 		CustomResponse<dynamic> customResponse = new();
 
 		Semester semester = new() { SemesterName = semesterDTO.SemesterName };
-		bool isCreatedSuccessful = await semesterRepository.CreateAsync(semester);
+		await semesterRepository.CreateAsync(semester);
+
+
+		bool isCreatedSuccessful = await unitOfWork.SaveChangesAsync();
 
 
 		if (isCreatedSuccessful)
@@ -115,7 +118,10 @@ public class SemesterService : ISemesterService
 		}
 		else
 		{
-			bool isUpdateSuccessful = await semesterRepository.UpdateAsync(semester);
+
+			semesterRepository.Update(semester);
+
+			bool isUpdateSuccessful = await unitOfWork.SaveChangesAsync();
 
 			customResponse.StatusCode = isUpdateSuccessful ? (int)HttpStatusCode.OK : (int)HttpStatusCode.InternalServerError;
 			customResponse.Message = isUpdateSuccessful ? "Semester updated successfully" : "Failed to update semester";

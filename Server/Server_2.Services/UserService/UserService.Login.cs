@@ -53,7 +53,7 @@ public partial class UserService
 
 		AuthenticationUser authenticationUser = mapper.Map<AuthenticationUser>(user);
 		authenticationUser.RoleName = (await userManager.GetRolesAsync(user))[0].Trim();
-		authenticationUser.Token = ServiceUtilities.CreateJwtToken(authenticationUser.RoleName, configuration);
+		authenticationUser.Token = ServiceUtility.CreateJwtToken(authenticationUser.RoleName, configuration);
 
 
 		customResponse.StatusCode = (int)HttpStatusCode.OK;
@@ -114,7 +114,7 @@ public partial class UserService
 
 			AuthenticationUser authenticationUser = mapper.Map<AuthenticationUser>(user);
 			authenticationUser.RoleName = (await userManager.GetRolesAsync(user!))[0];
-			authenticationUser.Token = ServiceUtilities.CreateJwtToken(authenticationUser.RoleName, configuration);
+			authenticationUser.Token = ServiceUtility.CreateJwtToken(authenticationUser.RoleName, configuration);
 
 			customResponse.StatusCode = (int)HttpStatusCode.OK;
 			customResponse.Data = authenticationUser;

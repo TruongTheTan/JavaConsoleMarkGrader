@@ -31,17 +31,15 @@ public abstract class BaseRepository<T> where T : class
 	}
 
 
-	public async Task<bool> CreateAsync(T entity)
+	public async Task CreateAsync(T entity)
 	{
 		await dbSet.AddAsync(entity);
-		return await SaveChangesAsync();
 	}
 
 
-	public async Task<bool> UpdateAsync(T entity)
+	public void Update(T entity)
 	{
 		dbSet.Update(entity);
-		return await SaveChangesAsync();
 	}
 
 

@@ -93,13 +93,14 @@ public class TestCaseService
 		TestCase newTestCase = mapper.Map<TestCase>(testCase);
 		newTestCase.IsInputArray = !newTestCase.IsInputByLine;
 
-		bool isCreateSuccessful = await testCaseRepository.CreateAsync(newTestCase);
+		await testCaseRepository.CreateAsync(newTestCase);
 
+		bool isCreatedSuccessful = await unitOfWork.SaveChangesAsync();
 
 		return new CustomResponse<dynamic>()
 		{
-			StatusCode = isCreateSuccessful ? (int)HttpStatusCode.Created : (int)HttpStatusCode.InternalServerError,
-			Message = isCreateSuccessful ? "New test case created successfully" : "Fail to create new test case"
+			StatusCode = isCreatedSuccessful ? (int)HttpStatusCode.Created : (int)HttpStatusCode.InternalServerError,
+			Message = isCreatedSuccessful ? "New test case created successfully" : "Fail to create new test case"
 		};
 	}
 
@@ -121,7 +122,9 @@ public class TestCaseService
 		else
 		{
 			TestCase testCaseToUpdate = mapper.Map<TestCase>(testCaseUpdateDTO);
-			bool isUpdateSuccess = await testCaseRepository.UpdateAsync(testCaseToUpdate);
+			testCaseRepository.Update(testCaseToUpdate);
+
+			bool isUpdateSuccess = await unitOfWork.SaveChangesAsync();
 
 			customResponse.StatusCode = isUpdateSuccess ? (int)HttpStatusCode.OK : (int)HttpStatusCode.InternalServerError;
 			customResponse.Message = isUpdateSuccess ? "Test case updated successfully" : "Fail to update test case";

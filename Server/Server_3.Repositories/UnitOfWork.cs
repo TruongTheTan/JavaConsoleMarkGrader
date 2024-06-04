@@ -23,5 +23,11 @@ public sealed class UnitOfWork
 	public StudentRepository StudentRepository => this.studentRepository ??= new StudentRepository(context);
 	public SemesterRepository SemesterRepository => this.semesterRepository ??= new SemesterRepository(context);
 
+
+
+	public async Task<bool> SaveChangesAsync()
+	{
+		return (await context.SaveChangesAsync() > 0);
+	}
 }
 

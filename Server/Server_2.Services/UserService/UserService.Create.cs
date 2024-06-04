@@ -14,7 +14,7 @@ public partial class UserService
 		CustomResponse<dynamic> customResponse = new();
 
 
-		bool isValidEmail = await ServiceUtilities.ValidateEmailAsync(createUserDTO.Email);
+		bool isValidEmail = await ServiceUtility.ValidateEmailAsync(createUserDTO.Email);
 		bool isUserExisted = (await userManager.FindByEmailAsync(createUserDTO.Email)) != null;
 
 
@@ -58,7 +58,7 @@ public partial class UserService
 					string body = $"<a href='http://localhost:4200/confirm-email'>Click this link to confirm your email</a> \n" +
 					$"Please copy this code to the following form: {token}";
 
-					await ServiceUtilities.SendEmailAsync("Email confirmation", body, createUserDTO.Email);
+					await ServiceUtility.SendEmailAsync("Email confirmation", body, createUserDTO.Email);
 
 					customResponse.StatusCode = (int)HttpStatusCode.Created;
 					customResponse.Message = "User created successfully";

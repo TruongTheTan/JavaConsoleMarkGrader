@@ -21,7 +21,7 @@ public partial class UserService
 			const string emailTitle = "Confirm email successfully";
 			const string emailBody = "Your email has been confirmed successfully, now you can login";
 
-			bool isSendEmailSuccess = await ServiceUtilities.SendEmailAsync(emailTitle, emailBody, userConfirmEmail.Email);
+			bool isSendEmailSuccess = await ServiceUtility.SendEmailAsync(emailTitle, emailBody, userConfirmEmail.Email);
 
 			if (isSendEmailSuccess)
 			{
